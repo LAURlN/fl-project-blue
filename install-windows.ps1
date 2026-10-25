@@ -33,7 +33,7 @@ $roboArgs = @(
     "/NFL",
     "/NDL",
     "/XD", "saves", "logs", ".update-tmp", ".freebuff",
-    "/XF", "console_id", "settings.ini", "instance-*.lock"
+    "/XF", "console_id", "settings.ini", "instance-*.lock", "channel.env", "test-version.json"
 )
 & robocopy @roboArgs | Out-Null
 if ($LASTEXITCODE -ge 8) {

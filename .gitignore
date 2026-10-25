@@ -20,3 +20,7 @@
 # Temporary update staging
 /.update-tmp/
 /.freebuff/
+
+# Local test-channel markers (never part of the stable package)
+/channel.env
+/test-version.json

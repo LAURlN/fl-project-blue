@@ -3,12 +3,30 @@ param(
     [switch]$NoUpdate,
     [switch]$Vanilla,
     [switch]$NoDlc,
-    [switch]$Launcher
+    [switch]$Launcher,
+    [switch]$NoLaunch
 )
 
 $ErrorActionPreference = "Stop"
 $Here = Split-Path -Parent $MyInvocation.MyCommand.Path
 Set-Location $Here
+
+# 0. Load the optional channel marker (channel.env). A test install sets
+#    FL_CHANNEL=test; a stable install has no file and follows origin/main.
+$Channel = "stable"
+$ChannelFile = Join-Path $Here "channel.env"
+if (Test-Path $ChannelFile) {
+    Get-Content $ChannelFile | ForEach-Object {
+        $line = $_.Trim()
+        if ($line -and -not $line.StartsWith("#") -and $line.Contains("=")) {
+            $parts = $line.Split("=", 2)
+            if ($parts[0].Trim() -eq "FL_CHANNEL" -and $parts[1].Trim()) {
+                $Channel = $parts[1].Trim().ToLowerInvariant()
+            }
+        }
+    }
+}
+$IsTestChannel = ($Channel -eq "test")
 
 # Load update-config.env if present
 $UpdateBranch = "main"
@@ -29,25 +47,46 @@ if (Test-Path "$Here\update-config.env") {
 }
 
 # 1. Auto-update check (safe: never touches game/, saves/, settings.ini, or console_id)
-if (-not $NoUpdate -and $env:FL_NO_UPDATE -ne "1") {
+#    Test installs are local-only and never auto-update.
+if (-not $IsTestChannel -and -not $NoUpdate -and $env:FL_NO_UPDATE -ne "1") {
+    # Native git writes to stderr when there is no network or no remote. Windows
+    # PowerShell 5.1 turns redirected native stderr into a terminating error while
+    # $ErrorActionPreference is Stop, so run the updater with Continue (each git call
+    # redirects stderr itself) and restore the previous setting afterwards.
+    $PrevUpdateEap = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+    try {
     $gitCmd = Get-Command git -ErrorAction SilentlyContinue
     if ($gitCmd -and (Test-Path "$Here\.git")) {
         $remotes = & git -c safe.directory=* remote 2>$null
         if ($remotes -contains "origin") {
-            Write-Host "[Updater] Checking for updates from origin/$UpdateBranch..." -ForegroundColor Cyan
             & git -c safe.directory=* fetch origin $UpdateBranch --quiet 2>$null
             if ($LASTEXITCODE -eq 0) {
                 $localRev = (& git -c safe.directory=* rev-parse HEAD 2>$null)
                 $remoteRev = (& git -c safe.directory=* rev-parse "origin/$UpdateBranch" 2>$null)
-                if ($remoteRev -and ($localRev -ne $remoteRev)) {
-                    Write-Host "[Updater] Applying update ($($localRev.Substring(0,7)) -> $($remoteRev.Substring(0,7)))..." -ForegroundColor Green
-                    & git -c safe.directory=* merge --ff-only "origin/$UpdateBranch" 2>$null
-                    if ($LASTEXITCODE -ne 0) {
-                        # Fallback: checkout tracked runtime/mod paths directly without touching local untracked files
-                        & git -c safe.directory=* checkout "origin/$UpdateBranch" -- bin lib data/yw2-recomp/mods data/yw2-recomp/shader-cache-v3 data/yw2-recomp/settings.default.ini version.json 2>$null
+                if ($localRev -and $remoteRev) {
+                    $shortLocal  = $localRev.Substring(0, 7)
+                    $shortRemote = $remoteRev.Substring(0, 7)
+                    if ($localRev -eq $remoteRev) {
+                        Write-Host "[Updater] Already up to date ($shortLocal)." -ForegroundColor DarkGray
+                    } else {
+                        # Keep a local, unpublished hotfix: HEAD strictly ahead of origin.
+                        & git -c safe.directory=* merge-base --is-ancestor "origin/$UpdateBranch" HEAD 2>$null
+                        if ($LASTEXITCODE -eq 0) {
+                            Write-Host "[Updater] Local hotfix not yet published ($shortLocal ahead of $shortRemote)" -ForegroundColor Yellow
+                        } else {
+                            # origin is ahead or the branches diverged: mirror origin exactly.
+                            # reset --hard only touches tracked files; game/, saves/, logs/,
+                            # settings.ini and console_id are ignored and stay untouched.
+                            # Never run git clean.
+                            & git -c safe.directory=* reset --hard "origin/$UpdateBranch" 2>$null | Out-Null
+                            if ($LASTEXITCODE -eq 0) {
+                                Write-Host "[Updater] Updated $shortLocal -> $shortRemote" -ForegroundColor Green
+                            } else {
+                                Write-Host "[Updater] Update failed; continuing with local version." -ForegroundColor Yellow
+                            }
+                        }
                     }
-                } else {
-                    Write-Host "[Updater] Already up to date." -ForegroundColor DarkGray
                 }
             } else {
                 Write-Host "[Updater] Offline or remote unreachable; continuing with local version." -ForegroundColor Yellow
@@ -84,10 +123,34 @@ if (-not $NoUpdate -and $env:FL_NO_UPDATE -ne "1") {
             Write-Host "[Updater] ZIP update skipped ($($_.Exception.Message))." -ForegroundColor Yellow
         }
     }
+    } finally {
+        $ErrorActionPreference = $PrevUpdateEap
+    }
 }
 
 # 2. Print version / mod compatibility digest
-if (Test-Path "$Here\version.json") {
+$TestVersion = $null
+if ($IsTestChannel) {
+    $TestVersionFile = Join-Path $Here "test-version.json"
+    if (Test-Path $TestVersionFile) {
+        try {
+            $TestVersion = Get-Content $TestVersionFile -Raw | ConvertFrom-Json
+            $TestLabel = if ($TestVersion.label) { $TestVersion.label } else { "(unlabeled)" }
+            Write-Host ("==============================================================") -ForegroundColor DarkYellow
+            Write-Host (" TEST BUILD | {0}" -f $TestLabel) -ForegroundColor Yellow
+            if ($TestVersion.exe_source)   { Write-Host (" Exe source:  {0}" -f $TestVersion.exe_source) -ForegroundColor Yellow }
+            if ($TestVersion.exe_sha256)   { Write-Host (" Exe SHA-256: {0}" -f $TestVersion.exe_sha256) -ForegroundColor Yellow }
+            if ($TestVersion.mods)         { Write-Host (" Mods:        {0}" -f (@($TestVersion.mods) -join ", ")) -ForegroundColor Yellow }
+            if ($TestVersion.date)         { Write-Host (" Published:   {0}" -f $TestVersion.date) -ForegroundColor Yellow }
+            Write-Host (" Local test install - auto-update disabled.") -ForegroundColor DarkYellow
+            Write-Host ("==============================================================") -ForegroundColor DarkYellow
+        } catch {
+            Write-Host "[Test] test-version.json is unreadable; launching anyway." -ForegroundColor Yellow
+        }
+    } else {
+        Write-Host "[Test] Missing test-version.json. Run publish-test.ps1 to fill this test install." -ForegroundColor Yellow
+    }
+} elseif (Test-Path "$Here\version.json") {
     try {
         $v = Get-Content "$Here\version.json" -Raw | ConvertFrom-Json
         Write-Host ("==============================================================") -ForegroundColor DarkCyan
@@ -135,7 +198,7 @@ if (-not (Test-Path $DlcPath)) {
 
 # 5. Locate Windows executable
 $ExePath = Join-Path $Here "bin\fl_eur.exe"
-if (-not (Test-Path $ExePath)) {
+if (-not (Test-Path $ExePath) -and -not $IsTestChannel) {
     foreach ($candidate in @(
         (Join-Path $Here "..\FantasyLife-Windows\bin\fl_eur.exe"),
         (Join-Path $Here "..\fl-project-blue\port-wt\windows-port\build\windows-native\fl_eur.exe"),
@@ -146,7 +209,11 @@ if (-not (Test-Path $ExePath)) {
     }
 }
 if (-not (Test-Path $ExePath)) {
-    Write-Error "fl_eur.exe not found in $Here\bin\fl_eur.exe yet. Run publish-update.ps1 once the Windows build completes."
+    if ($IsTestChannel) {
+        Write-Error "fl_eur.exe not found in $Here\bin\fl_eur.exe. Run publish-test.ps1 -Exe <built fl_eur.exe> to fill this test install."
+    } else {
+        Write-Error "fl_eur.exe not found in $Here\bin\fl_eur.exe yet. Run publish-update.ps1 once the Windows build completes."
+    }
     exit 1
 }
 
@@ -175,17 +242,29 @@ $ModRoot = Join-Path $Here "data\yw2-recomp\mods\fantasylife"
 if ($Vanilla) {
     $env:FL_MOD_DIRS = ""
 } elseif (-not $env:FL_MOD_DIRS) {
-    $env:FL_MOD_DIRS = @(
-        (Join-Path $ModRoot "story-skip"),
-        (Join-Path $ModRoot "eastern-plains-enemy"),
-        (Join-Path $ModRoot "castele-house"),
-        (Join-Path $ModRoot "wooden-sword")
-    ) -join ";"
+    if ($IsTestChannel) {
+        $TestMods = @()
+        if ($TestVersion -and $TestVersion.mods) { $TestMods = @($TestVersion.mods) }
+        $env:FL_MOD_DIRS = (@($TestMods | ForEach-Object { Join-Path $ModRoot $_ }) -join ";")
+        if ($TestMods.Count -eq 0) { $env:FL_MOD_DIRS = "" }
+    } else {
+        $env:FL_MOD_DIRS = @(
+            (Join-Path $ModRoot "story-skip"),
+            (Join-Path $ModRoot "eastern-plains-enemy"),
+            (Join-Path $ModRoot "castele-house"),
+            (Join-Path $ModRoot "wooden-sword")
+        ) -join ";"
+    }
 }
 
 # Ensure bin/ (and any local LLVM-MinGW compiler for Shader JIT) is on PATH
 $BinDir = Split-Path -Parent $ExePath
 $env:PATH = "$BinDir;$Here\bin;$env:PATH"
+
+if ($NoLaunch) {
+    Write-Host "[Launch] -NoLaunch set; exiting without starting the game." -ForegroundColor DarkGray
+    exit 0
+}
 
 $LogFile = Join-Path $LogDir "play.log"
 Write-Host "[Launch] Save profile: $Save ($SaveDir)" -ForegroundColor Green

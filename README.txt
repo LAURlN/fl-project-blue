@@ -44,3 +44,36 @@ Useful Launch Flags:
 Whenever you change a mod or rebuild `fl_eur.exe`, run:
      powershell -ExecutionPolicy Bypass -File .\publish-update.ps1 -RebuildMods -Commit -Push
 Your brothers simply close and re-open `play.bat` / `play.sh` to get the update!
+
+`-Push` only runs in an interactive PowerShell window. It prints the commit range that
+will be pushed and asks you to type `publish`; redirected or non-interactive sessions are
+refused.
+
+4. STABLE VS TEST INSTALLS
+--------------------------
+* Stable = `%LOCALAPPDATA%\FantasyLife-PC`, shortcut "Fantasy Life". It follows
+  `origin/main` and only changes when you publish (section 3).
+
+  Update rule on every launch:
+  - fetch `origin/main`; if it equals HEAD, it reports "Already up to date";
+  - if HEAD is strictly ahead (a local hotfix you have not published yet), it keeps
+    your version and prints one yellow `[Updater] Local hotfix not yet published ...`
+    line;
+  - otherwise (origin ahead, or the histories diverged) it mirrors origin exactly with
+    `git reset --hard origin/main` and prints `[Updater] Updated <old> -> <new>`.
+  That reset only touches tracked files. Ignored files (`game/`, `saves/`, `logs/`,
+  `settings.ini`, `console_id`, shader logs) are never touched, and the updater never
+  runs `git clean`.
+  Offline, it launches the local version with a yellow note.
+
+* Test = `%LOCALAPPDATA%\FantasyLife-PC-Test`, shortcut "Fantasy Life (Test)".
+  It is local only: no git repo/remote, no auto-update, never pushed, so your brothers
+  never see it. Put whatever is currently under test there:
+     powershell -ExecutionPolicy Bypass -File .\publish-test.ps1 -Exe <built fl_eur.exe> -Label "<branch> <commit>"
+  Optional: `-Relay <clockwork-relay.exe>`, `-ModDirs <overlay dirs>` (default: the
+  stable install's four mods), and `-CopySavesFromStable` (one-way copy of the stable
+  saves into the test saves; never the other way).
+  The script hard-links `game/` from the stable install, seeds its own `settings.ini`,
+  and never copies `console_id`, so each install keeps its own multiplayer identity.
+  Re-running it never touches test saves, `settings.ini`, or `console_id`, and never
+  writes to the stable install.

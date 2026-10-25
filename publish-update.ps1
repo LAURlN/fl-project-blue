@@ -15,6 +15,34 @@ $MainRepo = Join-Path $WorkRoot "fl-project-blue"
 $LinuxPkg = Join-Path $WorkRoot "FantasyLife-Linux"
 $WinPkg   = Join-Path $WorkRoot "FantasyLife-Windows"
 
+# Publishing to the brothers' stable install must always be a deliberate,
+# human-confirmed action. Refuse immediately when there is no interactive
+# console (redirected stdin, -NonInteractive, service/agent session).
+function Test-InteractivePublishSession {
+    try {
+        if ([Console]::IsInputRedirected) { return $false }
+        if (-not [Environment]::UserInteractive) { return $false }
+        $cmdLine = (Get-CimInstance Win32_Process -Filter "ProcessId=$PID" -ErrorAction Stop).CommandLine
+        if ($cmdLine -and ($cmdLine -match '(?i)(^|\s)-noninteractive(\s|$)')) { return $false }
+        return $true
+    } catch {
+        return $false
+    }
+}
+
+if ($Push) {
+    if (-not (Test-InteractivePublishSession)) {
+        Write-Host "ERROR: -Push requires an interactive session; stdin is redirected or PowerShell is non-interactive." -ForegroundColor Red
+        Write-Host "Refusing to publish to the stable origin. Run this from an interactive PowerShell window." -ForegroundColor Red
+        exit 1
+    }
+    $branch = (& git -C $UsbRoot rev-parse --abbrev-ref HEAD 2>$null)
+    if ((Test-Path (Join-Path $UsbRoot ".git")) -and (($branch | Out-String).Trim() -ne "main")) {
+        Write-Host "ERROR: -Push commits and pushes 'main', but the repository is on '$branch'. Switch to main first." -ForegroundColor Red
+        exit 1
+    }
+}
+
 Write-Host "=== Publishing to FantasyLife-USB ($UsbRoot) ===" -ForegroundColor Cyan
 
 # 1. Ensure directory layout
@@ -201,7 +229,7 @@ if (-not (Test-Path (Join-Path $UsbRoot ".git"))) {
 }
 
 if ($Commit -or $Push) {
-    & git -C $UsbRoot add .gitignore update-config.env play.ps1 play.bat play.sh publish-update.ps1 install-windows.ps1 Install-Windows.bat install-linux.sh README.txt version.json data/yw2-recomp/settings.default.ini data/yw2-recomp/mods data/yw2-recomp/shader-cache-v3 bin lib
+    & git -C $UsbRoot add .gitignore update-config.env play.ps1 play.bat play.sh publish-update.ps1 publish-test.ps1 install-windows.ps1 Install-Windows.bat install-linux.sh README.txt version.json data/yw2-recomp/settings.default.ini data/yw2-recomp/mods data/yw2-recomp/shader-cache-v3 bin lib
     $status = (& git -C $UsbRoot status --porcelain)
     if ($status) {
         if (-not $Message) {
@@ -213,10 +241,47 @@ if ($Commit -or $Push) {
         Write-Host "[Git]     Nothing new to commit." -ForegroundColor DarkGray
     }
     if ($Push) {
+        if (-not (Test-InteractivePublishSession)) {
+            Write-Host "ERROR: -Push requires an interactive session. Refusing to publish." -ForegroundColor Red
+            exit 1
+        }
         $remotes = (& git -C $UsbRoot remote)
         if ($remotes -contains "origin") {
-            & git -C $UsbRoot push -u origin main
-            Write-Host "[Git]     Pushed to origin/main." -ForegroundColor Green
+            & git -C $UsbRoot fetch origin main --quiet 2>$null
+            $originRev = (& git -C $UsbRoot rev-parse --verify "origin/main" 2>$null)
+            $headRev   = (& git -C $UsbRoot rev-parse HEAD 2>$null)
+            $rangeArgs = if ($originRev) { "origin/main..HEAD" } else { "HEAD" }
+            $rangeLog  = @(& git -C $UsbRoot log --oneline $rangeArgs 2>$null | Where-Object { $_ })
+
+            Write-Host ""
+            Write-Host "=== About to push to origin/main ===" -ForegroundColor Yellow
+            if ($originRev) {
+                Write-Host ("  Range:   {0}..{1} (origin/main..HEAD)" -f $originRev.Substring(0,7), $headRev.Substring(0,7)) -ForegroundColor Yellow
+            } else {
+                Write-Host "  Range:   all commits (origin/main does not exist yet; first push)" -ForegroundColor Yellow
+            }
+            if ($rangeLog.Count -gt 0) {
+                $rangeLog | ForEach-Object { Write-Host "    $_" -ForegroundColor Yellow }
+            } else {
+                Write-Host "    (no new commits)" -ForegroundColor Yellow
+            }
+            Write-Host "====================================" -ForegroundColor Yellow
+
+            if ($rangeLog.Count -eq 0) {
+                Write-Host "[Git]     Nothing new to push." -ForegroundColor DarkGray
+            } else {
+                $answer = Read-Host "Type 'publish' to push these commits to origin/main (anything else cancels)"
+                if ($answer -cne "publish") {
+                    Write-Host "[Git]     Publish cancelled; nothing was pushed." -ForegroundColor Yellow
+                    exit 1
+                }
+                & git -C $UsbRoot push -u origin main
+                if ($LASTEXITCODE -ne 0) {
+                    Write-Host "[Git]     Push failed (exit $LASTEXITCODE); nothing else was changed." -ForegroundColor Red
+                    exit 1
+                }
+                Write-Host "[Git]     Pushed to origin/main." -ForegroundColor Green
+            }
         } else {
             Write-Host "[Git]     No 'origin' remote configured yet. Add one with: git -C `"$UsbRoot`" remote add origin <URL>" -ForegroundColor Yellow
         }
@@ -240,7 +305,7 @@ if ($UsbDrive) {
         "/NFL",
         "/NDL",
         "/XD", "saves", "logs", ".update-tmp", ".freebuff",
-        "/XF", "console_id", "settings.ini", "instance-*.lock"
+        "/XF", "console_id", "settings.ini", "instance-*.lock", "channel.env", "test-version.json"
     )
     & robocopy @roboArgs | Out-Null
     if ($LASTEXITCODE -ge 8) { throw "Robocopy to $UsbTarget failed with code $LASTEXITCODE" }
