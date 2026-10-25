@@ -362,7 +362,6 @@ foreach ($icon in $iconCandidates) {
 }
 
 # 3. Mod overlays (only these are enabled by play.ps1 in the test channel)
-$DefaultModNames = @("story-skip", "eastern-plains-enemy", "castele-house", "wooden-sword")
 $StableModRoot = Join-Path $StableFull "data\yw2-recomp\mods\fantasylife"
 $ModSources = @()
 if ($ModDirs.Count -gt 0) {
@@ -371,9 +370,30 @@ if ($ModDirs.Count -gt 0) {
         $ModSources += (Resolve-Path -LiteralPath $dir).Path
     }
 } else {
+    # Baseline tests follow the installed stable manifest, including future
+    # contributor mods. An explicit [] stays empty; old packages use folders.
+    $DefaultModNames = @()
+    $HaveStableModList = $false
+    $StableVersion = Join-Path $StableFull "version.json"
+    if (Test-Path -LiteralPath $StableVersion) {
+        $stableManifest = Get-Content -LiteralPath $StableVersion -Raw | ConvertFrom-Json
+        if ($stableManifest.PSObject.Properties.Name -contains "mods") {
+            if ($null -eq $stableManifest.mods -or $stableManifest.mods -isnot [System.Array]) { throw "Stable version.json mods must be an array." }
+            $DefaultModNames = @($stableManifest.mods)
+            $HaveStableModList = $true
+        }
+    }
+    if (-not $HaveStableModList) {
+        $DefaultModNames = @(Get-ChildItem -LiteralPath $StableModRoot -Directory -ErrorAction SilentlyContinue |
+            Where-Object { Test-Path -LiteralPath (Join-Path $_.FullName "overlay.json") } |
+            Sort-Object Name | ForEach-Object { $_.Name })
+    }
+    if (@($DefaultModNames | Select-Object -Unique).Count -ne $DefaultModNames.Count) { throw "Duplicate stable mod name." }
     foreach ($name in $DefaultModNames) {
+        if ($name -isnot [string] -or $name -notmatch '^[a-zA-Z0-9][a-zA-Z0-9._-]*$') { throw "Invalid stable mod name." }
         $candidate = Join-Path $StableModRoot $name
-        if (Test-Path -LiteralPath $candidate -PathType Container) { $ModSources += $candidate }
+        if (-not (Test-Path -LiteralPath (Join-Path $candidate "overlay.json"))) { throw "Stable mod '$name' is missing; update the normal game first." }
+        $ModSources += $candidate
     }
 }
 

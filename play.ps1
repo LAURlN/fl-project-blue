@@ -188,13 +188,13 @@ if (-not $IsTestChannel -and -not $NoUpdate -and $env:FL_NO_UPDATE -ne "1") {
                 }
 
                 # Runtime/data first.
-                foreach ($sub in @("bin", "lib", "data\yw2-recomp\shader-cache-v3")) {
+                foreach ($sub in @("bin", "lib", "data\yw2-recomp\shader-cache-v3", "contrib")) {
                     $src = Join-Path $packageRoot $sub
                     $dst = Join-Path $Here $sub
                     if (Test-Path -LiteralPath $src -PathType Container) {
                         New-Item -ItemType Directory -Path $dst -Force | Out-Null
                         foreach ($item in @(Get-ChildItem -LiteralPath $src -Force -ErrorAction SilentlyContinue)) {
-                            Copy-Item -LiteralPath $item.FullName -Destination (Join-Path $dst $item.Name) -Recurse -Force
+                            Copy-Item -LiteralPath $item.FullName -Destination $dst -Recurse -Force
                         }
                     }
                 }
@@ -425,12 +425,33 @@ if ($Vanilla) {
         $env:FL_MOD_DIRS = (@($TestMods | ForEach-Object { Join-Path $ModRoot $_ }) -join ";")
         if ($TestMods.Count -eq 0) { $env:FL_MOD_DIRS = "" }
     } else {
-        $env:FL_MOD_DIRS = @(
-            (Join-Path $ModRoot "story-skip"),
-            (Join-Path $ModRoot "eastern-plains-enemy"),
-            (Join-Path $ModRoot "castele-house"),
-            (Join-Path $ModRoot "wooden-sword")
-        ) -join ";"
+        # An explicit empty list means vanilla. Missing/old manifests fall back
+        # to installed overlays; never infer four fixed names from a build date.
+        $StableMods = @()
+        $HaveModList = $false
+        if (Test-Path -LiteralPath (Join-Path $Here "version.json")) {
+            try {
+                $Manifest = Get-Content -LiteralPath (Join-Path $Here "version.json") -Raw | ConvertFrom-Json
+                if ($Manifest.PSObject.Properties.Name -contains "mods") {
+                    if ($null -eq $Manifest.mods -or $Manifest.mods -isnot [System.Array]) { throw "mods must be an array" }
+                    $StableMods = @($Manifest.mods)
+                    foreach ($mod in $StableMods) {
+                        if ($mod -isnot [string] -or $mod -notmatch '^[a-zA-Z0-9][a-zA-Z0-9._-]*$') { throw "invalid mod folder name" }
+                    }
+                    if (@($StableMods | Select-Object -Unique).Count -ne $StableMods.Count) { throw "duplicate mod name" }
+                    $HaveModList = $true
+                }
+            } catch { Write-Host "[Mods] version.json mod list unreadable; using installed folders." -ForegroundColor Yellow }
+        }
+        if (-not $HaveModList) {
+            $StableMods = @(Get-ChildItem -LiteralPath $ModRoot -Directory -ErrorAction SilentlyContinue |
+                Where-Object { Test-Path -LiteralPath (Join-Path $_.FullName "overlay.json") } |
+                Sort-Object Name | ForEach-Object { $_.Name })
+        }
+        foreach ($mod in $StableMods) {
+            if (-not (Test-Path -LiteralPath (Join-Path $ModRoot "$mod\overlay.json"))) { throw "Installed mod '$mod' is missing. Update the normal game before playing." }
+        }
+        $env:FL_MOD_DIRS = @($StableMods | ForEach-Object { Join-Path $ModRoot $_ }) -join ";"
     }
 }
 

@@ -90,7 +90,7 @@ the previous Linux build; a yellow warning appears when it is older than the Win
   never see it. Put whatever is currently under test there:
      powershell -ExecutionPolicy Bypass -File .\publish-test.ps1 -Exe <built fl_eur.exe> -Label "<branch> <commit>"
   Optional: `-Relay <clockwork-relay.exe>`, `-ModDirs <overlay dirs>` (default: the
-  stable install's four mods), and `-CopySavesFromStable` (one-way copy of the stable
+  stable install's version.json mods, falling back to installed folders), and `-CopySavesFromStable` (one-way copy of the stable
   saves into the test saves; never the other way).
   The script hard-links `game/` from the stable install, seeds its own `settings.ini`,
   and never copies `console_id`, so each install keeps its own multiplayer identity.
@@ -156,3 +156,17 @@ firewall is enabled and multiplayer does not work, allow the game and UDP 47830,
 example:
   sudo ufw allow 47830/udp
 (only needed on the player who hosts a relay).
+
+7. CONTRIBUTING (FOR BEGINNERS)
+-------------------------------
+Open contrib/START-HERE.md (German first, then English). You can describe a small
+data mod to a Freebuff agent, try it in Fantasy Life (Test), and send a proposed
+change to Leo's PRIVATE modding-kit-only repository. Leo reviews and decides.
+Start once with contrib/Setup-Contrib.bat. Rerun it after updates to refresh the
+agent instructions. Normal launches never prompt you to set up a workshop.
+The public package repository is separate; never upload source dumps or extracted
+game resources. The private modding-kit URL lives in contrib/config.env (no secrets).
+Stable Windows play.ps1 reads version.json's mods array (old packages fall back
+to installed overlay folders); an empty array disables all packaged mods.
+For maintainers: -RebuildMods reads the source repo's mods/enabled.json in order,
+builds each source with fl_mod.py and checks the entire stack before continuing.

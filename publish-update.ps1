@@ -259,7 +259,7 @@ if ($LinuxStamp -and $WinExeStamp) {
 }
 
 # 4. Sync or Rebuild Mod Overlays
-$ModNames = @("story-skip", "eastern-plains-enemy", "castele-house", "wooden-sword")
+$ModNames = @()
 $ArchiveDir = Join-Path $MainRepo "extracted\fl_eu\archive"
 if ($FromTest) {
     # Mirror exactly the overlays listed in test-version.json; drop stale ones.
@@ -290,20 +290,40 @@ if ($FromTest) {
     } else {
         Write-Host "[Mods]    Test install has no mods; the package ships without mod overlays." -ForegroundColor Yellow
     }
-} elseif ($RebuildMods -and (Test-Path $ArchiveDir)) {
+} elseif ($RebuildMods) {
+    if (-not (Test-Path -LiteralPath $ArchiveDir -PathType Container)) { throw "Missing source archive: $ArchiveDir" }
+    $EnabledFile = Join-Path $MainRepo "mods\enabled.json"
+    # Wrap the array to preserve [] and single-element arrays in PowerShell 5.1.
+    $EnabledText = Get-Content -LiteralPath $EnabledFile -Raw
+    $Enabled = (ConvertFrom-Json -InputObject ('{"mods":' + $EnabledText + '}')).mods
+    if ($null -eq $Enabled -or $Enabled -isnot [System.Array]) { throw "mods/enabled.json must be a JSON array of mod folder names." }
+    $ModNames = @($Enabled)
+    foreach ($mod in $ModNames) {
+        if ($mod -isnot [string] -or $mod -notmatch '^[a-zA-Z0-9][a-zA-Z0-9._-]*$') { throw "Invalid enabled mod folder name: $mod" }
+        if (-not (Test-Path -LiteralPath (Join-Path $MainRepo "mods\$mod\mod.json") -PathType Leaf)) { throw "Enabled mod source is missing: $mod" }
+    }
+    if (@($ModNames | Select-Object -Unique).Count -ne $ModNames.Count) { throw "Duplicate mod in mods/enabled.json" }
     Write-Host "[Mods]    Rebuilding mod overlays from $MainRepo\mods..." -ForegroundColor Cyan
     foreach ($mod in $ModNames) {
         $outMod = Join-Path $ModsDir $mod
-        if (Test-Path $outMod) { Remove-Item -Recurse -Force $outMod }
-        if ($mod -eq "story-skip") {
-            & python -I (Join-Path $MainRepo "tools\fl_story_skip.py") build $ArchiveDir $outMod
-        } else {
-            $spec = Join-Path $MainRepo "mods\$mod\mod.json"
-            & python -I (Join-Path $MainRepo "tools\fl_mod.py") build $spec $ArchiveDir $outMod
-        }
+        $sourceMod = Join-Path $MainRepo "mods\$mod"
+        & python -I (Join-Path $MainRepo "tools\fl_mod.py") build $ArchiveDir $sourceMod $outMod --replace
         if ($LASTEXITCODE -ne 0) { throw "Failed to build mod $mod" }
     }
-    Write-Host "[Mods]    Rebuilt all 4 mod overlays." -ForegroundColor Green
+    if ($ModNames.Count -gt 0) {
+        $StackDirs = @($ModNames | ForEach-Object { Join-Path $ModsDir $_ })
+        & python -I (Join-Path $MainRepo "tools\fl_mod.py") check-stack @StackDirs
+        if ($LASTEXITCODE -ne 0) { throw "Enabled mod stack conflicts; publication stopped." }
+    }
+    # Only direct children of this package's known mods root may be removed.
+    $modsFull = [IO.Path]::GetFullPath($ModsDir).TrimEnd('\')
+    foreach ($old in @(Get-ChildItem -LiteralPath $ModsDir -Directory)) {
+        if ($ModNames -notcontains $old.Name) {
+            if ((Split-Path -Parent $old.FullName) -ne $modsFull) { throw "Unsafe stale mod path: $($old.FullName)" }
+            Remove-Item -LiteralPath $old.FullName -Recurse -Force
+        }
+    }
+    Write-Host "[Mods]    Rebuilt $($ModNames.Count) enabled mod overlay(s); stack checked." -ForegroundColor Green
 } else {
     foreach ($srcModRoot in @(
         (Join-Path $WinPkg "data\yw2-recomp\mods\fantasylife"),
@@ -315,6 +335,9 @@ if ($FromTest) {
             break
         }
     }
+    $ModNames = @(Get-ChildItem -LiteralPath $ModsDir -Directory |
+        Where-Object { Test-Path -LiteralPath (Join-Path $_.FullName "overlay.json") } |
+        Sort-Object Name | ForEach-Object { $_.Name })
 }
 
 # 5. Sync precompiled Shader Cache (.cpp, .so, .dll; skip .log and .tmp)
@@ -419,7 +442,7 @@ if (-not (Test-Path (Join-Path $UsbRoot ".git"))) {
 }
 
 if ($Commit -or $Push) {
-    & git -C $UsbRoot add .gitignore update-config.env play.ps1 play.bat play.sh setup-firewall.ps1 publish-update.ps1 publish-test.ps1 install-test.ps1 Install-Test.bat install-windows.ps1 Install-Windows.bat install-linux.sh README.txt version.json data/yw2-recomp/settings.default.ini data/yw2-recomp/mods data/yw2-recomp/shader-cache-v3 bin lib
+    & git -C $UsbRoot add .gitignore update-config.env play.ps1 play.bat play.sh setup-firewall.ps1 publish-update.ps1 publish-test.ps1 install-test.ps1 Install-Test.bat install-windows.ps1 Install-Windows.bat install-linux.sh README.txt contrib version.json data/yw2-recomp/settings.default.ini data/yw2-recomp/mods data/yw2-recomp/shader-cache-v3 bin lib
     $status = (& git -C $UsbRoot status --porcelain)
     if ($status) {
         if (-not $Message) {
