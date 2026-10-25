@@ -191,9 +191,9 @@ $LogFile = Join-Path $LogDir "play.log"
 Write-Host "[Launch] Save profile: $Save ($SaveDir)" -ForegroundColor Green
 Write-Host "[Launch] Log output:   $LogFile" -ForegroundColor DarkGray
 
-if ($Launcher) {
-    & $ExePath --launcher $RomPath *> $LogFile
-} else {
-    & $ExePath --play $RomPath *> $LogFile
-}
-exit $LASTEXITCODE
+# The game logs to stderr. Windows PowerShell 5.1 turns redirected native stderr into
+# errors, which $ErrorActionPreference = "Stop" makes fatal, so let cmd do the redirect.
+$Mode = if ($Launcher) { "--launcher" } else { "--play" }
+$CmdLine = "/d /s /c `"`"$ExePath`" $Mode `"$RomPath`" > `"$LogFile`" 2>&1`""
+$Game = Start-Process -FilePath $env:ComSpec -ArgumentList $CmdLine -NoNewWindow -Wait -PassThru
+exit $Game.ExitCode
