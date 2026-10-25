@@ -1,0 +1,13 @@
+﻿{
+    "version":  "fl-bd75659-port-7eaffbf",
+    "updated_at":  "2026-10-25T12:38:54Z",
+    "mod_digest":  "45b5a9df2552",
+    "mods":  [
+                 "story-skip",
+                 "eastern-plains-enemy",
+                 "castele-house",
+                 "wooden-sword"
+             ],
+    "has_windows_bin":  true,
+    "has_linux_bin":  true
+}

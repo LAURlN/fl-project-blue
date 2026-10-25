@@ -1,0 +1,460 @@
+{
+  "format": "fl-resource-overlay-v1",
+  "name": "Wooden Sword",
+  "program_id": "0004000000113100",
+  "archive_count": 58095,
+  "archive_size": 372881344,
+  "header_fnv32": "13fdfc8c",
+  "resources": [
+    {
+      "id": 4122,
+      "size": 19112,
+      "stored_size": 7665,
+      "compression": 1,
+      "file": "resources/04122.lz",
+      "sha256": "24f4bbc618906f4fb3fc9bb68f62c41d8d14c11f54ec8fcdf8072003e79d2b56"
+    },
+    {
+      "id": 4123,
+      "size": 24960,
+      "stored_size": 17500,
+      "compression": 1,
+      "file": "resources/04123.lz",
+      "sha256": "ad112ee73bb2aab929daeebf1c66e21eca05985e1ecc176532d28a1e66fc4862"
+    },
+    {
+      "id": 6702,
+      "size": 126760,
+      "stored_size": 22000,
+      "compression": 1,
+      "file": "resources/06702.lz",
+      "sha256": "8b292ff258ed2cdc241f6c271244eaa48d9736273ba0d9f6b05a8d583927146e"
+    },
+    {
+      "id": 6703,
+      "size": 126760,
+      "stored_size": 22000,
+      "compression": 1,
+      "file": "resources/06703.lz",
+      "sha256": "8b292ff258ed2cdc241f6c271244eaa48d9736273ba0d9f6b05a8d583927146e"
+    },
+    {
+      "id": 6704,
+      "size": 126760,
+      "stored_size": 22000,
+      "compression": 1,
+      "file": "resources/06704.lz",
+      "sha256": "8b292ff258ed2cdc241f6c271244eaa48d9736273ba0d9f6b05a8d583927146e"
+    },
+    {
+      "id": 6705,
+      "size": 126760,
+      "stored_size": 22000,
+      "compression": 1,
+      "file": "resources/06705.lz",
+      "sha256": "8b292ff258ed2cdc241f6c271244eaa48d9736273ba0d9f6b05a8d583927146e"
+    },
+    {
+      "id": 6706,
+      "size": 126760,
+      "stored_size": 22000,
+      "compression": 1,
+      "file": "resources/06706.lz",
+      "sha256": "8b292ff258ed2cdc241f6c271244eaa48d9736273ba0d9f6b05a8d583927146e"
+    },
+    {
+      "id": 6707,
+      "size": 126760,
+      "stored_size": 22000,
+      "compression": 1,
+      "file": "resources/06707.lz",
+      "sha256": "8b292ff258ed2cdc241f6c271244eaa48d9736273ba0d9f6b05a8d583927146e"
+    },
+    {
+      "id": 6708,
+      "size": 126760,
+      "stored_size": 22000,
+      "compression": 1,
+      "file": "resources/06708.lz",
+      "sha256": "8b292ff258ed2cdc241f6c271244eaa48d9736273ba0d9f6b05a8d583927146e"
+    },
+    {
+      "id": 6709,
+      "size": 126760,
+      "stored_size": 22000,
+      "compression": 1,
+      "file": "resources/06709.lz",
+      "sha256": "8b292ff258ed2cdc241f6c271244eaa48d9736273ba0d9f6b05a8d583927146e"
+    },
+    {
+      "id": 6710,
+      "size": 126760,
+      "stored_size": 22000,
+      "compression": 1,
+      "file": "resources/06710.lz",
+      "sha256": "8b292ff258ed2cdc241f6c271244eaa48d9736273ba0d9f6b05a8d583927146e"
+    },
+    {
+      "id": 6720,
+      "size": 3944,
+      "stored_size": 1398,
+      "compression": 1,
+      "file": "resources/06720.lz",
+      "sha256": "bcd1b955d6da739688a8038baa26e1f83a3a3237cdd8c61670aa1444bc702b8d"
+    },
+    {
+      "id": 6721,
+      "size": 3944,
+      "stored_size": 1398,
+      "compression": 1,
+      "file": "resources/06721.lz",
+      "sha256": "bcd1b955d6da739688a8038baa26e1f83a3a3237cdd8c61670aa1444bc702b8d"
+    },
+    {
+      "id": 6722,
+      "size": 3944,
+      "stored_size": 1398,
+      "compression": 1,
+      "file": "resources/06722.lz",
+      "sha256": "bcd1b955d6da739688a8038baa26e1f83a3a3237cdd8c61670aa1444bc702b8d"
+    },
+    {
+      "id": 6723,
+      "size": 3944,
+      "stored_size": 1398,
+      "compression": 1,
+      "file": "resources/06723.lz",
+      "sha256": "bcd1b955d6da739688a8038baa26e1f83a3a3237cdd8c61670aa1444bc702b8d"
+    },
+    {
+      "id": 6724,
+      "size": 3944,
+      "stored_size": 1398,
+      "compression": 1,
+      "file": "resources/06724.lz",
+      "sha256": "bcd1b955d6da739688a8038baa26e1f83a3a3237cdd8c61670aa1444bc702b8d"
+    },
+    {
+      "id": 6725,
+      "size": 3944,
+      "stored_size": 1398,
+      "compression": 1,
+      "file": "resources/06725.lz",
+      "sha256": "bcd1b955d6da739688a8038baa26e1f83a3a3237cdd8c61670aa1444bc702b8d"
+    },
+    {
+      "id": 6726,
+      "size": 3944,
+      "stored_size": 1398,
+      "compression": 1,
+      "file": "resources/06726.lz",
+      "sha256": "bcd1b955d6da739688a8038baa26e1f83a3a3237cdd8c61670aa1444bc702b8d"
+    },
+    {
+      "id": 6727,
+      "size": 3944,
+      "stored_size": 1398,
+      "compression": 1,
+      "file": "resources/06727.lz",
+      "sha256": "bcd1b955d6da739688a8038baa26e1f83a3a3237cdd8c61670aa1444bc702b8d"
+    },
+    {
+      "id": 6728,
+      "size": 3944,
+      "stored_size": 1398,
+      "compression": 1,
+      "file": "resources/06728.lz",
+      "sha256": "bcd1b955d6da739688a8038baa26e1f83a3a3237cdd8c61670aa1444bc702b8d"
+    },
+    {
+      "id": 6792,
+      "size": 161868,
+      "stored_size": 54388,
+      "compression": 1,
+      "file": "resources/06792.lz",
+      "sha256": "abfe0783a7a478c6e40211e44bbd06a9e1f80db8841afc9f551bc6a5eaab1b62"
+    },
+    {
+      "id": 6793,
+      "size": 164108,
+      "stored_size": 52106,
+      "compression": 1,
+      "file": "resources/06793.lz",
+      "sha256": "25240499a33099940fe4b15d5a639386ee9a9e570c76a52a097960ba03d31ae0"
+    },
+    {
+      "id": 6794,
+      "size": 163252,
+      "stored_size": 52119,
+      "compression": 1,
+      "file": "resources/06794.lz",
+      "sha256": "10e6629485340749ee0c1b72313ccdc7be9f81b52d2948a4d1378f030004638f"
+    },
+    {
+      "id": 6795,
+      "size": 158492,
+      "stored_size": 51723,
+      "compression": 1,
+      "file": "resources/06795.lz",
+      "sha256": "fa5c5fb4c6ed6160af4a62edbe35ee45ed51cf36474032d929c6d05392c2ea32"
+    },
+    {
+      "id": 6796,
+      "size": 155488,
+      "stored_size": 51246,
+      "compression": 1,
+      "file": "resources/06796.lz",
+      "sha256": "f649be5bad5243efe7bb257bc2165524374a687b5a84bbebda1d4f0af228e606"
+    },
+    {
+      "id": 6797,
+      "size": 164120,
+      "stored_size": 52096,
+      "compression": 1,
+      "file": "resources/06797.lz",
+      "sha256": "2ff1f688fb3a98e40dd9b11a71fda4a3f51bd79fca30cf3faf0f0dc3c6191371"
+    },
+    {
+      "id": 6798,
+      "size": 163252,
+      "stored_size": 52119,
+      "compression": 1,
+      "file": "resources/06798.lz",
+      "sha256": "10e6629485340749ee0c1b72313ccdc7be9f81b52d2948a4d1378f030004638f"
+    },
+    {
+      "id": 6799,
+      "size": 166236,
+      "stored_size": 51991,
+      "compression": 1,
+      "file": "resources/06799.lz",
+      "sha256": "0fe87fc24e8ce6168ea410814b37958da96a50c8fa65d94b1385a9211b073c7f"
+    },
+    {
+      "id": 6800,
+      "size": 154796,
+      "stored_size": 51051,
+      "compression": 1,
+      "file": "resources/06800.lz",
+      "sha256": "ccabaf9d66c0de5e1d99be67c475dc235c2a5ab6202cc84e14c0936ae04744e1"
+    },
+    {
+      "id": 6801,
+      "size": 229636,
+      "stored_size": 48875,
+      "compression": 1,
+      "file": "resources/06801.lz",
+      "sha256": "21340966494f1532709e71e102a0667b8d7db6ec58e532598321103a5454c84f"
+    },
+    {
+      "id": 6802,
+      "size": 184680,
+      "stored_size": 44281,
+      "compression": 1,
+      "file": "resources/06802.lz",
+      "sha256": "f398d292d76913a72aea470f727400a4124a3bf717818a38fb73c31483743baf"
+    },
+    {
+      "id": 6803,
+      "size": 184680,
+      "stored_size": 44281,
+      "compression": 1,
+      "file": "resources/06803.lz",
+      "sha256": "f398d292d76913a72aea470f727400a4124a3bf717818a38fb73c31483743baf"
+    },
+    {
+      "id": 6804,
+      "size": 184680,
+      "stored_size": 44281,
+      "compression": 1,
+      "file": "resources/06804.lz",
+      "sha256": "f398d292d76913a72aea470f727400a4124a3bf717818a38fb73c31483743baf"
+    },
+    {
+      "id": 6805,
+      "size": 184680,
+      "stored_size": 44281,
+      "compression": 1,
+      "file": "resources/06805.lz",
+      "sha256": "f398d292d76913a72aea470f727400a4124a3bf717818a38fb73c31483743baf"
+    },
+    {
+      "id": 6806,
+      "size": 184680,
+      "stored_size": 44281,
+      "compression": 1,
+      "file": "resources/06806.lz",
+      "sha256": "f398d292d76913a72aea470f727400a4124a3bf717818a38fb73c31483743baf"
+    },
+    {
+      "id": 6807,
+      "size": 184680,
+      "stored_size": 44281,
+      "compression": 1,
+      "file": "resources/06807.lz",
+      "sha256": "f398d292d76913a72aea470f727400a4124a3bf717818a38fb73c31483743baf"
+    },
+    {
+      "id": 6808,
+      "size": 184680,
+      "stored_size": 44281,
+      "compression": 1,
+      "file": "resources/06808.lz",
+      "sha256": "f398d292d76913a72aea470f727400a4124a3bf717818a38fb73c31483743baf"
+    },
+    {
+      "id": 6809,
+      "size": 184680,
+      "stored_size": 44281,
+      "compression": 1,
+      "file": "resources/06809.lz",
+      "sha256": "f398d292d76913a72aea470f727400a4124a3bf717818a38fb73c31483743baf"
+    },
+    {
+      "id": 6810,
+      "size": 403000,
+      "stored_size": 111171,
+      "compression": 1,
+      "file": "resources/06810.lz",
+      "sha256": "b77a0f2898362c09c7cfe6c91f1323181917416d582cf6f4d15d601deb025ae0"
+    },
+    {
+      "id": 6811,
+      "size": 332088,
+      "stored_size": 85515,
+      "compression": 1,
+      "file": "resources/06811.lz",
+      "sha256": "74e7846c5b8c751f2443b5f7244ba1e51722f890cc953eb94886de4370f30962"
+    },
+    {
+      "id": 6812,
+      "size": 340464,
+      "stored_size": 86613,
+      "compression": 1,
+      "file": "resources/06812.lz",
+      "sha256": "230e7dbb5d412cace8f46f247d8eedfb23eb9611d3f4e67f70b3bee320ea5138"
+    },
+    {
+      "id": 6813,
+      "size": 337448,
+      "stored_size": 89094,
+      "compression": 1,
+      "file": "resources/06813.lz",
+      "sha256": "bfbae556f15fe619fb612a549b8c2071bb2747de9f534a18dc3d6a659da7f239"
+    },
+    {
+      "id": 6814,
+      "size": 326284,
+      "stored_size": 86158,
+      "compression": 1,
+      "file": "resources/06814.lz",
+      "sha256": "7e6146d3a2ba0e14bd47e59e0c0eb0e756115757c6109097cbb87bb7e7e75e99"
+    },
+    {
+      "id": 6815,
+      "size": 332092,
+      "stored_size": 85531,
+      "compression": 1,
+      "file": "resources/06815.lz",
+      "sha256": "ad691fe3814aa89dba692cd2dbf711951f981caeb9c9bc5858589a15b0c06850"
+    },
+    {
+      "id": 6816,
+      "size": 340464,
+      "stored_size": 86618,
+      "compression": 1,
+      "file": "resources/06816.lz",
+      "sha256": "d9f5ab7514997d07ce5f10d40392e3ea731d9f380297b21a0d80ce2d5afeac87"
+    },
+    {
+      "id": 6817,
+      "size": 328592,
+      "stored_size": 82475,
+      "compression": 1,
+      "file": "resources/06817.lz",
+      "sha256": "fa79200a7e69294dc557b9223af1b1489af20d27df21f8e5563a4f349bf7c345"
+    },
+    {
+      "id": 6818,
+      "size": 327604,
+      "stored_size": 86130,
+      "compression": 1,
+      "file": "resources/06818.lz",
+      "sha256": "fe50776ff43586943253cec11cb45c230da117884307cadec865b7618cf07bea"
+    },
+    {
+      "id": 8390,
+      "size": 15764,
+      "stored_size": 3745,
+      "compression": 1,
+      "file": "resources/08390.lz",
+      "sha256": "000e933ed51c27e8dfbe71d2326324f3c8c50dfa7e9ca94837779c31239a41a9"
+    },
+    {
+      "id": 8405,
+      "size": 516,
+      "stored_size": 160,
+      "compression": 1,
+      "file": "resources/08405.lz",
+      "sha256": "229b34b497306497fee22c599f060c30b77e381b7998da840ba0d8d72c9f3d41"
+    },
+    {
+      "id": 16487,
+      "size": 4224,
+      "stored_size": 1036,
+      "compression": 1,
+      "file": "resources/16487.lz",
+      "sha256": "847bdbf22175504fdc44cadd9a934ff5c543430c1b644e7c305b4b44a0dba196"
+    },
+    {
+      "id": 16488,
+      "size": 4224,
+      "stored_size": 1036,
+      "compression": 1,
+      "file": "resources/16488.lz",
+      "sha256": "30d6ee972c8f0c7303f2b336f049a519a042d106de5713ba06019d4065662d61"
+    },
+    {
+      "id": 16489,
+      "size": 4224,
+      "stored_size": 1036,
+      "compression": 1,
+      "file": "resources/16489.lz",
+      "sha256": "0d5360ea06fb87fe2113cf180f6713e0c1c8e93688fdda6f814e1453efc50086"
+    },
+    {
+      "id": 16490,
+      "size": 4224,
+      "stored_size": 1036,
+      "compression": 1,
+      "file": "resources/16490.lz",
+      "sha256": "ba85743b7e1e5dce8df54727822d421700e636aa6aec928ddff018fb946710e6"
+    }
+  ],
+  "virtual_sizes": {},
+  "validation": {
+    "item_rows": 2735,
+    "checks": {
+      "slot_row_counts": 8,
+      "challenge_rows": 18,
+      "parallel_item_rows": 4,
+      "contiguous_category_blocks": 1,
+      "category_stats_rows": 72,
+      "bounty_drop_rates": 146,
+      "bounty_drop_links": 438,
+      "item_icon_links": 2735,
+      "recipe_item_links": 5471,
+      "ingredient_quantities": 3894,
+      "recipe_flag_links": 1298,
+      "recipe_category_icons": 1298,
+      "shop_item_links": 1657,
+      "quest_item_links": 1200,
+      "quest_chain_links": 400,
+      "quest_flag_links": 400,
+      "quest_map_links": 400,
+      "quest_dialogue_links": 400,
+      "quest_text_rows": 9
+    },
+    "errors": []
+  }
+}

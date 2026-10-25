@@ -1,0 +1,22 @@
+# Game dumps (copy once via USB stick; never commit to Git)
+/game/
+*.3ds
+*.cia
+*.cxi
+
+# Player saves & logs (local to each brother's PC; never overwrite on update)
+/saves/
+/logs/
+
+# Per-machine identity, user settings & runtime locks
+# IMPORTANT: console_id MUST NOT be shared across PCs or multiplayer nodes will collide!
+/data/yw2-recomp/console_id
+/data/yw2-recomp/settings.ini
+/data/yw2-recomp/instance-*.lock
+/data/yw2-recomp/shader-cache-v3/*.log
+/data/yw2-recomp/shader-cache-v3/*.tmp*
+/data/yw2-recomp/shader-cache-v2/
+
+# Temporary update staging
+/.update-tmp/
+/.freebuff/
