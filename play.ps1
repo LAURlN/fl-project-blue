@@ -4,7 +4,9 @@ param(
     [switch]$Vanilla,
     [switch]$NoDlc,
     [switch]$Launcher,
-    [switch]$NoLaunch
+    [switch]$NoLaunch,
+    [switch]$NoFirewall,
+    [switch]$SetupFirewall
 )
 
 $ErrorActionPreference = "Stop"
@@ -31,6 +33,7 @@ $IsTestChannel = ($Channel -eq "test")
 # Load update-config.env if present
 $UpdateBranch = "main"
 $UpdateZipUrl = ""
+$UpdateVersionUrl = ""
 if (Test-Path "$Here\update-config.env") {
     Get-Content "$Here\update-config.env" | ForEach-Object {
         $line = $_.Trim()
@@ -42,7 +45,22 @@ if (Test-Path "$Here\update-config.env") {
             if ($parts[0].Trim() -eq "FL_UPDATE_ZIP_URL" -and $parts[1].Trim()) {
                 $UpdateZipUrl = $parts[1].Trim()
             }
+            if ($parts[0].Trim() -eq "FL_UPDATE_VERSION_URL" -and $parts[1].Trim()) {
+                $UpdateVersionUrl = $parts[1].Trim()
+            }
         }
+    }
+}
+
+# Derive a raw version.json URL for GitHub archive ZIPs so the gitless updater
+# can compare versions before downloading the whole package.
+if (-not $UpdateVersionUrl -and $UpdateZipUrl) {
+    if ($UpdateZipUrl -match '^https?://github\.com/([^/]+)/([^/]+)/archive/refs/heads/(.+?)(?:\.zip)?/?$') {
+        $UpdateVersionUrl = "https://raw.githubusercontent.com/$($Matches[1])/$($Matches[2])/$($Matches[3])/version.json"
+    } elseif ($UpdateZipUrl -match '^https?://github\.com/([^/]+)/([^/]+)/archive/(.+?)(?:\.zip)?/?$') {
+        $UpdateVersionUrl = "https://raw.githubusercontent.com/$($Matches[1])/$($Matches[2])/$($Matches[3])/version.json"
+    } elseif ($UpdateZipUrl -match '^https?://codeload\.github\.com/([^/]+)/([^/]+)/zip/refs/heads/(.+?)/?$') {
+        $UpdateVersionUrl = "https://raw.githubusercontent.com/$($Matches[1])/$($Matches[2])/$($Matches[3])/version.json"
     }
 }
 
@@ -93,34 +111,144 @@ if (-not $IsTestChannel -and -not $NoUpdate -and $env:FL_NO_UPDATE -ne "1") {
             }
         }
     } elseif ($UpdateZipUrl) {
-        Write-Host "[Updater] Git not found; checking ZIP update from $UpdateZipUrl..." -ForegroundColor Cyan
+        Write-Host "[Updater] Git not found; checking ZIP update..." -ForegroundColor Cyan
+        # The PS 5.1 progress bar makes Invoke-WebRequest 10-50x slower.
+        $PrevZipProgress = $ProgressPreference
+        $ProgressPreference = "SilentlyContinue"
+        # The outer updater block uses Continue so redirected git stderr cannot
+        # abort the launch. ZIP file operations should fail loudly instead.
+        $PrevZipEap = $ErrorActionPreference
+        $ErrorActionPreference = "Stop"
+        $tmpDir = Join-Path $Here ".update-tmp"
+        $downloaded = $false
         try {
-            $tmpDir = Join-Path $Here ".update-tmp"
-            if (Test-Path $tmpDir) { Remove-Item -Recurse -Force $tmpDir }
-            New-Item -ItemType Directory -Path $tmpDir | Out-Null
-            $zipFile = Join-Path $tmpDir "update.zip"
-            Invoke-WebRequest -Uri $UpdateZipUrl -OutFile $zipFile -UseBasicParsing -TimeoutSec 15
-            Expand-Archive -Path $zipFile -DestinationPath $tmpDir -Force
-            $extractedRoot = Get-ChildItem -Path $tmpDir -Directory | Select-Object -First 1
-            if ($extractedRoot) {
-                foreach ($sub in @("bin", "lib", "data\yw2-recomp\mods", "data\yw2-recomp\shader-cache-v3")) {
-                    $src = Join-Path $extractedRoot.FullName $sub
-                    $dst = Join-Path $Here $sub
-                    if (Test-Path $src) {
-                        New-Item -ItemType Directory -Path $dst -Force | Out-Null
-                        Copy-Item -Path "$src\*" -Destination $dst -Recurse -Force
+            $LocalVersion = $null
+            if (Test-Path "$Here\version.json") {
+                try { $LocalVersion = Get-Content "$Here\version.json" -Raw | ConvertFrom-Json } catch { $LocalVersion = $null }
+            }
+
+            $RemoteVersion = $null
+            $VersionChecked = $false
+            if ($UpdateVersionUrl) {
+                try {
+                    $versionResponse = Invoke-WebRequest -Uri $UpdateVersionUrl -UseBasicParsing -TimeoutSec 15
+                    $RemoteVersion = $versionResponse.Content | ConvertFrom-Json
+                    if ($RemoteVersion -and $RemoteVersion.version) { $VersionChecked = $true }
+                } catch {
+                    $VersionChecked = $false
+                }
+            }
+
+            if (-not $VersionChecked) {
+                # No network, 404, unparseable version.json, or no URL: never
+                # block the launch, and never download the large ZIP blindly.
+                Write-Host "[Updater] ZIP update check failed; continuing with local version." -ForegroundColor Yellow
+            } elseif ($LocalVersion -and
+                      ([string]$LocalVersion.version -eq [string]$RemoteVersion.version) -and
+                      ([string]$LocalVersion.updated_at -eq [string]$RemoteVersion.updated_at)) {
+                Write-Host "[Updater] Already up to date ($($RemoteVersion.version))" -ForegroundColor DarkGray
+            } else {
+                $sizeText = ""
+                try {
+                    $head = Invoke-WebRequest -Uri $UpdateZipUrl -Method Head -UseBasicParsing -TimeoutSec 20
+                    $contentLength = $head.Headers["Content-Length"]
+                    if ($contentLength) {
+                        $sizeText = (" ({0:N1} MB)" -f ([double]$contentLength / 1MB))
+                    }
+                } catch {}
+                Write-Host "[Updater] Downloading update$sizeText..." -ForegroundColor Cyan
+
+                if (Test-Path $tmpDir) { Remove-Item -Recurse -Force $tmpDir }
+                New-Item -ItemType Directory -Path $tmpDir | Out-Null
+                $downloaded = $true
+                $zipFile = Join-Path $tmpDir "update.zip"
+                Invoke-WebRequest -Uri $UpdateZipUrl -OutFile $zipFile -UseBasicParsing -TimeoutSec 600
+                $zipMB = (Get-Item -LiteralPath $zipFile).Length / 1MB
+                Write-Host ("[Updater] Downloaded {0:N1} MB." -f $zipMB) -ForegroundColor DarkGray
+
+                $extractDir = Join-Path $tmpDir "extract"
+                Expand-Archive -Path $zipFile -DestinationPath $extractDir -Force
+
+                # GitHub archive ZIPs have one top-level folder; portable
+                # packages exported by publish-test.ps1 are flat.
+                $packageRoot = $extractDir
+                if (-not (Test-Path (Join-Path $packageRoot "version.json")) -and
+                    -not (Test-Path (Join-Path $packageRoot "bin\fl_eur.exe"))) {
+                    foreach ($candidate in @(Get-ChildItem -LiteralPath $extractDir -Directory -ErrorAction SilentlyContinue)) {
+                        if ((Test-Path (Join-Path $candidate.FullName "version.json")) -or
+                            (Test-Path (Join-Path $candidate.FullName "bin\fl_eur.exe"))) {
+                            $packageRoot = $candidate.FullName
+                            break
+                        }
                     }
                 }
-                foreach ($file in @("version.json", "data\yw2-recomp\settings.default.ini")) {
-                    $src = Join-Path $extractedRoot.FullName $file
-                    $dst = Join-Path $Here $file
-                    if (Test-Path $src) { Copy-Item -Path $src -Destination $dst -Force }
+                if (-not (Test-Path (Join-Path $packageRoot "version.json")) -and
+                    -not (Test-Path (Join-Path $packageRoot "bin\fl_eur.exe"))) {
+                    throw "update package has no version.json or bin\fl_eur.exe"
                 }
+
+                # Runtime/data first.
+                foreach ($sub in @("bin", "lib", "data\yw2-recomp\shader-cache-v3")) {
+                    $src = Join-Path $packageRoot $sub
+                    $dst = Join-Path $Here $sub
+                    if (Test-Path -LiteralPath $src -PathType Container) {
+                        New-Item -ItemType Directory -Path $dst -Force | Out-Null
+                        foreach ($item in @(Get-ChildItem -LiteralPath $src -Force -ErrorAction SilentlyContinue)) {
+                            Copy-Item -LiteralPath $item.FullName -Destination (Join-Path $dst $item.Name) -Recurse -Force
+                        }
+                    }
+                }
+
+                # Mods are mirrored: overlays removed upstream must disappear.
+                $srcMods = Join-Path $packageRoot "data\yw2-recomp\mods"
+                $dstMods = Join-Path $Here "data\yw2-recomp\mods"
+                if (Test-Path -LiteralPath $srcMods -PathType Container) {
+                    if (Test-Path -LiteralPath $dstMods) { Remove-Item -LiteralPath $dstMods -Recurse -Force }
+                    New-Item -ItemType Directory -Path $dstMods -Force | Out-Null
+                    foreach ($item in @(Get-ChildItem -LiteralPath $srcMods -Force -ErrorAction SilentlyContinue)) {
+                        Copy-Item -LiteralPath $item.FullName -Destination (Join-Path $dstMods $item.Name) -Recurse -Force
+                    }
+                } elseif (Test-Path -LiteralPath $dstMods) {
+                    Remove-Item -LiteralPath $dstMods -Recurse -Force
+                    New-Item -ItemType Directory -Path $dstMods -Force | Out-Null
+                }
+
+                foreach ($file in @("version.json", "data\yw2-recomp\settings.default.ini")) {
+                    $src = Join-Path $packageRoot $file
+                    $dst = Join-Path $Here $file
+                    if (Test-Path -LiteralPath $src -PathType Leaf) {
+                        $dstParent = Split-Path -Parent $dst
+                        if ($dstParent) { New-Item -ItemType Directory -Path $dstParent -Force | Out-Null }
+                        Copy-Item -LiteralPath $src -Destination $dst -Force
+                    }
+                }
+
+                # Scripts last. channel.env, test-version.json, game/, saves/,
+                # logs/, settings.ini and console_id are never in this list.
+                foreach ($name in @(
+                    "play.ps1", "play.bat", "play.sh", "setup-firewall.ps1",
+                    "install-windows.ps1", "Install-Windows.bat",
+                    "install-test.ps1", "Install-Test.bat", "install-linux.sh",
+                    "publish-update.ps1", "publish-test.ps1",
+                    "README.txt", "update-config.env"
+                )) {
+                    $src = Join-Path $packageRoot $name
+                    $dst = Join-Path $Here $name
+                    if (Test-Path -LiteralPath $src -PathType Leaf) {
+                        Copy-Item -LiteralPath $src -Destination $dst -Force
+                    }
+                }
+
                 Write-Host "[Updater] ZIP update applied." -ForegroundColor Green
             }
-            Remove-Item -Recurse -Force $tmpDir -ErrorAction SilentlyContinue
         } catch {
             Write-Host "[Updater] ZIP update skipped ($($_.Exception.Message))." -ForegroundColor Yellow
+        } finally {
+            $ProgressPreference = $PrevZipProgress
+            $ErrorActionPreference = $PrevZipEap
+            if ($downloaded -and (Test-Path $tmpDir)) {
+                Remove-Item -Recurse -Force $tmpDir -ErrorAction SilentlyContinue
+            }
         }
     }
     } finally {
@@ -215,6 +343,55 @@ if (-not (Test-Path $ExePath)) {
         Write-Error "fl_eur.exe not found in $Here\bin\fl_eur.exe yet. Run publish-update.ps1 once the Windows build completes."
     }
     exit 1
+}
+
+# 5b. Windows Firewall for multiplayer. Reading rules works without admin, so the
+#     check is cheap and silent when everything is already in place. Only a "yes"
+#     starts setup-firewall.ps1 through one UAC prompt.
+$FirewallScript   = Join-Path $Here "setup-firewall.ps1"
+$FirewallDeclined = Join-Path $RecompDataDir "firewall-declined"
+if ($NoFirewall -or $env:FL_NO_FIREWALL -eq "1") {
+    Write-Host "[Firewall] Skipped (-NoFirewall/FL_NO_FIREWALL=1)." -ForegroundColor DarkGray
+} elseif (-not (Test-Path -LiteralPath $FirewallScript -PathType Leaf)) {
+    Write-Host "[Firewall] setup-firewall.ps1 not found; skipping network access check." -ForegroundColor DarkGray
+} else {
+    try {
+        . $FirewallScript
+        if ($SetupFirewall) {
+            if (-not (Test-FantasyLifeInteractiveConsole)) {
+                Write-Host "[Firewall] Non-interactive session; skipping network access setup." -ForegroundColor DarkGray
+            } else {
+                Write-Host "[Firewall] Setting up multiplayer network access (one UAC prompt)..." -ForegroundColor Cyan
+                if (Invoke-FantasyLifeFirewallSetupElevated -InstallDir $Here) {
+                    Remove-Item -LiteralPath $FirewallDeclined -Force -ErrorAction SilentlyContinue
+                    Write-Host "[Firewall] Network access is ready." -ForegroundColor Green
+                }
+            }
+        } elseif (Test-Path -LiteralPath $FirewallDeclined) {
+            Write-Host "[Firewall] Network access setup was declined earlier; retry with play.bat -SetupFirewall." -ForegroundColor DarkGray
+        } elseif (-not (Test-FantasyLifeInteractiveConsole)) {
+            Write-Host "[Firewall] Non-interactive session; skipping network access setup." -ForegroundColor DarkGray
+        } else {
+            $FirewallStatus = Get-FantasyLifeFirewallStatus -InstallDir $Here
+            if ($FirewallStatus.Ready) {
+                Remove-Item -LiteralPath $FirewallDeclined -Force -ErrorAction SilentlyContinue
+            } else {
+                $FirewallAnswer = Read-Host "Set up network access for multiplayer now? [Y/n]"
+                if ($FirewallAnswer -match "^(?i)\s*n") {
+                    Set-Content -LiteralPath $FirewallDeclined -Encoding ASCII -Value ("Declined " + (Get-Date).ToString("s") + " for " + $Here)
+                    Write-Host "[Firewall] OK - skipping. Hamachi/LAN multiplayer may be blocked. Retry with play.bat -SetupFirewall." -ForegroundColor Yellow
+                } else {
+                    Write-Host "[Firewall] Setting up multiplayer network access (one UAC prompt)..." -ForegroundColor Cyan
+                    if (Invoke-FantasyLifeFirewallSetupElevated -InstallDir $Here) {
+                        Remove-Item -LiteralPath $FirewallDeclined -Force -ErrorAction SilentlyContinue
+                        Write-Host "[Firewall] Network access is ready." -ForegroundColor Green
+                    }
+                }
+            }
+        }
+    } catch {
+        Write-Host "[Firewall] Check skipped ($($_.Exception.Message))." -ForegroundColor Yellow
+    }
 }
 
 # 6. Configure environment variables

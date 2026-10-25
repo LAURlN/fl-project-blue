@@ -13,6 +13,7 @@
 /data/yw2-recomp/console_id
 /data/yw2-recomp/settings.ini
 /data/yw2-recomp/instance-*.lock
+/data/yw2-recomp/firewall-declined
 /data/yw2-recomp/shader-cache-v3/*.log
 /data/yw2-recomp/shader-cache-v3/*.tmp*
 /data/yw2-recomp/shader-cache-v2/

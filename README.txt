@@ -16,6 +16,12 @@ Every time you start the game via `play.bat` / `play.sh`:
 - Before launching, it prints the current `Build` and `Mod Digest` so everyone can
   confirm they are on the exact same version before joining multiplayer.
 
+On PCs without Git, the ZIP updater first reads the small remote `version.json` and
+only downloads the full ZIP when `version` or `updated_at` changed. The version URL is
+derived automatically for GitHub archive ZIPs; set `FL_UPDATE_VERSION_URL` in
+`update-config.env` for a different host. If the check is unreachable, the local build
+still launches normally.
+
 Useful Launch Flags:
 - Skip update check:
   - Windows: `.\play.ps1 -NoUpdate`
@@ -110,3 +116,43 @@ The installer:
 
 The exported ZIP contains no game dumps, saves, logs, `settings.ini`, or `console_id`,
 so it is safe to move between PCs.
+
+6. MULTIPLAYER NETWORK ACCESS (WINDOWS FIREWALL)
+------------------------------------------------
+The installer or the first launch offers to add Windows Firewall rules with one UAC
+prompt. The rules live in the group `Fantasy Life PC` and only apply to this install's
+`bin\fl_eur.exe`:
+
+- Inbound UDP allow on the Domain and Private profiles, remote `LocalSubnet`, for
+  normal LAN play.
+- Inbound UDP allow on the Public profile, remote only `25.0.0.0/8` (Hamachi) and
+  `26.0.0.0/8` (Radmin VPN). Public is never opened to RFC1918 ranges or `Any`:
+  cafés and other public Wi-Fi also use RFC1918 addresses.
+- If a ZeroTier adapter exists, an inbound UDP allow scoped to that adapter
+  (Public + Private), not to an address range.
+- When `bin\clockwork-relay.exe` is present, an optional inbound UDP 47830 allow on
+  the Domain and Private profiles for relay hosts.
+
+The setup is idempotent. Rules you created by hand (for example
+`Fantasy Life (Hamachi)`) are treated as compatible and are kept. Inbound Block rules
+for `fl_eur.exe` (created when someone clicked Cancel in a Windows prompt) are removed
+because they override allow rules.
+
+If you declined, or multiplayer is blocked later, run:
+  play.bat -SetupFirewall
+
+Preview without changing anything:
+  powershell -ExecutionPolicy Bypass -File .\setup-firewall.ps1 -WhatIf -InstallDir "$env:LOCALAPPDATA\FantasyLife-PC"
+Check only:
+  powershell -ExecutionPolicy Bypass -File .\setup-firewall.ps1 -Check -InstallDir "$env:LOCALAPPDATA\FantasyLife-PC"
+Remove only the rules managed by this package (your own rules stay):
+  powershell -ExecutionPolicy Bypass -File .\setup-firewall.ps1 -Remove -InstallDir "$env:LOCALAPPDATA\FantasyLife-PC"
+Use the same commands with `FantasyLife-PC-Test` for the test install. The decline
+marker is `data\yw2-recomp\firewall-declined`; deleting it also makes the next launch
+ask again.
+
+Linux: this package does not change Linux firewall settings. If `ufw` or a similar
+firewall is enabled and multiplayer does not work, allow the game and UDP 47830, for
+example:
+  sudo ufw allow 47830/udp
+(only needed on the player who hosts a relay).

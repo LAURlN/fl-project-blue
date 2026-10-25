@@ -8,7 +8,8 @@ param(
     [string]$StableDir = (Join-Path $env:LOCALAPPDATA "FantasyLife-PC"),
     [string]$TargetDir = (Join-Path $env:LOCALAPPDATA "FantasyLife-PC-Test"),
     [string]$ExportZip = "",
-    [switch]$NoShortcuts
+    [switch]$NoShortcuts,
+    [switch]$NoFirewall
 )
 
 $ErrorActionPreference = "Stop"
@@ -34,6 +35,42 @@ function Link-GameFile {
     } catch {
         Copy-Item -LiteralPath $From -Destination $To -Force
         return "copy"
+    }
+}
+
+# Add the test install to Windows Firewall only if a required rule is missing.
+# Dot-sourcing setup-firewall.ps1 has a param block of its own, so keep this
+# function's parameter name different from -InstallDir.
+function Set-TestFirewallIfMissing {
+    param([Parameter(Mandatory = $true)][string]$InstallPath)
+
+    if ($NoFirewall -or $env:FL_NO_FIREWALL -eq "1") {
+        Write-Host "[Firewall] Skipped (-NoFirewall/FL_NO_FIREWALL=1)." -ForegroundColor DarkGray
+        return
+    }
+    $setup = Join-Path $Here "setup-firewall.ps1"
+    if (-not (Test-Path -LiteralPath $setup -PathType Leaf)) {
+        Write-Host "[Firewall] setup-firewall.ps1 not found; skipping network access setup." -ForegroundColor Yellow
+        return
+    }
+    try {
+        . $setup
+        $status = Get-FantasyLifeFirewallStatus -InstallDir $InstallPath
+        if ($status.Ready) {
+            Write-Host "[Firewall] Multiplayer rules are already present." -ForegroundColor DarkGray
+            return
+        }
+        if (-not (Test-FantasyLifeInteractiveConsole)) {
+            Write-Host "[Firewall] Non-interactive session; skipped. Run play.bat -SetupFirewall in $InstallPath if multiplayer is blocked." -ForegroundColor Yellow
+            return
+        }
+        Write-Host "[Firewall] Adding missing multiplayer rules (one UAC prompt)..." -ForegroundColor Yellow
+        if (Invoke-FantasyLifeFirewallSetupElevated -InstallDir $InstallPath) {
+            Remove-Item -LiteralPath (Join-Path $InstallPath "data\yw2-recomp\firewall-declined") -Force -ErrorAction SilentlyContinue
+            Write-Host "[Firewall] Multiplayer rules are ready." -ForegroundColor Green
+        }
+    } catch {
+        Write-Host "[Firewall] Skipped ($($_.Exception.Message)). Run play.bat -SetupFirewall to retry." -ForegroundColor Yellow
     }
 }
 
@@ -75,8 +112,8 @@ function Export-TestPackage {
         # Root launchers, channel marker, manifest and installer. The installer and
         # README always come from this script's folder when available, so an
         # export-only run still ships the current installer.
-        foreach ($name in @("play.ps1", "play.bat", "play.sh", "channel.env", "test-version.json", "README.txt", "install-test.ps1", "Install-Test.bat")) {
-            if ($name -in @("README.txt", "install-test.ps1", "Install-Test.bat")) {
+        foreach ($name in @("play.ps1", "play.bat", "play.sh", "setup-firewall.ps1", "channel.env", "test-version.json", "README.txt", "install-test.ps1", "Install-Test.bat")) {
+            if ($name -in @("README.txt", "install-test.ps1", "Install-Test.bat", "setup-firewall.ps1")) {
                 $src = Join-Path $Here $name
                 if (-not (Test-Path -LiteralPath $src -PathType Leaf)) { $src = Join-Path $SourceFull $name }
             } else {
@@ -85,7 +122,7 @@ function Export-TestPackage {
             }
             if (Test-Path -LiteralPath $src -PathType Leaf) {
                 Copy-Item -LiteralPath $src -Destination (Join-Path $stage $name) -Force
-            } elseif ($name -in @("install-test.ps1", "Install-Test.bat", "play.ps1", "play.bat", "test-version.json")) {
+            } elseif ($name -in @("install-test.ps1", "Install-Test.bat", "play.ps1", "play.bat", "test-version.json", "setup-firewall.ps1")) {
                 throw "Cannot export: required file '$name' was not found in $SourceFull or $Here."
             }
         }
@@ -207,6 +244,7 @@ if ($ExportOnly) {
     Write-Host " From: $TargetFull" -ForegroundColor Gray
     Write-Host " To:   $([System.IO.Path]::GetFullPath($ExportZip))" -ForegroundColor Gray
     Write-Host "==============================================================" -ForegroundColor Yellow
+    Set-TestFirewallIfMissing -InstallPath $TargetFull
     Export-TestPackage -SourceDir $TargetFull -ZipPath $ExportZip
     exit 0
 }
@@ -245,7 +283,7 @@ Write-Host "==============================================================" -For
 
 # 1. Launcher scripts and the portable installer (same play.ps1, channel-aware;
 #    no git repo, no updater)
-foreach ($name in @("play.ps1", "play.bat", "play.sh", "README.txt", "install-test.ps1", "Install-Test.bat")) {
+foreach ($name in @("play.ps1", "play.bat", "play.sh", "setup-firewall.ps1", "README.txt", "install-test.ps1", "Install-Test.bat")) {
     $src = Join-Path $Here $name
     if (Test-Path -LiteralPath $src) {
         Copy-FileSafe $src (Join-Path $TargetFull $name) | Out-Null
@@ -466,7 +504,11 @@ if (-not $NoShortcuts) {
     }
 }
 
-# 9. Optional portable package for another PC (built from the finished install)
+# 9. Windows Firewall for the test install, only when a rule is missing. This
+#    never prompts in a non-interactive/export session.
+Set-TestFirewallIfMissing -InstallPath $TargetFull
+
+# 10. Optional portable package for another PC (built from the finished install)
 if ($ExportZip) {
     Export-TestPackage -SourceDir $TargetFull -ZipPath $ExportZip
 }

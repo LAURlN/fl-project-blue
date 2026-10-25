@@ -1,5 +1,6 @@
 param(
-    [string]$TargetDir = (Join-Path $env:LOCALAPPDATA "FantasyLife-PC")
+    [string]$TargetDir = (Join-Path $env:LOCALAPPDATA "FantasyLife-PC"),
+    [switch]$NoFirewall
 )
 
 $ErrorActionPreference = "Stop"
@@ -82,4 +83,37 @@ Write-Host ""
 Write-Host "  Installed to:     $TargetDir" -ForegroundColor Cyan
 Write-Host "  Desktop Shortcut: $DesktopDir\Fantasy Life.lnk" -ForegroundColor Cyan
 Write-Host "  Auto-Update:      Active (checks automatically on every launch)" -ForegroundColor Cyan
+Write-Host ""
+
+# Allow LAN/Hamachi/Radmin/ZeroTier multiplayer through Windows Firewall. This
+# is idempotent and keeps any rules the user created by hand.
+if ($NoFirewall -or $env:FL_NO_FIREWALL -eq "1") {
+    Write-Host "[Firewall] Skipped (-NoFirewall/FL_NO_FIREWALL=1)." -ForegroundColor DarkGray
+} else {
+    $FirewallSetup = Join-Path $TargetDir "setup-firewall.ps1"
+    if (-not (Test-Path -LiteralPath $FirewallSetup -PathType Leaf)) {
+        $FirewallSetup = Join-Path $SourceDir "setup-firewall.ps1"
+    }
+    if (-not (Test-Path -LiteralPath $FirewallSetup -PathType Leaf)) {
+        Write-Host "[Firewall] setup-firewall.ps1 not found; skipping network access setup." -ForegroundColor Yellow
+    } else {
+        Write-Host "[Firewall] Allowing LAN/Hamachi/Radmin/ZeroTier multiplayer through Windows Firewall (one UAC prompt)..." -ForegroundColor Yellow
+        try {
+            . $FirewallSetup
+            if (-not (Test-FantasyLifeInteractiveConsole)) {
+                Write-Host "[Firewall] Non-interactive session; skipped. Run play.bat -SetupFirewall in $TargetDir if multiplayer is blocked." -ForegroundColor Yellow
+            } else {
+                $FirewallStatus = Get-FantasyLifeFirewallStatus -InstallDir $TargetDir
+                if ($FirewallStatus.Ready) {
+                    Write-Host "[Firewall] Multiplayer rules are already present." -ForegroundColor DarkGray
+                } elseif (Invoke-FantasyLifeFirewallSetupElevated -InstallDir $TargetDir) {
+                    Remove-Item -LiteralPath (Join-Path $TargetDir "data\yw2-recomp\firewall-declined") -Force -ErrorAction SilentlyContinue
+                    Write-Host "[Firewall] Multiplayer rules are ready." -ForegroundColor Green
+                }
+            }
+        } catch {
+            Write-Host "[Firewall] Skipped ($($_.Exception.Message)). Run play.bat -SetupFirewall to retry." -ForegroundColor Yellow
+        }
+    }
+}
 Write-Host ""
