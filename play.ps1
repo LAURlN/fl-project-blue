@@ -32,19 +32,19 @@ if (Test-Path "$Here\update-config.env") {
 if (-not $NoUpdate -and $env:FL_NO_UPDATE -ne "1") {
     $gitCmd = Get-Command git -ErrorAction SilentlyContinue
     if ($gitCmd -and (Test-Path "$Here\.git")) {
-        $remotes = & git remote 2>$null
+        $remotes = & git -c safe.directory=* remote 2>$null
         if ($remotes -contains "origin") {
             Write-Host "[Updater] Checking for updates from origin/$UpdateBranch..." -ForegroundColor Cyan
-            & git fetch origin $UpdateBranch --quiet 2>$null
+            & git -c safe.directory=* fetch origin $UpdateBranch --quiet 2>$null
             if ($LASTEXITCODE -eq 0) {
-                $localRev = (& git rev-parse HEAD 2>$null)
-                $remoteRev = (& git rev-parse "origin/$UpdateBranch" 2>$null)
+                $localRev = (& git -c safe.directory=* rev-parse HEAD 2>$null)
+                $remoteRev = (& git -c safe.directory=* rev-parse "origin/$UpdateBranch" 2>$null)
                 if ($remoteRev -and ($localRev -ne $remoteRev)) {
                     Write-Host "[Updater] Applying update ($($localRev.Substring(0,7)) -> $($remoteRev.Substring(0,7)))..." -ForegroundColor Green
-                    & git merge --ff-only "origin/$UpdateBranch" 2>$null
+                    & git -c safe.directory=* merge --ff-only "origin/$UpdateBranch" 2>$null
                     if ($LASTEXITCODE -ne 0) {
                         # Fallback: checkout tracked runtime/mod paths directly without touching local untracked files
-                        & git checkout "origin/$UpdateBranch" -- bin lib data/yw2-recomp/mods data/yw2-recomp/shader-cache-v3 data/yw2-recomp/settings.default.ini version.json 2>$null
+                        & git -c safe.directory=* checkout "origin/$UpdateBranch" -- bin lib data/yw2-recomp/mods data/yw2-recomp/shader-cache-v3 data/yw2-recomp/settings.default.ini version.json 2>$null
                     }
                 } else {
                     Write-Host "[Updater] Already up to date." -ForegroundColor DarkGray

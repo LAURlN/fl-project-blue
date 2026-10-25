@@ -20,15 +20,15 @@ fi
 
 # 1. Auto-update check (never touches game/, saves/, settings.ini, or console_id)
 if [ "${FL_NO_UPDATE:-0}" != "1" ]; then
-    if command -v git >/dev/null 2>&1 && [ -d "$here/.git" ] && git remote | grep -qx origin; then
+    if command -v git >/dev/null 2>&1 && [ -d "$here/.git" ] && git -c safe.directory='*' remote | grep -qx origin; then
         echo "[Updater] Checking for updates from origin/$FL_UPDATE_BRANCH..."
-        if git fetch origin "$FL_UPDATE_BRANCH" --quiet 2>/dev/null; then
-            local_rev="$(git rev-parse HEAD 2>/dev/null || true)"
-            remote_rev="$(git rev-parse "origin/$FL_UPDATE_BRANCH" 2>/dev/null || true)"
+        if git -c safe.directory='*' fetch origin "$FL_UPDATE_BRANCH" --quiet 2>/dev/null; then
+            local_rev="$(git -c safe.directory='*' rev-parse HEAD 2>/dev/null || true)"
+            remote_rev="$(git -c safe.directory='*' rev-parse "origin/$FL_UPDATE_BRANCH" 2>/dev/null || true)"
             if [ -n "$remote_rev" ] && [ "$local_rev" != "$remote_rev" ]; then
                 echo "[Updater] Applying update (${local_rev:0:7} -> ${remote_rev:0:7})..."
-                git merge --ff-only "origin/$FL_UPDATE_BRANCH" 2>/dev/null || \
-                    git checkout "origin/$FL_UPDATE_BRANCH" -- bin lib data/yw2-recomp/mods data/yw2-recomp/shader-cache-v3 data/yw2-recomp/settings.default.ini version.json 2>/dev/null || true
+                git -c safe.directory='*' merge --ff-only "origin/$FL_UPDATE_BRANCH" 2>/dev/null || \
+                    git -c safe.directory='*' checkout "origin/$FL_UPDATE_BRANCH" -- bin lib data/yw2-recomp/mods data/yw2-recomp/shader-cache-v3 data/yw2-recomp/settings.default.ini version.json 2>/dev/null || true
                 chmod +x "$here/bin/fl_eur" "$here/play.sh" 2>/dev/null || true
             else
                 echo "[Updater] Already up to date."
