@@ -45,9 +45,22 @@ Whenever you change a mod or rebuild `fl_eur.exe`, run:
      powershell -ExecutionPolicy Bypass -File .\publish-update.ps1 -RebuildMods -Commit -Push
 Your brothers simply close and re-open `play.bat` / `play.sh` to get the update!
 
-`-Push` only runs in an interactive PowerShell window. It prints the commit range that
-will be pushed and asks you to type `publish`; redirected or non-interactive sessions are
-refused.
+`-Push` only runs in an interactive PowerShell window. It prints the exe source and
+SHA-256, the commit range that will be pushed, and asks you to type `publish`;
+redirected or non-interactive sessions are refused.
+
+Publishing the exact build you tested
+-------------------------------------
+When the build in `%LOCALAPPDATA%\FantasyLife-PC-Test` is the one you tested, publish
+exactly that install instead of whatever binary happens to be in a build folder:
+     powershell -ExecutionPolicy Bypass -File .\publish-update.ps1 -FromTest -Commit -Push
+`-FromTest` copies the test install's `bin\fl_eur.exe`, its DLLs, `clockwork-relay.exe`
+and only the mod overlays listed in `test-version.json`, strips debug symbols, and writes
+`version.json` with the sanitized test label as `version` and a fresh `mod_digest`.
+You can point it elsewhere with `-TestDir <path>`.
+Without `-FromTest` the script behaves as before; either way it prints the published exe
+source and SHA-256. The Linux `bin/fl_eur` cannot be rebuilt on Windows, so it is kept as
+the previous Linux build; a yellow warning appears when it is older than the Windows exe.
 
 4. STABLE VS TEST INSTALLS
 --------------------------
@@ -77,3 +90,23 @@ refused.
   and never copies `console_id`, so each install keeps its own multiplayer identity.
   Re-running it never touches test saves, `settings.ini`, or `console_id`, and never
   writes to the stable install.
+
+5. TESTING ON A SECOND PC (e.g. laptop)
+---------------------------------------
+On your PC, export the current test install as a portable ZIP:
+     powershell -ExecutionPolicy Bypass -File .\publish-test.ps1 -ExportZip D:\fl-test.zip
+Add `-Exe`, `-Relay`, `-ModDirs`, or `-Label` to update the local test install first;
+with only `-ExportZip` the existing test install is exported unchanged.
+
+Copy the ZIP to the second PC, extract it, and double-click `Install-Test.bat`.
+The installer:
+- installs to `%LOCALAPPDATA%\FantasyLife-PC-Test`;
+- hard-links the game dumps from that PC's stable install
+  `%LOCALAPPDATA%\FantasyLife-PC\game` (copy fallback); if that is missing it asks for
+  the folder that contains `FantasyLife_EU.3ds` (or pass `-DumpDir <path>`);
+- keeps existing test saves, `settings.ini`, and `console_id`;
+- creates the "Fantasy Life (Test)" shortcuts;
+- optionally copies stable saves one-way, only when a test save does not already exist.
+
+The exported ZIP contains no game dumps, saves, logs, `settings.ini`, or `console_id`,
+so it is safe to move between PCs.

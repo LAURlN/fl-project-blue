@@ -7,57 +7,12 @@ param(
     [switch]$CopySavesFromStable,
     [string]$StableDir = (Join-Path $env:LOCALAPPDATA "FantasyLife-PC"),
     [string]$TargetDir = (Join-Path $env:LOCALAPPDATA "FantasyLife-PC-Test"),
+    [string]$ExportZip = "",
     [switch]$NoShortcuts
 )
 
 $ErrorActionPreference = "Stop"
 $Here = Split-Path -Parent $MyInvocation.MyCommand.Path
-
-# `powershell.exe -File ... -ModDirs a,b` binds the whole list as one string, so
-# expand comma-separated values unless the string is itself an existing path.
-$ExpandedModDirs = @()
-foreach ($dirValue in $ModDirs) {
-    if ($dirValue -and ($dirValue -notmatch ",")) {
-        $ExpandedModDirs += $dirValue
-    } elseif ($dirValue -and (Test-Path -LiteralPath $dirValue)) {
-        $ExpandedModDirs += $dirValue
-    } elseif ($dirValue) {
-        $ExpandedModDirs += @($dirValue -split "," | Where-Object { $_.Trim() } | ForEach-Object { $_.Trim() })
-    }
-}
-$ModDirs = $ExpandedModDirs
-
-# This script only ever reads the stable install. Every write goes to TargetDir.
-$StableFull = [System.IO.Path]::GetFullPath($StableDir).TrimEnd("\")
-$TargetFull = [System.IO.Path]::GetFullPath($TargetDir).TrimEnd("\")
-if ($TargetFull -eq $StableFull -or $TargetFull.StartsWith($StableFull + "\")) {
-    throw "Refusing to use the stable install as the test target: $TargetFull"
-}
-if (-not (Test-Path -LiteralPath $StableFull)) {
-    throw "Stable install not found: $StableFull"
-}
-
-if (-not $Label) { $Label = "test build" }
-
-$BinDir    = Join-Path $TargetFull "bin"
-$DataDir   = Join-Path $TargetFull "data\yw2-recomp"
-$ModsRoot  = Join-Path $DataDir "mods\fantasylife"
-$ShaderDir = Join-Path $DataDir "shader-cache-v3"
-$GameDir   = Join-Path $TargetFull "game"
-$SavesDir  = Join-Path $TargetFull "saves"
-$LogsDir   = Join-Path $TargetFull "logs"
-$TargetExe = Join-Path $BinDir "fl_eur.exe"
-$VersionFile = Join-Path $TargetFull "test-version.json"
-
-foreach ($d in @($BinDir, $DataDir, $ModsRoot, $ShaderDir, $GameDir, $SavesDir, $LogsDir)) {
-    New-Item -ItemType Directory -Path $d -Force | Out-Null
-}
-
-# Keep the previous manifest so a re-run without -Exe can report the real source.
-$PrevVersion = $null
-if (Test-Path -LiteralPath $VersionFile) {
-    try { $PrevVersion = Get-Content -LiteralPath $VersionFile -Raw | ConvertFrom-Json } catch {}
-}
 
 function Copy-FileSafe {
     param([string]$From, [string]$To)
@@ -82,15 +37,215 @@ function Link-GameFile {
     }
 }
 
+# Build a portable test package for another PC. It deliberately contains only
+# runtime files, mods, shaders, launchers and the installer: never game dumps,
+# saves, logs, settings.ini or console_id.
+function Export-TestPackage {
+    param(
+        [Parameter(Mandatory = $true)][string]$SourceDir,
+        [Parameter(Mandatory = $true)][string]$ZipPath
+    )
+    $SourceFull = [System.IO.Path]::GetFullPath($SourceDir).TrimEnd("\")
+    $SourceExe = Join-Path $SourceFull "bin\fl_eur.exe"
+    if (-not (Test-Path -LiteralPath $SourceExe -PathType Leaf)) {
+        throw "Cannot export: $SourceExe is missing."
+    }
+    $zipFull = [System.IO.Path]::GetFullPath($ZipPath)
+    $zipParent = Split-Path -Parent $zipFull
+    if ($zipParent -and -not (Test-Path -LiteralPath $zipParent)) {
+        New-Item -ItemType Directory -Path $zipParent -Force | Out-Null
+    }
+
+    $stage = Join-Path ([System.IO.Path]::GetTempPath()) ("fl-test-export-" + [guid]::NewGuid().ToString("N"))
+    $stageBin = Join-Path $stage "bin"
+    $stageData = Join-Path $stage "data\yw2-recomp"
+    $stageMods = Join-Path $stageData "mods\fantasylife"
+    $stageShader = Join-Path $stageData "shader-cache-v3"
+    foreach ($d in @($stageBin, $stageMods, $stageShader)) {
+        New-Item -ItemType Directory -Path $d -Force | Out-Null
+    }
+
+    try {
+        # bin/: exe, runtime DLLs, relay and icons
+        $srcBin = Join-Path $SourceFull "bin"
+        foreach ($f in @(Get-ChildItem -LiteralPath $srcBin -File -ErrorAction SilentlyContinue)) {
+            Copy-Item -LiteralPath $f.FullName -Destination (Join-Path $stageBin $f.Name) -Force
+        }
+
+        # Root launchers, channel marker, manifest and installer. The installer and
+        # README always come from this script's folder when available, so an
+        # export-only run still ships the current installer.
+        foreach ($name in @("play.ps1", "play.bat", "play.sh", "channel.env", "test-version.json", "README.txt", "install-test.ps1", "Install-Test.bat")) {
+            if ($name -in @("README.txt", "install-test.ps1", "Install-Test.bat")) {
+                $src = Join-Path $Here $name
+                if (-not (Test-Path -LiteralPath $src -PathType Leaf)) { $src = Join-Path $SourceFull $name }
+            } else {
+                $src = Join-Path $SourceFull $name
+                if (-not (Test-Path -LiteralPath $src -PathType Leaf)) { $src = Join-Path $Here $name }
+            }
+            if (Test-Path -LiteralPath $src -PathType Leaf) {
+                Copy-Item -LiteralPath $src -Destination (Join-Path $stage $name) -Force
+            } elseif ($name -in @("install-test.ps1", "Install-Test.bat", "play.ps1", "play.bat", "test-version.json")) {
+                throw "Cannot export: required file '$name' was not found in $SourceFull or $Here."
+            }
+        }
+        $channelText = "# Local test install marker written by publish-test.ps1`r`nFL_CHANNEL=test`r`n"
+        Set-Content -Path (Join-Path $stage "channel.env") -Value $channelText -Encoding ASCII
+
+        # Shared default settings (never settings.ini or console_id)
+        $defaultIni = Join-Path $SourceFull "data\yw2-recomp\settings.default.ini"
+        if (Test-Path -LiteralPath $defaultIni -PathType Leaf) {
+            Copy-Item -LiteralPath $defaultIni -Destination (Join-Path $stageData "settings.default.ini") -Force
+        } else {
+            Write-Host "[Export]   WARNING: settings.default.ini not found in $SourceFull." -ForegroundColor Yellow
+        }
+
+        # Mod overlays
+        $srcMods = Join-Path $SourceFull "data\yw2-recomp\mods\fantasylife"
+        if (Test-Path -LiteralPath $srcMods) {
+            foreach ($entry in @(Get-ChildItem -LiteralPath $srcMods -Force -ErrorAction SilentlyContinue)) {
+                Copy-Item -LiteralPath $entry.FullName -Destination (Join-Path $stageMods $entry.Name) -Recurse -Force
+            }
+        }
+
+        # Shader cache without logs or temp files
+        $srcShader = Join-Path $SourceFull "data\yw2-recomp\shader-cache-v3"
+        if (Test-Path -LiteralPath $srcShader) {
+            $shaderFiles = @(Get-ChildItem -LiteralPath $srcShader -Recurse -File -ErrorAction SilentlyContinue | Where-Object {
+                $_.Extension -notin @(".log", ".tmp") -and $_.Name -notlike "*.tmp*"
+            })
+            foreach ($f in $shaderFiles) {
+                $relative = $f.FullName.Substring($srcShader.Length).TrimStart("\")
+                $dst = Join-Path $stageShader $relative
+                $dstParent = Split-Path -Parent $dst
+                if ($dstParent) { New-Item -ItemType Directory -Path $dstParent -Force | Out-Null }
+                Copy-Item -LiteralPath $f.FullName -Destination $dst -Force
+            }
+        }
+
+        if (Test-Path -LiteralPath $zipFull) { Remove-Item -LiteralPath $zipFull -Force }
+        Add-Type -AssemblyName System.IO.Compression
+        Add-Type -AssemblyName System.IO.Compression.FileSystem
+        # PowerShell 5.1's ZipFile/Compress-Archive write backslash entry names,
+        # which is non-standard. Write forward-slash names explicitly.
+        $zipStream = [System.IO.File]::Open($zipFull, [System.IO.FileMode]::CreateNew, [System.IO.FileAccess]::Write)
+        try {
+            $archive = New-Object System.IO.Compression.ZipArchive($zipStream, ([System.IO.Compression.ZipArchiveMode]::Create), $true)
+            try {
+                $stagePrefix = $stage.TrimEnd("\") + "\"
+                foreach ($f in @(Get-ChildItem -LiteralPath $stage -Recurse -File -ErrorAction SilentlyContinue)) {
+                    $entryName = $f.FullName.Substring($stagePrefix.Length).Replace("\", "/")
+                    $entry = $archive.CreateEntry($entryName, [System.IO.Compression.CompressionLevel]::Optimal)
+                    $inStream = [System.IO.File]::OpenRead($f.FullName)
+                    try {
+                        $outStream = $entry.Open()
+                        try { $inStream.CopyTo($outStream) } finally { $outStream.Dispose() }
+                    } finally {
+                        $inStream.Dispose()
+                    }
+                }
+            } finally {
+                $archive.Dispose()
+            }
+        } finally {
+            $zipStream.Dispose()
+        }
+        if (-not (Test-Path -LiteralPath $zipFull -PathType Leaf)) {
+            throw "ZIP was not created: $zipFull"
+        }
+
+        $staged = @(Get-ChildItem -LiteralPath $stage -Recurse -File -ErrorAction SilentlyContinue)
+        $stagedBytes = ($staged | Measure-Object -Property Length -Sum).Sum
+        if (-not $stagedBytes) { $stagedBytes = 0 }
+        $zipBytes = (Get-Item -LiteralPath $zipFull).Length
+        Write-Host ("[Export]   Wrote {0}" -f $zipFull) -ForegroundColor Green
+        Write-Host ("[Export]   {0} file(s), {1:N1} MB staged -> {2:N1} MB ZIP" -f $staged.Count, ($stagedBytes / 1MB), ($zipBytes / 1MB)) -ForegroundColor Green
+        Write-Host "[Export]   Excludes game/, saves/, logs/, settings.ini and console_id." -ForegroundColor DarkGray
+    } finally {
+        if (Test-Path -LiteralPath $stage) {
+            Remove-Item -LiteralPath $stage -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+}
+
+# `powershell.exe -File ... -ModDirs a,b` binds the whole list as one string, so
+# expand comma-separated values unless the string is itself an existing path.
+$ExpandedModDirs = @()
+foreach ($dirValue in $ModDirs) {
+    if ($dirValue -and ($dirValue -notmatch ",")) {
+        $ExpandedModDirs += $dirValue
+    } elseif ($dirValue -and (Test-Path -LiteralPath $dirValue)) {
+        $ExpandedModDirs += $dirValue
+    } elseif ($dirValue) {
+        $ExpandedModDirs += @($dirValue -split "," | Where-Object { $_.Trim() } | ForEach-Object { $_.Trim() })
+    }
+}
+$ModDirs = $ExpandedModDirs
+
+# This script only ever reads the stable install. Every write goes to TargetDir.
+$StableFull = [System.IO.Path]::GetFullPath($StableDir).TrimEnd("\")
+$TargetFull = [System.IO.Path]::GetFullPath($TargetDir).TrimEnd("\")
+if ($TargetFull -eq $StableFull -or $TargetFull.StartsWith($StableFull + "\")) {
+    throw "Refusing to use the stable install as the test target: $TargetFull"
+}
+
+# `-ExportZip` alone exports the current test install without touching it. Any
+# parameter that installs a build also produces the ZIP after updating.
+$UpdateRequested = [bool]($Exe -or $Relay -or ($ModDirs.Count -gt 0) -or $Label -or $CopySavesFromStable)
+$ExportOnly = [bool]($ExportZip -and -not $UpdateRequested)
+
+if (-not $ExportOnly -and -not (Test-Path -LiteralPath $StableFull)) {
+    throw "Stable install not found: $StableFull"
+}
+
+if ($ExportOnly) {
+    if (-not (Test-Path -LiteralPath (Join-Path $TargetFull "bin\fl_eur.exe") -PathType Leaf)) {
+        throw "No test install to export at $TargetFull (missing bin\fl_eur.exe). Run with -Exe first."
+    }
+    Write-Host "==============================================================" -ForegroundColor Yellow
+    Write-Host " Fantasy Life PC - export the current TEST install" -ForegroundColor Yellow
+    Write-Host " From: $TargetFull" -ForegroundColor Gray
+    Write-Host " To:   $([System.IO.Path]::GetFullPath($ExportZip))" -ForegroundColor Gray
+    Write-Host "==============================================================" -ForegroundColor Yellow
+    Export-TestPackage -SourceDir $TargetFull -ZipPath $ExportZip
+    exit 0
+}
+
+if (-not $Label) { $Label = "test build" }
+
+$BinDir    = Join-Path $TargetFull "bin"
+$DataDir   = Join-Path $TargetFull "data\yw2-recomp"
+$ModsRoot  = Join-Path $DataDir "mods\fantasylife"
+$ShaderDir = Join-Path $DataDir "shader-cache-v3"
+$GameDir   = Join-Path $TargetFull "game"
+$SavesDir  = Join-Path $TargetFull "saves"
+$LogsDir   = Join-Path $TargetFull "logs"
+$TargetExe = Join-Path $BinDir "fl_eur.exe"
+$VersionFile = Join-Path $TargetFull "test-version.json"
+
+foreach ($d in @($BinDir, $DataDir, $ModsRoot, $ShaderDir, $GameDir, $SavesDir, $LogsDir)) {
+    New-Item -ItemType Directory -Path $d -Force | Out-Null
+}
+
+# Keep the previous manifest so a re-run without -Exe can report the real source.
+$PrevVersion = $null
+if (Test-Path -LiteralPath $VersionFile) {
+    try { $PrevVersion = Get-Content -LiteralPath $VersionFile -Raw | ConvertFrom-Json } catch {}
+}
+
 Write-Host "==============================================================" -ForegroundColor Yellow
 Write-Host " Fantasy Life PC - publish to local TEST install" -ForegroundColor Yellow
 Write-Host " Stable (read only): $StableFull" -ForegroundColor Gray
 Write-Host " Test target:        $TargetFull" -ForegroundColor Gray
 Write-Host " Label:              $Label" -ForegroundColor Gray
+if ($ExportZip) {
+    Write-Host " Export ZIP:         $([System.IO.Path]::GetFullPath($ExportZip))" -ForegroundColor Gray
+}
 Write-Host "==============================================================" -ForegroundColor Yellow
 
-# 1. Launcher scripts (same play.ps1, channel-aware; no git repo, no updater)
-foreach ($name in @("play.ps1", "play.bat", "play.sh", "README.txt")) {
+# 1. Launcher scripts and the portable installer (same play.ps1, channel-aware;
+#    no git repo, no updater)
+foreach ($name in @("play.ps1", "play.bat", "play.sh", "README.txt", "install-test.ps1", "Install-Test.bat")) {
     $src = Join-Path $Here $name
     if (Test-Path -LiteralPath $src) {
         Copy-FileSafe $src (Join-Path $TargetFull $name) | Out-Null
@@ -311,9 +466,17 @@ if (-not $NoShortcuts) {
     }
 }
 
+# 9. Optional portable package for another PC (built from the finished install)
+if ($ExportZip) {
+    Export-TestPackage -SourceDir $TargetFull -ZipPath $ExportZip
+}
+
 Write-Host ""
 Write-Host "Test install ready: $TargetFull" -ForegroundColor Green
 Write-Host "  Shortcut:         Fantasy Life (Test)" -ForegroundColor Green
 Write-Host "  Auto-update:      Off (local test channel)" -ForegroundColor Green
 Write-Host "  Test saves:       $SavesDir" -ForegroundColor Green
 Write-Host "  Manifest:         $VersionFile" -ForegroundColor Green
+if ($ExportZip) {
+    Write-Host "  Portable ZIP:     $([System.IO.Path]::GetFullPath($ExportZip))" -ForegroundColor Green
+}
