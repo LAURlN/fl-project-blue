@@ -151,4 +151,5 @@ if [ "${FL_NO_LAUNCH:-0}" = "1" ]; then
     echo "[Launch] FL_NO_LAUNCH=1; exiting without starting the game."
     exit 0
 fi
-exec "$here/bin/fl_eur" --play "$rom" "$@" > "$here/logs/play.log" 2>&1
+log="$here/logs/play.log"; [ "$save" = freelife ] || log="$here/logs/play-$save.log"  # one log per save profile
+exec "$here/bin/fl_eur" --play "$rom" "$@" > "$log" 2>&1

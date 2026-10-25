@@ -266,7 +266,8 @@ if ($NoLaunch) {
     exit 0
 }
 
-$LogFile = Join-Path $LogDir "play.log"
+# One log per save profile, so two windows (e.g. a multiplayer test) don't share one
+$LogFile = Join-Path $LogDir $(if ($Save -eq "freelife") { "play.log" } else { "play-$Save.log" })
 Write-Host "[Launch] Save profile: $Save ($SaveDir)" -ForegroundColor Green
 Write-Host "[Launch] Log output:   $LogFile" -ForegroundColor DarkGray
 
