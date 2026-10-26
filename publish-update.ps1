@@ -493,7 +493,7 @@ if (-not (Test-Path (Join-Path $UsbRoot ".git"))) {
 }
 
 if ($Commit -or $Push) {
-    & git -C $UsbRoot add .gitignore update-config.env play.ps1 play.bat play.sh setup-firewall.ps1 publish-update.ps1 publish-test.ps1 install-test.ps1 Install-Test.bat install-windows.ps1 Install-Windows.bat install-linux.sh README.txt contrib version.json data/yw2-recomp/settings.default.ini data/yw2-recomp/mods data/yw2-recomp/shader-cache-v3 bin lib
+    & git -C $UsbRoot add .gitignore update-config.env play.ps1 play.bat play.sh setup-firewall.ps1 publish-update.ps1 publish-test.ps1 install-test.ps1 Install-Test.bat install-windows.ps1 Install-Windows.bat install-linux.sh README.txt version.json data/yw2-recomp/settings.default.ini data/yw2-recomp/mods data/yw2-recomp/shader-cache-v3 bin lib
     $status = (& git -C $UsbRoot status --porcelain)
     if ($status) {
         if (-not $Message) {

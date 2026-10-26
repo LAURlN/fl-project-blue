@@ -192,15 +192,10 @@ example:
   sudo ufw allow 47830/udp
 (only needed on the player who hosts a relay).
 
-7. CONTRIBUTING (FOR BEGINNERS)
--------------------------------
-Open contrib/START-HERE.md (German first, then English). You can describe a small
-data mod to a Freebuff agent, try it in Fantasy Life (Test), and send a proposed
-change to Leo's PRIVATE modding-kit-only repository. Leo reviews and decides.
-Start once with contrib/Setup-Contrib.bat. Rerun it after updates to refresh the
-agent instructions. Normal launches never prompt you to set up a workshop.
-The public package repository is separate; never upload source dumps or extracted
-game resources. The private modding-kit URL lives in contrib/config.env (no secrets).
+7. MODS
+-------
+Mods are added through the launcher's Mod Manager (ZIP or GameBanana). Never upload source dumps or extracted
+game resources.
 Stable Windows play.ps1 reads version.json's mods array (old packages fall back
 to installed overlay folders); an empty array disables all packaged mods.
 For maintainers: -RebuildMods reads the source repo's mods/enabled.json in order,
