@@ -62,19 +62,32 @@ if (-not (Test-Path $SettingsIni) -and (Test-Path $DefaultIni)) {
 }
 
 Write-Host "[2/3] Creating Desktop and Start Menu shortcuts..." -ForegroundColor Yellow
-$WshShell = New-Object -ComObject WScript.Shell
 $DesktopDir  = [Environment]::GetFolderPath("Desktop")
 $ProgramsDir = [Environment]::GetFolderPath("Programs")
+# The shortcut opens the launcher window (update, play with mods, play vanilla).
+# Its icon is generated from this PC's own game dump; the package itself only
+# ships a neutral fallback icon.
+$IconPath = Join-Path $TargetDir "bin\fantasy-life.ico"
+$IconTool = Join-Path $TargetDir "bin\launcher\icon.ps1"
+$HaveIconTool = Test-Path -LiteralPath $IconTool
+if ($HaveIconTool) {
+    . $IconTool
+    try { $IconPath = Get-FantasyLifeIconPath -InstallDir $TargetDir -RomPath (Join-Path $TargetDir "game\FantasyLife_EU.3ds") } catch {}
+}
 
 foreach ($dir in @($DesktopDir, $ProgramsDir)) {
     if ($dir -and (Test-Path $dir)) {
         $lnkPath = Join-Path $dir "Fantasy Life.lnk"
-        $sc = $WshShell.CreateShortcut($lnkPath)
-        $sc.TargetPath       = Join-Path $TargetDir "play.bat"
-        $sc.WorkingDirectory = $TargetDir
-        $sc.IconLocation     = (Join-Path $TargetDir "bin\fantasy-life.ico") + ",0"
-        $sc.Description      = "Fantasy Life PC (Auto-Updating)"
-        $sc.Save()
+        if ($HaveIconTool) {
+            Set-FantasyLifeShortcut -Path $lnkPath -InstallDir $TargetDir -IconPath $IconPath -Description "Fantasy Life PC"
+        } else {
+            $sc = (New-Object -ComObject WScript.Shell).CreateShortcut($lnkPath)
+            $sc.TargetPath       = Join-Path $TargetDir "play.bat"
+            $sc.WorkingDirectory = $TargetDir
+            $sc.IconLocation     = $IconPath + ",0"
+            $sc.Description      = "Fantasy Life PC"
+            $sc.Save()
+        }
     }
 }
 
@@ -82,7 +95,7 @@ Write-Host "[3/3] Installation complete!" -ForegroundColor Green
 Write-Host ""
 Write-Host "  Installed to:     $TargetDir" -ForegroundColor Cyan
 Write-Host "  Desktop Shortcut: $DesktopDir\Fantasy Life.lnk" -ForegroundColor Cyan
-Write-Host "  Auto-Update:      Active (checks automatically on every launch)" -ForegroundColor Cyan
+Write-Host "  Updates:          The launcher window shows when an update is ready (one click)" -ForegroundColor Cyan
 Write-Host ""
 
 # Allow LAN/Hamachi/Radmin/ZeroTier multiplayer through Windows Firewall. This

@@ -295,18 +295,33 @@ Write-Host "[Manifest] Updated test-version.json (exe sha256: $exeHash)" -Foregr
 
 # 8. "Fantasy Life (Test)" shortcuts.
 if (-not $NoShortcuts) {
-    $WshShell = New-Object -ComObject WScript.Shell
+    # The shortcut opens the launcher window; the icon is generated from the
+    # game dump (never shipped), with the neutral package icon as fallback.
     $iconPath = Join-Path $BinDir "fantasy-life.ico"
     if (-not (Test-Path -LiteralPath $iconPath)) { $iconPath = $TargetExe }
+    $iconTool = Join-Path $BinDir "launcher\icon.ps1"
+    $haveTool = Test-Path -LiteralPath $iconTool
+    if ($haveTool) {
+        . $iconTool
+        $rom = Join-Path $GameDir "FantasyLife_EU.3ds"
+        if (-not (Test-Path -LiteralPath $rom)) {
+            $rom = @(Get-ChildItem -LiteralPath $GameDir -Filter "*.3ds" -File -ErrorAction SilentlyContinue | Select-Object -First 1 | ForEach-Object { $_.FullName })[0]
+        }
+        try { $iconPath = Get-FantasyLifeIconPath -InstallDir $TargetFull -RomPath $(if ($rom) { $rom } else { "" }) } catch {}
+    }
     foreach ($dir in @([Environment]::GetFolderPath("Desktop"), [Environment]::GetFolderPath("Programs"))) {
         if ($dir -and (Test-Path -LiteralPath $dir)) {
             $lnkPath = Join-Path $dir "Fantasy Life (Test).lnk"
-            $shortcut = $WshShell.CreateShortcut($lnkPath)
-            $shortcut.TargetPath = Join-Path $TargetFull "play.bat"
-            $shortcut.WorkingDirectory = $TargetFull
-            $shortcut.IconLocation = $iconPath + ",0"
-            $shortcut.Description = "Fantasy Life PC - TEST build (local only, no auto-update)"
-            $shortcut.Save()
+            if ($haveTool) {
+                Set-FantasyLifeShortcut -Path $lnkPath -InstallDir $TargetFull -IconPath $iconPath -Description "Fantasy Life PC - TEST build (local only, no auto-update)"
+            } else {
+                $shortcut = (New-Object -ComObject WScript.Shell).CreateShortcut($lnkPath)
+                $shortcut.TargetPath = Join-Path $TargetFull "play.bat"
+                $shortcut.WorkingDirectory = $TargetFull
+                $shortcut.IconLocation = $iconPath + ",0"
+                $shortcut.Description = "Fantasy Life PC - TEST build (local only, no auto-update)"
+                $shortcut.Save()
+            }
             Write-Host "[Shortcut] $lnkPath" -ForegroundColor Green
         }
     }

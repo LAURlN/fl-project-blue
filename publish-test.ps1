@@ -108,6 +108,10 @@ function Export-TestPackage {
         foreach ($f in @(Get-ChildItem -LiteralPath $srcBin -File -ErrorAction SilentlyContinue)) {
             Copy-Item -LiteralPath $f.FullName -Destination (Join-Path $stageBin $f.Name) -Force
         }
+        # bin\launcher\ (launcher window, icon tools)
+        foreach ($d in @(Get-ChildItem -LiteralPath $srcBin -Directory -ErrorAction SilentlyContinue)) {
+            Copy-Item -LiteralPath $d.FullName -Destination (Join-Path $stageBin $d.Name) -Recurse -Force
+        }
 
         # Root launchers, channel marker, manifest and installer. The installer and
         # README always come from this script's folder when available, so an
@@ -349,16 +353,22 @@ if ($Relay) {
     }
 }
 
-# Icon for the test shortcuts
-$iconCandidates = @(
-    (Join-Path $Here "bin\fantasy-life.ico"),
-    (Join-Path $StableBin "fantasy-life.ico")
-)
-foreach ($icon in $iconCandidates) {
-    if (Test-Path -LiteralPath $icon) {
-        Copy-FileSafe $icon (Join-Path $BinDir "fantasy-life.ico") | Out-Null
-        break
+# Neutral fallback icon and the launcher window (bin\launcher\) from this package.
+# The real game icon is generated from the dump into data\yw2-recomp\icon.ico.
+foreach ($name in @("fantasy-life.ico", "fantasy-life.png")) {
+    foreach ($icon in @((Join-Path $Here "bin\$name"), (Join-Path $StableBin $name))) {
+        if (Test-Path -LiteralPath $icon) {
+            Copy-FileSafe $icon (Join-Path $BinDir $name) | Out-Null
+            break
+        }
     }
+}
+$SrcLauncher = Join-Path $Here "bin\launcher"
+$DstLauncher = Join-Path $BinDir "launcher"
+if (Test-Path -LiteralPath $SrcLauncher -PathType Container) {
+    if (Test-Path -LiteralPath $DstLauncher) { Remove-Item -LiteralPath $DstLauncher -Recurse -Force }
+    Copy-Item -LiteralPath $SrcLauncher -Destination $DstLauncher -Recurse -Force
+    Write-Host "[Launcher] Copied the launcher window (bin\launcher)" -ForegroundColor Green
 }
 
 # 3. Mod overlays (only these are enabled by play.ps1 in the test channel)
@@ -507,21 +517,36 @@ Write-Host "[Manifest] Wrote test-version.json (label: $Label, exe sha256: $exeH
 
 # 8. Shortcuts for the test install
 if (-not $NoShortcuts) {
-    $WshShell = New-Object -ComObject WScript.Shell
+    # The shortcut opens the launcher window; its icon comes from the game dump
+    # (generated locally, never shipped) with the neutral icon as fallback.
+    $IconTool = Join-Path $BinDir "launcher\icon.ps1"
+    $IconPath = Join-Path $BinDir "fantasy-life.ico"
+    $TestRom = Join-Path $GameDir "FantasyLife_EU.3ds"
+    $HaveIconTool = Test-Path -LiteralPath $IconTool
+    if ($HaveIconTool) {
+        . $IconTool
+        try { $IconPath = Get-FantasyLifeIconPath -InstallDir $TargetFull -RomPath $(if (Test-Path -LiteralPath $TestRom) { $TestRom } else { "" }) } catch {}
+    }
     $DesktopDir  = [Environment]::GetFolderPath("Desktop")
     $ProgramsDir = [Environment]::GetFolderPath("Programs")
     foreach ($dir in @($DesktopDir, $ProgramsDir)) {
         if ($dir -and (Test-Path -LiteralPath $dir)) {
             $lnkPath = Join-Path $dir "Fantasy Life (Test).lnk"
-            $sc = $WshShell.CreateShortcut($lnkPath)
-            $sc.TargetPath       = Join-Path $TargetFull "play.bat"
-            $sc.WorkingDirectory = $TargetFull
-            $sc.IconLocation     = (Join-Path $BinDir "fantasy-life.ico") + ",0"
-            $sc.Description      = "Fantasy Life PC - TEST build (local only, no auto-update)"
-            $sc.Save()
-            Write-Host "[Shortcut] $lnkPath" -ForegroundColor Green
+            if ($HaveIconTool) {
+                Set-FantasyLifeShortcut -Path $lnkPath -InstallDir $TargetFull -IconPath $IconPath -Description "Fantasy Life PC - TEST build (local only, no auto-update)"
+            } else {
+                $sc = (New-Object -ComObject WScript.Shell).CreateShortcut($lnkPath)
+                $sc.TargetPath       = Join-Path $TargetFull "play.bat"
+                $sc.WorkingDirectory = $TargetFull
+                $sc.IconLocation     = $IconPath + ",0"
+                $sc.Description      = "Fantasy Life PC - TEST build (local only, no auto-update)"
+                $sc.Save()
+            }
+            Write-Host "[Shortcut] $lnkPath (icon: $IconPath)" -ForegroundColor Green
         }
     }
+    $ie4 = Join-Path $env:SystemRoot "System32\ie4uinit.exe"
+    if (Test-Path -LiteralPath $ie4) { try { Start-Process -FilePath $ie4 -ArgumentList "-show" -WindowStyle Hidden } catch {} }
 }
 
 # 9. Windows Firewall for the test install, only when a rule is missing. This

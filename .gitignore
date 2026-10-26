@@ -25,3 +25,12 @@
 # Local test-channel markers (never part of the stable package)
 /channel.env
 /test-version.json
+
+# Launcher: icon generated from the player's own dump (never ship game art),
+# window preferences and launcher log
+/data/yw2-recomp/icon.ico
+/data/yw2-recomp/icon.png
+/data/yw2-recomp/icon.version
+/data/yw2-recomp/icon.ico.tmp
+/data/yw2-recomp/icon.png.tmp
+/data/yw2-recomp/launcher.json
