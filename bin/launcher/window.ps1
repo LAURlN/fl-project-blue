@@ -811,6 +811,7 @@ function Show-FLLauncherWindow {
                 $relaunch = @("-NoProfile", "-ExecutionPolicy", "Bypass", "-WindowStyle", "Hidden", "-File", "`"$PlayScript`"", "-Window", "-Hidden",
                               "-AfterUpdate", "`"$($script:FL.OldVersion)`"")
                 if ($script:FL.SelectedSave) { $relaunch += @("-Save", $script:FL.SelectedSave) }
+                if ($script:FL.Preview) { $relaunch += "-Preview" }
                 Start-Process -FilePath $ps -ArgumentList $relaunch -WorkingDirectory $Here -WindowStyle Hidden
                 $script:FL.ExitCode = 0
                 $script:FL.Window.Close()
