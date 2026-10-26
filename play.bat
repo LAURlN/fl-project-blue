@@ -1,17 +1,18 @@
 @echo off
 setlocal
-cd /d "%~dp0"
 goto main
-rem Keep the exit below at byte 104 (see note after :main)..
+rem Keep the exit below at byte 104 (LF) / 108 (CRLF); see note after :mai
 exit /b
 :main
+cd /d "%~dp0"
 rem Fantasy Life PC. Without arguments (desktop shortcut, double-click) this
 rem opens the launcher window. With arguments it is the command-line launcher:
 rem   play.bat -Direct          play right away, no window
 rem   play.bat -Vanilla         play without data mods
 rem   play.bat -Save story      open the window with the story save selected
-rem The "exit /b" above ":main" must stay at byte offset 104: an older play.bat
-rem that an update replaced while it was running resumes reading there.
+rem The "exit /b" above ":main" must stay the 5th line at byte offset 104 (108 with
+rem CRLF line ends): an older play.bat that an update replaced while it was
+rem running resumes reading at exactly that offset.
 if "%~1"=="" goto window
 powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0play.ps1" %*
 if errorlevel 1 (
