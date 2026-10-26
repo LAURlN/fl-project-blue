@@ -1,0 +1,302 @@
+{
+  "format": "fl-resource-overlay-v1",
+  "name": "Thistle Wolf (East Grassy Plains)",
+  "program_id": "0004000000113100",
+  "archive_count": 58095,
+  "archive_size": 372881344,
+  "header_fnv32": "13fdfc8c",
+  "resources": [
+    {
+      "id": 6920,
+      "size": 6276,
+      "stored_size": 3771,
+      "compression": 1,
+      "file": "resources/06920.lz",
+      "sha256": "a4600fa0ae6865bb33bd4548213b562cc7e1b07184748c749f20194982d57e2b"
+    },
+    {
+      "id": 6930,
+      "size": 40272,
+      "stored_size": 8353,
+      "compression": 1,
+      "file": "resources/06930.lz",
+      "sha256": "d4e4ac5cc64a6d4a209f7c94d0506d054df9b7ba2d819e4aef8d132cfb986bf5"
+    },
+    {
+      "id": 6940,
+      "size": 9000,
+      "stored_size": 4388,
+      "compression": 1,
+      "file": "resources/06940.lz",
+      "sha256": "64615c4e9ff52be0ed0f4fddf5cefe8fcbb983015bef101de0a86ec74e0e2082"
+    },
+    {
+      "id": 6941,
+      "size": 9000,
+      "stored_size": 4388,
+      "compression": 1,
+      "file": "resources/06941.lz",
+      "sha256": "64615c4e9ff52be0ed0f4fddf5cefe8fcbb983015bef101de0a86ec74e0e2082"
+    },
+    {
+      "id": 6942,
+      "size": 9000,
+      "stored_size": 4388,
+      "compression": 1,
+      "file": "resources/06942.lz",
+      "sha256": "64615c4e9ff52be0ed0f4fddf5cefe8fcbb983015bef101de0a86ec74e0e2082"
+    },
+    {
+      "id": 6943,
+      "size": 9000,
+      "stored_size": 4388,
+      "compression": 1,
+      "file": "resources/06943.lz",
+      "sha256": "64615c4e9ff52be0ed0f4fddf5cefe8fcbb983015bef101de0a86ec74e0e2082"
+    },
+    {
+      "id": 6944,
+      "size": 9000,
+      "stored_size": 4388,
+      "compression": 1,
+      "file": "resources/06944.lz",
+      "sha256": "64615c4e9ff52be0ed0f4fddf5cefe8fcbb983015bef101de0a86ec74e0e2082"
+    },
+    {
+      "id": 6945,
+      "size": 9000,
+      "stored_size": 4388,
+      "compression": 1,
+      "file": "resources/06945.lz",
+      "sha256": "64615c4e9ff52be0ed0f4fddf5cefe8fcbb983015bef101de0a86ec74e0e2082"
+    },
+    {
+      "id": 6946,
+      "size": 9000,
+      "stored_size": 4388,
+      "compression": 1,
+      "file": "resources/06946.lz",
+      "sha256": "64615c4e9ff52be0ed0f4fddf5cefe8fcbb983015bef101de0a86ec74e0e2082"
+    },
+    {
+      "id": 6947,
+      "size": 9000,
+      "stored_size": 4388,
+      "compression": 1,
+      "file": "resources/06947.lz",
+      "sha256": "64615c4e9ff52be0ed0f4fddf5cefe8fcbb983015bef101de0a86ec74e0e2082"
+    },
+    {
+      "id": 7290,
+      "size": 2084,
+      "stored_size": 573,
+      "compression": 1,
+      "file": "resources/07290.lz",
+      "sha256": "ba01ecbe3dfcff6fb9bd042758934c3673d1b05bf98190849c9ec19fcd78abed"
+    },
+    {
+      "id": 7291,
+      "size": 2416,
+      "stored_size": 657,
+      "compression": 1,
+      "file": "resources/07291.lz",
+      "sha256": "4326a1975df929d1daef0cf6947fcb978fbdbdd7306e9e5bc0e44405ddd1cd23"
+    },
+    {
+      "id": 7292,
+      "size": 2416,
+      "stored_size": 657,
+      "compression": 1,
+      "file": "resources/07292.lz",
+      "sha256": "4326a1975df929d1daef0cf6947fcb978fbdbdd7306e9e5bc0e44405ddd1cd23"
+    },
+    {
+      "id": 7293,
+      "size": 2416,
+      "stored_size": 657,
+      "compression": 1,
+      "file": "resources/07293.lz",
+      "sha256": "4326a1975df929d1daef0cf6947fcb978fbdbdd7306e9e5bc0e44405ddd1cd23"
+    },
+    {
+      "id": 7294,
+      "size": 2416,
+      "stored_size": 657,
+      "compression": 1,
+      "file": "resources/07294.lz",
+      "sha256": "4326a1975df929d1daef0cf6947fcb978fbdbdd7306e9e5bc0e44405ddd1cd23"
+    },
+    {
+      "id": 7295,
+      "size": 2416,
+      "stored_size": 657,
+      "compression": 1,
+      "file": "resources/07295.lz",
+      "sha256": "4326a1975df929d1daef0cf6947fcb978fbdbdd7306e9e5bc0e44405ddd1cd23"
+    },
+    {
+      "id": 7296,
+      "size": 2416,
+      "stored_size": 657,
+      "compression": 1,
+      "file": "resources/07296.lz",
+      "sha256": "4326a1975df929d1daef0cf6947fcb978fbdbdd7306e9e5bc0e44405ddd1cd23"
+    },
+    {
+      "id": 7297,
+      "size": 2416,
+      "stored_size": 657,
+      "compression": 1,
+      "file": "resources/07297.lz",
+      "sha256": "4326a1975df929d1daef0cf6947fcb978fbdbdd7306e9e5bc0e44405ddd1cd23"
+    },
+    {
+      "id": 7298,
+      "size": 2416,
+      "stored_size": 657,
+      "compression": 1,
+      "file": "resources/07298.lz",
+      "sha256": "4326a1975df929d1daef0cf6947fcb978fbdbdd7306e9e5bc0e44405ddd1cd23"
+    },
+    {
+      "id": 8706,
+      "size": 159344,
+      "stored_size": 70297,
+      "compression": 1,
+      "file": "resources/08706.lz",
+      "sha256": "08d233e62703c8e555405fdb4c6ae0faed4dcd58d6a38ae572479195c2e7b202"
+    },
+    {
+      "id": 8707,
+      "size": 159092,
+      "stored_size": 70144,
+      "compression": 1,
+      "file": "resources/08707.lz",
+      "sha256": "b9e78889df92cf61f79577c13cc7321022ab7666e8afba4253d1daa653073012"
+    },
+    {
+      "id": 8708,
+      "size": 157688,
+      "stored_size": 69863,
+      "compression": 1,
+      "file": "resources/08708.lz",
+      "sha256": "9fa13338da301f570d75d992ebc946f2766c3fe88fa2476fa67e561f6e03f0c8"
+    },
+    {
+      "id": 8709,
+      "size": 157060,
+      "stored_size": 69890,
+      "compression": 1,
+      "file": "resources/08709.lz",
+      "sha256": "73f8e05a61982dffbd816e477cbdf51017ff5bf9a62b13d92dd2db0f2fc92b5a"
+    },
+    {
+      "id": 8710,
+      "size": 159344,
+      "stored_size": 70297,
+      "compression": 1,
+      "file": "resources/08710.lz",
+      "sha256": "08d233e62703c8e555405fdb4c6ae0faed4dcd58d6a38ae572479195c2e7b202"
+    },
+    {
+      "id": 8711,
+      "size": 159092,
+      "stored_size": 70144,
+      "compression": 1,
+      "file": "resources/08711.lz",
+      "sha256": "b9e78889df92cf61f79577c13cc7321022ab7666e8afba4253d1daa653073012"
+    },
+    {
+      "id": 8712,
+      "size": 160584,
+      "stored_size": 70290,
+      "compression": 1,
+      "file": "resources/08712.lz",
+      "sha256": "bc2a635eaaf6b86b90449c7db93d778d46a7b5e8291982312fa459ce0aa947bb"
+    },
+    {
+      "id": 8713,
+      "size": 157248,
+      "stored_size": 69930,
+      "compression": 1,
+      "file": "resources/08713.lz",
+      "sha256": "34aa8c9a34706978ef0d485d478a15497ba445d7c02711daa6e06ed914fb13f5"
+    },
+    {
+      "id": 8719,
+      "size": 144392,
+      "stored_size": 67893,
+      "compression": 1,
+      "file": "resources/08719.lz",
+      "sha256": "cf9ce276134beb8c8bbfaab95c641529dd62092a12d655cf758d41abd262d7d3"
+    },
+    {
+      "id": 23053,
+      "size": 36176,
+      "stored_size": 18153,
+      "compression": 1,
+      "file": "resources/23053.lz",
+      "sha256": "e28ab136bcc541fcda50039567fc880c1a4084f52ab09b7bf980447b2c468909"
+    },
+    {
+      "id": 23055,
+      "size": 11136,
+      "stored_size": 4715,
+      "compression": 1,
+      "file": "resources/23055.lz",
+      "sha256": "930b2efd9e8c96f73bc2ad69b9746ae544e0307203a2eea86cd98d7b55f3af2a"
+    },
+    {
+      "id": 51122,
+      "size": 230408,
+      "stored_size": 99801,
+      "compression": 1,
+      "file": "resources/51122.lz",
+      "sha256": "15d29abbe33a1e06d43252b102b84587c471ee35556fba49a684d65d1704551e"
+    }
+  ],
+  "virtual_sizes": {
+    "51118": 34304,
+    "51119": 8,
+    "51120": 40956,
+    "51121": 10368,
+    "51123": 63420,
+    "51124": 30812,
+    "51125": 12372,
+    "51126": 10916,
+    "51127": 5996,
+    "51128": 2852,
+    "51129": 384,
+    "51130": 520,
+    "51131": 552,
+    "51132": 1228,
+    "51133": 4940,
+    "51134": 9080,
+    "51135": 168
+  },
+  "validation": {
+    "item_rows": 2735,
+    "checks": {
+      "slot_row_counts": 8,
+      "challenge_rows": 18,
+      "parallel_item_rows": 4,
+      "contiguous_category_blocks": 1,
+      "category_stats_rows": 72,
+      "bounty_drop_rates": 146,
+      "bounty_drop_links": 438,
+      "item_icon_links": 2735,
+      "recipe_item_links": 5472,
+      "ingredient_quantities": 3894,
+      "recipe_flag_links": 1298,
+      "recipe_category_icons": 1298,
+      "shop_item_links": 1656,
+      "quest_item_links": 1200,
+      "quest_chain_links": 400,
+      "quest_flag_links": 400,
+      "quest_map_links": 400,
+      "quest_dialogue_links": 400,
+      "quest_text_rows": 9
+    },
+    "errors": []
+  }
+}

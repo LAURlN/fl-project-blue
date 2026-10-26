@@ -1,11 +1,12 @@
 ﻿{
-    "version":  "launcher-pkg-825b255",
-    "updated_at":  "2026-10-26T12:50:51Z",
-    "mod_digest":  "bc4c6e39ccf0",
+    "version":  "fl-1850ca2-port-3c43859",
+    "updated_at":  "2026-10-26T13:00:13Z",
+    "mod_digest":  "4ed6fd42d64e",
     "mods":  [
-                 "overlay-stack",
+                 "story-skip",
+                 "eastern-plains-enemy",
                  "castele-house",
-                 "story-skip"
+                 "wooden-sword"
              ],
     "has_windows_bin":  true,
     "has_linux_bin":  true
