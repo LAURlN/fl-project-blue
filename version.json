@@ -1,12 +1,11 @@
 ﻿{
-    "version":  "coop-freedom-main-7fc0a99-port-238cdac-free-life-v4",
-    "updated_at":  "2026-10-25T18:57:25Z",
-    "mod_digest":  "4ed6fd42d64e",
+    "version":  "launcher-pkg-825b255",
+    "updated_at":  "2026-10-26T12:50:51Z",
+    "mod_digest":  "bc4c6e39ccf0",
     "mods":  [
-                 "story-skip",
-                 "eastern-plains-enemy",
+                 "overlay-stack",
                  "castele-house",
-                 "wooden-sword"
+                 "story-skip"
              ],
     "has_windows_bin":  true,
     "has_linux_bin":  true
