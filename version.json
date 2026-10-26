@@ -1,11 +1,11 @@
 ﻿{
     "version":  "fl-1850ca2-port-3c43859",
-    "updated_at":  "2026-10-26T13:00:13Z",
-    "mod_digest":  "4ed6fd42d64e",
+    "updated_at":  "2026-10-26T13:07:43Z",
+    "mod_digest":  "85d9cab915cf",
     "mods":  [
-                 "story-skip",
-                 "eastern-plains-enemy",
                  "castele-house",
+                 "eastern-plains-enemy",
+                 "story-skip",
                  "wooden-sword"
              ],
     "has_windows_bin":  true,

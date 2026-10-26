@@ -1,0 +1,212 @@
+{
+  "format": "fl-resource-overlay-v1",
+  "name": "Castele Quiet House",
+  "program_id": "0004000000113100",
+  "archive_count": 58095,
+  "archive_size": 372881344,
+  "header_fnv32": "13fdfc8c",
+  "resources": [
+    {
+      "id": 5965,
+      "size": 27996,
+      "stored_size": 7822,
+      "compression": 1,
+      "file": "resources/05965.lz",
+      "sha256": "d1c47e00a56f36bdf571bdc14165b32a648ad74f70c85b703be122ae85d4a3ba"
+    },
+    {
+      "id": 5966,
+      "size": 40396,
+      "stored_size": 11545,
+      "compression": 1,
+      "file": "resources/05966.lz",
+      "sha256": "a417046073ac2f10727f43c7d912ecc5a176a56d9ea5e062199405908cd75798"
+    },
+    {
+      "id": 5967,
+      "size": 40732,
+      "stored_size": 11614,
+      "compression": 1,
+      "file": "resources/05967.lz",
+      "sha256": "6a3eb64fd62da091227258f05cb671da8fcaa69df91cc6d417a204e119431100"
+    },
+    {
+      "id": 5968,
+      "size": 40192,
+      "stored_size": 11556,
+      "compression": 1,
+      "file": "resources/05968.lz",
+      "sha256": "358bbdd3c6a1bbebc6314bc4149a15b66bde8a43bda667416f63396fd7258499"
+    },
+    {
+      "id": 5969,
+      "size": 39680,
+      "stored_size": 11443,
+      "compression": 1,
+      "file": "resources/05969.lz",
+      "sha256": "44f25f9f12d72a803c689dd0775a61f4fcdf80427c736068c3af799b865e70c5"
+    },
+    {
+      "id": 5970,
+      "size": 40396,
+      "stored_size": 11545,
+      "compression": 1,
+      "file": "resources/05970.lz",
+      "sha256": "a417046073ac2f10727f43c7d912ecc5a176a56d9ea5e062199405908cd75798"
+    },
+    {
+      "id": 5971,
+      "size": 40732,
+      "stored_size": 11614,
+      "compression": 1,
+      "file": "resources/05971.lz",
+      "sha256": "6a3eb64fd62da091227258f05cb671da8fcaa69df91cc6d417a204e119431100"
+    },
+    {
+      "id": 5972,
+      "size": 40772,
+      "stored_size": 11610,
+      "compression": 1,
+      "file": "resources/05972.lz",
+      "sha256": "0b74de2829c4f645567361744794548415dc36db8dac928ddc4b1e13e6a9bb98"
+    },
+    {
+      "id": 5973,
+      "size": 39764,
+      "stored_size": 11448,
+      "compression": 1,
+      "file": "resources/05973.lz",
+      "sha256": "d37852cabcb59dfca43d16c605323b377f4d81c4eb9c69c9a957eaf0ece06810"
+    },
+    {
+      "id": 8716,
+      "size": 34124,
+      "stored_size": 15525,
+      "compression": 1,
+      "file": "resources/08716.lz",
+      "sha256": "05cb7a265b926677c25e5caae0472652ee7fe64a576ae850a98fda6ae0e16108"
+    },
+    {
+      "id": 8996,
+      "size": 116,
+      "stored_size": 86,
+      "compression": 1,
+      "file": "resources/08996.lz",
+      "sha256": "d7555cbe2038842bd5f788077547c8100f44c9fac33805a9473e27f4a0906440"
+    },
+    {
+      "id": 8997,
+      "size": 3320,
+      "stored_size": 1884,
+      "compression": 1,
+      "file": "resources/08997.lz",
+      "sha256": "8d7d89a037c2d976ac8cde32e6d2055a01d4fc813367c10ef90d4245c9617936"
+    },
+    {
+      "id": 8998,
+      "size": 1608,
+      "stored_size": 764,
+      "compression": 1,
+      "file": "resources/08998.lz",
+      "sha256": "dc107af8e1389a05038ec2937bc767e141565dfcd2db6a04dd361935bb88bb3e"
+    },
+    {
+      "id": 8999,
+      "size": 84,
+      "stored_size": 14,
+      "compression": 1,
+      "file": "resources/08999.lz",
+      "sha256": "a3d3fbe30b4c76f90553997626014c3958a081cf3739b6f8c9168a4f225f0a31"
+    },
+    {
+      "id": 9000,
+      "size": 20,
+      "stored_size": 20,
+      "compression": 1,
+      "file": "resources/09000.lz",
+      "sha256": "7408f758f4f70302d91f013279a71809bae8e6d1d2ee4e9008b3e8a3102afbcd"
+    },
+    {
+      "id": 9001,
+      "size": 16,
+      "stored_size": 12,
+      "compression": 1,
+      "file": "resources/09001.lz",
+      "sha256": "490ee43733c3f1b0367e6682522e8a5e0798b9c66684d5c3d4fbce6d4842d4fc"
+    },
+    {
+      "id": 9002,
+      "size": 177192,
+      "stored_size": 57381,
+      "compression": 1,
+      "file": "resources/09002.lz",
+      "sha256": "7943d7a0c8d0cc3ac43ae0620adf4b79d36cf8dcbcfcb848d87c4fa1e84a73cb"
+    },
+    {
+      "id": 9003,
+      "size": 152320,
+      "stored_size": 82950,
+      "compression": 1,
+      "file": "resources/09003.lz",
+      "sha256": "92a8a29f90f0590299dbb701c1481a387f07b15b79ea47939c170f6d4db1c036"
+    },
+    {
+      "id": 9004,
+      "size": 32,
+      "stored_size": 29,
+      "compression": 1,
+      "file": "resources/09004.lz",
+      "sha256": "be8ade7a911f27367e419982889bfbb90dbdaf68470425b9adf25ca511729d67"
+    },
+    {
+      "id": 21323,
+      "size": 388,
+      "stored_size": 131,
+      "compression": 1,
+      "file": "resources/21323.lz",
+      "sha256": "ff87666d5a1e0e9cf93f53a07472d1d0d3eb157366c7c4d022ff0770fa710b95"
+    },
+    {
+      "id": 21324,
+      "size": 228,
+      "stored_size": 35,
+      "compression": 1,
+      "file": "resources/21324.lz",
+      "sha256": "8e5b52e91199149c77fef9f7c06dbaf3dee654b82fb74d6ece7544ec278743ea"
+    },
+    {
+      "id": 22761,
+      "size": 7212,
+      "stored_size": 2296,
+      "compression": 1,
+      "file": "resources/22761.lz",
+      "sha256": "067a5918e25a8ab7e1b89b680d90ce300e7877cbfc7a8ec0cec7c23b14a6b5c1"
+    }
+  ],
+  "virtual_sizes": {},
+  "validation": {
+    "item_rows": 2735,
+    "checks": {
+      "slot_row_counts": 8,
+      "challenge_rows": 18,
+      "parallel_item_rows": 4,
+      "contiguous_category_blocks": 1,
+      "category_stats_rows": 72,
+      "bounty_drop_rates": 146,
+      "bounty_drop_links": 438,
+      "item_icon_links": 2735,
+      "recipe_item_links": 5472,
+      "ingredient_quantities": 3894,
+      "recipe_flag_links": 1298,
+      "recipe_category_icons": 1298,
+      "shop_item_links": 1656,
+      "quest_item_links": 1200,
+      "quest_chain_links": 400,
+      "quest_flag_links": 400,
+      "quest_map_links": 400,
+      "quest_dialogue_links": 400,
+      "quest_text_rows": 9
+    },
+    "errors": []
+  }
+}
