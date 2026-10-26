@@ -325,19 +325,41 @@ if ($FromTest) {
     }
     Write-Host "[Mods]    Rebuilt $($ModNames.Count) enabled mod overlay(s); stack checked." -ForegroundColor Green
 } else {
-    foreach ($srcModRoot in @(
+    $sourceModRoot = @(
         (Join-Path $WinPkg "data\yw2-recomp\mods\fantasylife"),
         (Join-Path $LinuxPkg "data\yw2-recomp\mods\fantasylife")
-    )) {
-        if (Test-Path $srcModRoot) {
-            Copy-Item -Path "$srcModRoot\*" -Destination $ModsDir -Recurse -Force
-            Write-Host "[Mods]    Synced built mod overlays from $srcModRoot" -ForegroundColor Green
-            break
+    ) | Where-Object { Test-Path -LiteralPath $_ -PathType Container } | Select-Object -First 1
+    if ($sourceModRoot) {
+        $sourceMods = @(Get-ChildItem -LiteralPath $sourceModRoot -Directory | Sort-Object Name)
+        if ($sourceMods.Count -eq 0) {
+            throw "Built mod source is empty: $sourceModRoot. Refusing to publish a package with its previous mods silently removed."
         }
+        $ModNames = @()
+        foreach ($sourceMod in $sourceMods) {
+            if ($sourceMod.Name -notmatch '^[a-zA-Z0-9][a-zA-Z0-9._-]*$') { throw "Invalid built mod folder name: $($sourceMod.Name)" }
+            if (-not (Test-Path -LiteralPath (Join-Path $sourceMod.FullName "overlay.json") -PathType Leaf)) {
+                throw "Built mod '$($sourceMod.Name)' has no overlay.json: $($sourceMod.FullName)"
+            }
+            Copy-Item -LiteralPath $sourceMod.FullName -Destination (Join-Path $ModsDir $sourceMod.Name) -Recurse -Force
+            $ModNames += $sourceMod.Name
+        }
+
+        # Mirror the selected build's overlay set. Prune only stale direct
+        # children of this package's known mods directory, after all copies pass.
+        $modsFull = [IO.Path]::GetFullPath($ModsDir).TrimEnd('\')
+        foreach ($old in @(Get-ChildItem -LiteralPath $ModsDir -Directory)) {
+            if ($ModNames -notcontains $old.Name) {
+                if ((Split-Path -Parent $old.FullName) -ne $modsFull) { throw "Unsafe stale mod path: $($old.FullName)" }
+                Remove-Item -LiteralPath $old.FullName -Recurse -Force
+            }
+        }
+        Write-Host ("[Mods]    Mirrored {0} built mod overlay(s) from {1}: {2}" -f $ModNames.Count, $sourceModRoot, ($ModNames -join ", ")) -ForegroundColor Green
+    } else {
+        $ModNames = @(Get-ChildItem -LiteralPath $ModsDir -Directory |
+            Where-Object { Test-Path -LiteralPath (Join-Path $_.FullName "overlay.json") } |
+            Sort-Object Name | ForEach-Object { $_.Name })
+        Write-Host "[Mods]    No built mod source found; keeping the package's existing overlays." -ForegroundColor Yellow
     }
-    $ModNames = @(Get-ChildItem -LiteralPath $ModsDir -Directory |
-        Where-Object { Test-Path -LiteralPath (Join-Path $_.FullName "overlay.json") } |
-        Sort-Object Name | ForEach-Object { $_.Name })
 }
 
 # 5. Sync precompiled Shader Cache (.cpp, .so, .dll; skip .log and .tmp)

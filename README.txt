@@ -205,3 +205,9 @@ Stable Windows play.ps1 reads version.json's mods array (old packages fall back
 to installed overlay folders); an empty array disables all packaged mods.
 For maintainers: -RebuildMods reads the source repo's mods/enabled.json in order,
 builds each source with fl_mod.py and checks the entire stack before continuing.
+The ordinary publish command mirrors every built overlay from FantasyLife-Windows
+(or FantasyLife-Linux when no Windows mod directory exists), removes stale package
+overlays, and records the exact set in version.json. From FantasyLife-USB, run:
+  powershell -ExecutionPolicy Bypass -File .\publish-update.ps1 -Push
+Do not add -FromTest unless you intend to publish exactly the overlays listed by
+the test install's test-version.json; that mode replaces the package's mod set.
