@@ -325,23 +325,40 @@ if ($FromTest) {
     }
     Write-Host "[Mods]    Rebuilt $($ModNames.Count) enabled mod overlay(s); stack checked." -ForegroundColor Green
 } else {
-    $sourceModRoot = @(
-        (Join-Path $WinPkg "data\yw2-recomp\mods\fantasylife"),
-        (Join-Path $LinuxPkg "data\yw2-recomp\mods\fantasylife")
-    ) | Where-Object { Test-Path -LiteralPath $_ -PathType Container } | Select-Object -First 1
+    $sourcePackage = $null
+    $sourceModRoot = $null
+    foreach ($candidatePackage in @($WinPkg, $LinuxPkg)) {
+        $candidateModRoot = Join-Path $candidatePackage "data\yw2-recomp\mods\fantasylife"
+        if (Test-Path -LiteralPath $candidateModRoot -PathType Container) {
+            $sourcePackage = $candidatePackage
+            $sourceModRoot = $candidateModRoot
+            break
+        }
+    }
     if ($sourceModRoot) {
-        $sourceMods = @(Get-ChildItem -LiteralPath $sourceModRoot -Directory | Sort-Object Name)
-        if ($sourceMods.Count -eq 0) {
-            throw "Built mod source is empty: $sourceModRoot. Refusing to publish a package with its previous mods silently removed."
+        $sourceVersionPath = Join-Path $sourcePackage "version.json"
+        if (-not (Test-Path -LiteralPath $sourceVersionPath -PathType Leaf)) {
+            throw "Built package has no version.json: $sourceVersionPath"
+        }
+        try {
+            $sourceVersion = Get-Content -LiteralPath $sourceVersionPath -Raw | ConvertFrom-Json
+        } catch {
+            throw "Cannot read built package manifest $sourceVersionPath ($($_.Exception.Message))"
+        }
+        $sourceModNames = @($sourceVersion.mods | ForEach-Object { [string]$_ })
+        if ($sourceModNames.Count -eq 0) {
+            throw "Built package manifest lists no mods: $sourceVersionPath. Refusing to publish an empty mod set."
         }
         $ModNames = @()
+        if (@($sourceModNames | Select-Object -Unique).Count -ne $sourceModNames.Count) { throw "Duplicate mod in built package manifest: $sourceVersionPath" }
         $modsFull = [IO.Path]::GetFullPath($ModsDir).TrimEnd('\')
-        foreach ($sourceMod in $sourceMods) {
-            if ($sourceMod.Name -notmatch '^[a-zA-Z0-9][a-zA-Z0-9._-]*$') { throw "Invalid built mod folder name: $($sourceMod.Name)" }
-            if (-not (Test-Path -LiteralPath (Join-Path $sourceMod.FullName "overlay.json") -PathType Leaf)) {
-                throw "Built mod '$($sourceMod.Name)' has no overlay.json: $($sourceMod.FullName)"
+        foreach ($mod in $sourceModNames) {
+            if ($mod -notmatch '^[a-zA-Z0-9][a-zA-Z0-9._-]*$') { throw "Invalid built mod folder name: $mod" }
+            $sourceMod = Join-Path $sourceModRoot $mod
+            if (-not (Test-Path -LiteralPath (Join-Path $sourceMod "overlay.json") -PathType Leaf)) {
+                throw "Built manifest lists mod '$mod' but its overlay.json is missing: $sourceMod"
             }
-            $destMod = Join-Path $ModsDir $sourceMod.Name
+            $destMod = Join-Path $ModsDir $mod
             if (Test-Path -LiteralPath $destMod) {
                 if ([IO.Path]::GetFullPath((Split-Path -Parent $destMod)).TrimEnd('\') -ne $modsFull) {
                     throw "Unsafe destination mod path: $destMod"
@@ -350,11 +367,11 @@ if ($FromTest) {
                 # destination first avoids Copy-Item nesting ModName\ModName.
                 Remove-Item -LiteralPath $destMod -Recurse -Force
             }
-            Copy-Item -LiteralPath $sourceMod.FullName -Destination $ModsDir -Recurse -Force
+            Copy-Item -LiteralPath $sourceMod -Destination $ModsDir -Recurse -Force
             if (-not (Test-Path -LiteralPath (Join-Path $destMod "overlay.json") -PathType Leaf)) {
-                throw "Copied mod '$($sourceMod.Name)' has no overlay.json at its package root."
+                throw "Copied mod '$mod' has no overlay.json at its package root."
             }
-            $ModNames += $sourceMod.Name
+            $ModNames += $mod
         }
 
         # Mirror the selected build's overlay set. Prune only stale direct
