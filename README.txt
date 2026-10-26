@@ -3,18 +3,27 @@ Fantasy Life PC - Standalone Dual-OS (Windows + Linux) Auto-Updating Build
 
 1. HOW TO PLAY (Brothers' PCs)
 ------------------------------
-* Windows: Double-click `play.bat`
-  - Or in PowerShell: `.\play.ps1` (Free Life save) or `.\play.ps1 story` (Story save)
-* Linux:   Run `bash play.sh` (Free Life save) or `bash play.sh story` (Story save)
+* Windows: Double-click the "Fantasy Life" desktop shortcut (or `play.bat`).
+  The Fantasy Life launcher window opens:
+  - It shows your installed build and checks for updates in the background
+    (a few seconds; offline never blocks playing). When a new build is out you see
+    "Update available" and an "Update now" button with a progress bar. Update
+    before playing together: multiplayer needs everyone on the same build.
+  - "Play" starts the game with all mods of this build (shown as chips).
+  - "Play vanilla" starts the original game data without any mods.
+    Vanilla players can play together; vanilla and modded players cannot.
+  - Pick the save profile (Free Life / Story). The window remembers your choice.
+  - Footer: Game settings (controls, resolution, online relay = the Clockwork
+    launcher), Firewall (one admin prompt), Log, install folder.
+  - The window hides while you play and closes when the game ends normally.
+    If the game stops with an error, the window comes back with the last log lines.
+* Linux: `bash play.sh` opens the same choices as a zenity dialog (if installed) or a
+  terminal menu. `bash play.sh story` / `bash play.sh --direct` play right away.
 
-Every time you start the game via `play.bat` / `play.sh`:
-- It automatically checks for updates (new mods, bugfixes, shader cache, binaries)
-  from the update repository and applies them in 1-2 seconds.
-- Your personal saves (`saves/`), controller/audio settings (`settings.ini`),
-  unique multiplayer console ID (`console_id`), and game dumps (`game/`) are
-  NEVER overwritten by updates.
-- Before launching, it prints the current `Build` and `Mod Digest` so everyone can
-  confirm they are on the exact same version before joining multiplayer.
+Updates are no longer applied silently on start; you choose in the window.
+Your personal saves (`saves/`), controller/audio settings (`settings.ini`),
+unique multiplayer console ID (`console_id`), and game dumps (`game/`) are
+NEVER overwritten by updates.
 
 On PCs without Git, the ZIP updater first reads the small remote `version.json` and
 only downloads the full ZIP when `version` or `updated_at` changed. The version URL is
@@ -22,15 +31,40 @@ derived automatically for GitHub archive ZIPs; set `FL_UPDATE_VERSION_URL` in
 `update-config.env` for a different host. If the check is unreachable, the local build
 still launches normally.
 
-Useful Launch Flags:
-- Skip update check:
-  - Windows: `.\play.ps1 -NoUpdate`
-  - Linux:   `FL_NO_UPDATE=1 bash play.sh`
-- Play without mods (vanilla):
-  - Windows: `.\play.ps1 -Vanilla`
-  - Linux:   `FL_MOD_DIRS= bash play.sh`
-- Open Clockwork Launcher (change controller bindings, resolution, or relay room):
-  - Windows: `.\play.ps1 -Launcher`
+What "Play vanilla" means exactly
+- No data mods: FL_MOD_DIRS is passed EMPTY, so none of the overlays in
+  `data\yw2-recomp\mods\fantasylife` are loaded. (Before this launcher, `-Vanilla` on
+  Windows silently loaded every installed overlay; that is fixed.)
+- Everything else stays the same: the same PC runtime with its technical fixes,
+  the Origin Island DLC (if present), your settings.ini and your saves.
+- Co-op freedom options (Change Life, report, requests, makeover in multiplayer)
+  are runtime settings in settings.ini, not data mods. They stay as you set them in
+  Game settings and are part of the multiplayer compatibility check, so vanilla
+  players must also use the same co-op freedom settings (the defaults match).
+- Vanilla multiplayer therefore needs: the same build (exe), vanilla on every
+  player, the same DLC presence and the same co-op freedom settings.
+- Save profiles are shared between modded and vanilla play; mod content in a save
+  may behave differently without the mod.
+
+Command-line launcher (scripts, shortcuts of your own):
+  play.bat                     launcher window (same as the desktop shortcut)
+  play.bat -Save story         launcher window with the story save selected
+  play.bat -Direct             play right away (updates first, like the old launcher)
+  play.bat -Direct -NoUpdate   play right away without the update check
+  play.bat -Vanilla            play right away without mods
+  play.bat -Launcher           Clockwork launcher (controller bindings, resolution, relay)
+  play.bat -NoLaunch           update check and environment only; never starts the game
+  play.bat -SetupFirewall      set up the multiplayer firewall, then play
+  play.bat -NoDlc / -NoFirewall
+  (`.\play.ps1 <flags>` works the same in PowerShell. FL_DIRECT=1 always skips the window.)
+  Linux: FL_NO_UPDATE=1, FL_NO_LAUNCH=1, FL_MOD_DIRS= (vanilla) and FL_DIRECT=1 work
+  as environment variables; `bash play.sh --vanilla [save]`.
+
+Desktop icon: the launcher draws the real Fantasy Life icon from YOUR game dump
+(`data\yw2-recomp\icon.ico`, never uploaded) and points the shortcut at it on the
+next start. Without a dump the shortcut uses the neutral `bin\fantasy-life.ico`.
+The shortcut starts `bin\launcher\FantasyLife.vbs` (no console window); if VBScript
+is missing it falls back to `play.bat`.
 
 2. FIRST-TIME USB STICK SETUP (Your PC)
 ---------------------------------------
@@ -49,7 +83,7 @@ Useful Launch Flags:
 ----------------------------------
 Whenever you change a mod or rebuild `fl_eur.exe`, run:
      powershell -ExecutionPolicy Bypass -File .\publish-update.ps1 -RebuildMods -Commit -Push
-Your brothers simply close and re-open `play.bat` / `play.sh` to get the update!
+Your brothers see "Update available" in the launcher window and click "Update now".
 
 `-Push` only runs in an interactive PowerShell window. It prints the exe source and
 SHA-256, the commit range that will be pushed, and asks you to type `publish`;
@@ -73,7 +107,7 @@ the previous Linux build; a yellow warning appears when it is older than the Win
 * Stable = `%LOCALAPPDATA%\FantasyLife-PC`, shortcut "Fantasy Life". It follows
   `origin/main` and only changes when you publish (section 3).
 
-  Update rule on every launch:
+  Update rule (launcher "Update now", or every `play.bat -Direct` start):
   - fetch `origin/main`; if it equals HEAD, it reports "Already up to date";
   - if HEAD is strictly ahead (a local hotfix you have not published yet), it keeps
     your version and prints one yellow `[Updater] Local hotfix not yet published ...`
@@ -87,7 +121,7 @@ the previous Linux build; a yellow warning appears when it is older than the Win
 
 * Test = `%LOCALAPPDATA%\FantasyLife-PC-Test`, shortcut "Fantasy Life (Test)".
   It is local only: no git repo/remote, no auto-update, never pushed, so your brothers
-  never see it. Put whatever is currently under test there:
+  never see it. Its launcher window is orange and marked TEST BUILD with the label. Put whatever is currently under test there:
      powershell -ExecutionPolicy Bypass -File .\publish-test.ps1 -Exe <built fl_eur.exe> -Label "<branch> <commit>"
   Optional: `-Relay <clockwork-relay.exe>`, `-ModDirs <overlay dirs>` (default: the
   stable install's version.json mods, falling back to installed folders), and `-CopySavesFromStable` (one-way copy of the stable
@@ -138,7 +172,8 @@ The setup is idempotent. Rules you created by hand (for example
 for `fl_eur.exe` (created when someone clicked Cancel in a Windows prompt) are removed
 because they override allow rules.
 
-If you declined, or multiplayer is blocked later, run:
+If you declined, or multiplayer is blocked later, click "Firewall" in the launcher
+window, or run:
   play.bat -SetupFirewall
 
 Preview without changing anything:
