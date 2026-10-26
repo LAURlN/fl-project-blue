@@ -1,0 +1,31 @@
+{
+  "name": "map_spawn_index",
+  "resource_ids": [
+    8695
+  ],
+  "row_size": 8,
+  "columns": [
+    {
+      "name": "map_id",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 0,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "Map-name row ID; searched by 0x3d5ae0, not row-indexed."
+    },
+    {
+      "name": "spawn_table_resource",
+      "type": "resource",
+      "type_id": 7,
+      "offset": 4,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "Per-area monster spawn-group SCR. Loaded by 0x3d6174/0x3d5ae0."
+    }
+  ]
+}

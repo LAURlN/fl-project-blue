@@ -1,0 +1,2269 @@
+{
+  "format": "fl-eu-intro-skip-effects-v2",
+  "lives": [
+    {
+      "life": 2,
+      "quest": 55,
+      "resource": 26412,
+      "sha256": "19a5c2001d6138947fbef398560210a1d4b4722f8e9a1f2a9ab8d0c22700a30e",
+      "offer_function": 5042,
+      "offer_end": 5350,
+      "offer_row": 527,
+      "effects": [
+        {
+          "pc": 5270,
+          "helper": 4168,
+          "native": 181,
+          "args": [
+            925,
+            1
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x00399dac"
+        },
+        {
+          "pc": 5273,
+          "helper": 4219,
+          "native": 183,
+          "args": [
+            8,
+            1
+          ],
+          "notice": true,
+          "intro_pcs": [
+            5900
+          ],
+          "replay": true,
+          "handler": "0x0039ba98"
+        },
+        {
+          "pc": 5276,
+          "native": 191,
+          "args": [
+            55,
+            1
+          ],
+          "notice": false,
+          "replay": true,
+          "handler": "0x0039a5a4"
+        },
+        {
+          "pc": 5279,
+          "native": 191,
+          "args": [
+            57,
+            1
+          ],
+          "notice": false,
+          "replay": true,
+          "handler": "0x0039a5a4"
+        },
+        {
+          "pc": 5282,
+          "helper": 4338,
+          "native": 178,
+          "args": [
+            500
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x00399e34"
+        }
+      ],
+      "challenge_pc": 5314,
+      "finish_pc": 5340,
+      "name": "Angler",
+      "offer_caller_pc": 5494,
+      "offer_gate_helper": 4807,
+      "text_resource_en_gb": 26436,
+      "choices": {
+        "continue_result": 1,
+        "skip_result": 2,
+        "confirmation": "See message_result/switch blocks within offer_function..first effect; confirmation result 1 continues the skip, result 2 returns 0."
+      },
+      "challenge": 124,
+      "completion": {
+        "challenge_helper": 4549,
+        "challenge_native": [
+          87,
+          124,
+          1,
+          0
+        ],
+        "craft_notice_native": null,
+        "finish_helper": 4019,
+        "finish_args": [
+          2,
+          2,
+          4294967295
+        ],
+        "finish_natives": [
+          [
+            78,
+            1
+          ]
+        ],
+        "teardown_helper": 126,
+        "teardown_natives": [
+          [
+            367
+          ],
+          [
+            322,
+            2
+          ],
+          [
+            41,
+            4294967196
+          ]
+        ],
+        "end_entry_rank_native": [
+          173,
+          2,
+          1
+        ],
+        "preset_phase": [
+          55,
+          3
+        ],
+        "notes": "78 uses the current quest actor/record; never transplant into opening. Replay persistent challenge/rank directly, and use existing SYS003 flags + phase preset for all intro variants. UI/camera/actor cleanup is specific to the master scene. Entry slot 1 clears quest-actor companion slots with 56/78 before setting rank; these are not player skill grants.",
+        "end_entry_pc": 10413,
+        "rank_pc": 10425,
+        "flags": [
+          {
+            "resource": 27679,
+            "pc": 9909,
+            "flag": 9,
+            "value": 1
+          }
+        ],
+        "ignored_actor_natives": [
+          56,
+          78
+        ]
+      },
+      "starting_life_equivalent": "Each native-183 effect lists played-intro PCs calling the identical skill helper 4219. Replay once for all Lives, including starting Life; no second starting-Life grant."
+    },
+    {
+      "life": 3,
+      "quest": 46,
+      "resource": 26478,
+      "sha256": "149ab02cf336e862cddbc91fad731f7eda708defeffcb335af9ae6a6c4070ffc",
+      "offer_function": 5042,
+      "offer_end": 5210,
+      "offer_row": 601,
+      "effects": [
+        {
+          "pc": 5143,
+          "helper": 4168,
+          "native": 181,
+          "args": [
+            34,
+            1
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x00399dac"
+        },
+        {
+          "pc": 5146,
+          "helper": 4219,
+          "native": 183,
+          "args": [
+            27,
+            1
+          ],
+          "notice": true,
+          "intro_pcs": [
+            5530
+          ],
+          "replay": true,
+          "handler": "0x0039ba98"
+        },
+        {
+          "pc": 5149,
+          "native": 191,
+          "args": [
+            109,
+            1
+          ],
+          "notice": false,
+          "replay": true,
+          "handler": "0x0039a5a4"
+        },
+        {
+          "pc": 5152,
+          "native": 191,
+          "args": [
+            110,
+            1
+          ],
+          "notice": false,
+          "replay": true,
+          "handler": "0x0039a5a4"
+        },
+        {
+          "pc": 5155,
+          "native": 191,
+          "args": [
+            111,
+            1
+          ],
+          "notice": false,
+          "replay": true,
+          "handler": "0x0039a5a4"
+        },
+        {
+          "pc": 5158,
+          "helper": 4234,
+          "native": 191,
+          "args": [
+            113,
+            1
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x0039a5a4"
+        },
+        {
+          "pc": 5161,
+          "helper": 4234,
+          "native": 191,
+          "args": [
+            119,
+            1
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x0039a5a4"
+        },
+        {
+          "pc": 5164,
+          "helper": 4338,
+          "native": 178,
+          "args": [
+            500
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x00399e34"
+        }
+      ],
+      "challenge_pc": 5182,
+      "finish_pc": 5200,
+      "name": "Hunter",
+      "offer_caller_pc": 5268,
+      "offer_gate_helper": 4807,
+      "text_resource_en_gb": 26502,
+      "choices": {
+        "continue_result": 1,
+        "skip_result": 2,
+        "confirmation": "See message_result/switch blocks within offer_function..first effect; confirmation result 1 continues the skip, result 2 returns 0."
+      },
+      "challenge": 202,
+      "completion": {
+        "challenge_helper": 4549,
+        "challenge_native": [
+          87,
+          202,
+          1,
+          0
+        ],
+        "craft_notice_native": null,
+        "finish_helper": 4019,
+        "finish_args": [
+          2,
+          2,
+          4294967295
+        ],
+        "finish_natives": [
+          [
+            78,
+            1
+          ]
+        ],
+        "teardown_helper": 126,
+        "teardown_natives": [
+          [
+            367
+          ],
+          [
+            322,
+            2
+          ],
+          [
+            41,
+            4294967196
+          ]
+        ],
+        "end_entry_rank_native": [
+          173,
+          3,
+          1
+        ],
+        "preset_phase": [
+          46,
+          3
+        ],
+        "notes": "78 uses the current quest actor/record; never transplant into opening. Replay persistent challenge/rank directly, and use existing SYS003 flags + phase preset for all intro variants. UI/camera/actor cleanup is specific to the master scene. Entry slot 1 clears quest-actor companion slots with 56/78 before setting rank; these are not player skill grants.",
+        "end_entry_pc": 10877,
+        "rank_pc": 10891,
+        "flags": [
+          {
+            "resource": 27679,
+            "pc": 9935,
+            "flag": 10,
+            "value": 1
+          }
+        ],
+        "ignored_actor_natives": [
+          56,
+          78
+        ]
+      },
+      "starting_life_equivalent": "Each native-183 effect lists played-intro PCs calling the identical skill helper 4219. Replay once for all Lives, including starting Life; no second starting-Life grant."
+    },
+    {
+      "life": 5,
+      "quest": 67,
+      "resource": 26214,
+      "sha256": "5531ff0af4b709d0855dfd4fe42055f45b5e15d2fd63899ff2552a0b3ac9be71",
+      "offer_function": 5042,
+      "offer_end": 5314,
+      "offer_row": 919,
+      "effects": [
+        {
+          "pc": 5188,
+          "helper": 4168,
+          "native": 181,
+          "args": [
+            936,
+            1
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x00399dac"
+        },
+        {
+          "pc": 5191,
+          "helper": 4219,
+          "native": 183,
+          "args": [
+            20,
+            1
+          ],
+          "notice": true,
+          "intro_pcs": [
+            6223
+          ],
+          "replay": true,
+          "handler": "0x0039ba98"
+        },
+        {
+          "pc": 5194,
+          "helper": 4219,
+          "native": 183,
+          "args": [
+            23,
+            1
+          ],
+          "notice": true,
+          "intro_pcs": [
+            9236
+          ],
+          "replay": true,
+          "handler": "0x0039ba98"
+        },
+        {
+          "pc": 5197,
+          "helper": 4219,
+          "native": 183,
+          "args": [
+            10,
+            1
+          ],
+          "notice": true,
+          "intro_pcs": [
+            9839
+          ],
+          "replay": true,
+          "handler": "0x0039ba98"
+        },
+        {
+          "pc": 5200,
+          "helper": 4219,
+          "native": 183,
+          "args": [
+            11,
+            1
+          ],
+          "notice": true,
+          "intro_pcs": [
+            10108
+          ],
+          "replay": true,
+          "handler": "0x0039ba98"
+        },
+        {
+          "pc": 5203,
+          "helper": 4338,
+          "native": 178,
+          "args": [
+            500
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x00399e34"
+        }
+      ],
+      "challenge_pc": 5241,
+      "finish_pc": 5304,
+      "name": "Blacksmith",
+      "offer_caller_pc": 5437,
+      "offer_gate_helper": 4807,
+      "text_resource_en_gb": 26238,
+      "choices": {
+        "continue_result": 1,
+        "skip_result": 2,
+        "confirmation": "See message_result/switch blocks within offer_function..first effect; confirmation result 1 continues the skip, result 2 returns 0."
+      },
+      "challenge": 345,
+      "completion": {
+        "challenge_helper": 4549,
+        "challenge_native": [
+          87,
+          345,
+          1,
+          0
+        ],
+        "craft_notice_native": [
+          481,
+          5,
+          1
+        ],
+        "finish_helper": 4019,
+        "finish_args": [
+          2,
+          2,
+          4294967295
+        ],
+        "finish_natives": [
+          [
+            78,
+            1
+          ]
+        ],
+        "teardown_helper": 126,
+        "teardown_natives": [
+          [
+            367
+          ],
+          [
+            322,
+            2
+          ],
+          [
+            41,
+            4294967196
+          ]
+        ],
+        "end_entry_rank_native": [
+          173,
+          5,
+          1
+        ],
+        "preset_phase": [
+          67,
+          3
+        ],
+        "notes": "78 uses the current quest actor/record; never transplant into opening. Replay persistent challenge/rank directly, and use existing SYS003 flags + phase preset for all intro variants. UI/camera/actor cleanup is specific to the master scene. Entry slot 1 clears quest-actor companion slots with 56/78 before setting rank; these are not player skill grants.",
+        "end_entry_pc": 12740,
+        "rank_pc": 12752,
+        "flags": [
+          {
+            "resource": 27679,
+            "pc": 9958,
+            "flag": 11,
+            "value": 1
+          }
+        ],
+        "ignored_actor_natives": [
+          56,
+          78
+        ]
+      },
+      "starting_life_equivalent": "Each native-183 effect lists played-intro PCs calling the identical skill helper 4219. Replay once for all Lives, including starting Life; no second starting-Life grant."
+    },
+    {
+      "life": 7,
+      "quest": 58,
+      "resource": 26634,
+      "sha256": "f5f1146c9f2e3628ff35964cba1ef603dcc63a2d5e552bc84de67fec72e04d89",
+      "offer_function": 5042,
+      "offer_end": 5319,
+      "offer_row": 767,
+      "effects": [
+        {
+          "pc": 5200,
+          "helper": 4168,
+          "native": 181,
+          "args": [
+            914,
+            1
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x00399dac"
+        },
+        {
+          "pc": 5203,
+          "helper": 4219,
+          "native": 183,
+          "args": [
+            12,
+            1
+          ],
+          "notice": true,
+          "intro_pcs": [
+            5708,
+            5883
+          ],
+          "replay": true,
+          "handler": "0x0039ba98"
+        },
+        {
+          "pc": 5206,
+          "native": 191,
+          "args": [
+            50,
+            1
+          ],
+          "notice": false,
+          "replay": true,
+          "handler": "0x0039a5a4"
+        },
+        {
+          "pc": 5209,
+          "native": 191,
+          "args": [
+            51,
+            1
+          ],
+          "notice": false,
+          "replay": true,
+          "handler": "0x0039a5a4"
+        },
+        {
+          "pc": 5214,
+          "helper": 4168,
+          "native": 181,
+          "args": [
+            1868,
+            1
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x00399dac"
+        },
+        {
+          "pc": 5217,
+          "helper": 4338,
+          "native": 178,
+          "args": [
+            500
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x00399e34"
+        }
+      ],
+      "challenge_pc": 5259,
+      "finish_pc": 5301,
+      "name": "Woodcutter",
+      "offer_caller_pc": 5380,
+      "offer_gate_helper": 4807,
+      "text_resource_en_gb": 26658,
+      "choices": {
+        "continue_result": 1,
+        "skip_result": 2,
+        "confirmation": "See message_result/switch blocks within offer_function..first effect; confirmation result 1 continues the skip, result 2 returns 0."
+      },
+      "challenge": 494,
+      "completion": {
+        "challenge_helper": 4549,
+        "challenge_native": [
+          87,
+          494,
+          1,
+          0
+        ],
+        "craft_notice_native": null,
+        "finish_helper": 4019,
+        "finish_args": [
+          2,
+          2,
+          4294967295
+        ],
+        "finish_natives": [
+          [
+            78,
+            1
+          ]
+        ],
+        "teardown_helper": 126,
+        "teardown_natives": [
+          [
+            367
+          ],
+          [
+            322,
+            2
+          ],
+          [
+            41,
+            4294967196
+          ]
+        ],
+        "end_entry_rank_native": [
+          173,
+          7,
+          1
+        ],
+        "preset_phase": [
+          58,
+          3
+        ],
+        "notes": "78 uses the current quest actor/record; never transplant into opening. Replay persistent challenge/rank directly, and use existing SYS003 flags + phase preset for all intro variants. UI/camera/actor cleanup is specific to the master scene. Entry slot 1 clears quest-actor companion slots with 56/78 before setting rank; these are not player skill grants.",
+        "end_entry_pc": 12271,
+        "rank_pc": 12283,
+        "flags": [
+          {
+            "resource": 27679,
+            "pc": 9975,
+            "flag": 12,
+            "value": 1
+          }
+        ],
+        "ignored_actor_natives": [
+          56,
+          78
+        ]
+      },
+      "starting_life_equivalent": "Each native-183 effect lists played-intro PCs calling the identical skill helper 4219. Replay once for all Lives, including starting Life; no second starting-Life grant."
+    },
+    {
+      "life": 8,
+      "quest": 76,
+      "resource": 26724,
+      "sha256": "82c1f9362d1836d50332fdd22448363ee6be2597c75e84e18db85a22a034c9a3",
+      "offer_function": 5042,
+      "offer_end": 5350,
+      "offer_row": 699,
+      "effects": [
+        {
+          "pc": 5265,
+          "helper": 4168,
+          "native": 181,
+          "args": [
+            947,
+            1
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x00399dac"
+        },
+        {
+          "pc": 5268,
+          "helper": 4219,
+          "native": 183,
+          "args": [
+            18,
+            1
+          ],
+          "notice": true,
+          "intro_pcs": [
+            6360
+          ],
+          "replay": true,
+          "handler": "0x0039ba98"
+        },
+        {
+          "pc": 5271,
+          "helper": 4219,
+          "native": 183,
+          "args": [
+            4,
+            1
+          ],
+          "notice": true,
+          "intro_pcs": [
+            7811
+          ],
+          "replay": true,
+          "handler": "0x0039ba98"
+        },
+        {
+          "pc": 5274,
+          "helper": 4219,
+          "native": 183,
+          "args": [
+            21,
+            1
+          ],
+          "notice": true,
+          "intro_pcs": [
+            8477
+          ],
+          "replay": true,
+          "handler": "0x0039ba98"
+        },
+        {
+          "pc": 5277,
+          "helper": 4219,
+          "native": 183,
+          "args": [
+            2,
+            1
+          ],
+          "notice": true,
+          "intro_pcs": [
+            8489
+          ],
+          "replay": true,
+          "handler": "0x0039ba98"
+        },
+        {
+          "pc": 5280,
+          "helper": 4338,
+          "native": 178,
+          "args": [
+            500
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x00399e34"
+        }
+      ],
+      "challenge_pc": 5292,
+      "finish_pc": 5338,
+      "name": "Tailor",
+      "offer_caller_pc": 5522,
+      "offer_gate_helper": 4807,
+      "text_resource_en_gb": 26748,
+      "choices": {
+        "continue_result": 1,
+        "skip_result": 2,
+        "confirmation": "See message_result/switch blocks within offer_function..first effect; confirmation result 1 continues the skip, result 2 returns 0."
+      },
+      "challenge": 567,
+      "completion": {
+        "challenge_helper": 4549,
+        "challenge_native": [
+          87,
+          567,
+          1,
+          0
+        ],
+        "craft_notice_native": [
+          481,
+          8,
+          1
+        ],
+        "finish_helper": 4019,
+        "finish_args": [
+          2,
+          2,
+          4294967295
+        ],
+        "finish_natives": [
+          [
+            78,
+            1
+          ]
+        ],
+        "teardown_helper": 126,
+        "teardown_natives": [
+          [
+            367
+          ],
+          [
+            322,
+            2
+          ],
+          [
+            41,
+            4294967196
+          ]
+        ],
+        "end_entry_rank_native": [
+          173,
+          8,
+          1
+        ],
+        "preset_phase": [
+          76,
+          3
+        ],
+        "notes": "78 uses the current quest actor/record; never transplant into opening. Replay persistent challenge/rank directly, and use existing SYS003 flags + phase preset for all intro variants. UI/camera/actor cleanup is specific to the master scene. Entry slot 1 clears quest-actor companion slots with 56/78 before setting rank; these are not player skill grants.",
+        "end_entry_pc": 10634,
+        "rank_pc": 10646,
+        "flags": [
+          {
+            "resource": 27679,
+            "pc": 10001,
+            "flag": 13,
+            "value": 1
+          }
+        ],
+        "ignored_actor_natives": [
+          56,
+          78
+        ]
+      },
+      "starting_life_equivalent": "Each native-183 effect lists played-intro PCs calling the identical skill helper 4219. Replay once for all Lives, including starting Life; no second starting-Life grant."
+    },
+    {
+      "life": 9,
+      "quest": 49,
+      "resource": 26568,
+      "sha256": "12a541c8e205569567405f69ba4587d4194dc78e250cec87610ccc85e6645d1f",
+      "offer_function": 5042,
+      "offer_end": 5300,
+      "offer_row": 617,
+      "effects": [
+        {
+          "pc": 5187,
+          "helper": 4168,
+          "native": 181,
+          "args": [
+            0,
+            1
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x00399dac"
+        },
+        {
+          "pc": 5192,
+          "helper": 4168,
+          "native": 181,
+          "args": [
+            523,
+            1
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x00399dac"
+        },
+        {
+          "pc": 5195,
+          "helper": 4219,
+          "native": 183,
+          "args": [
+            32,
+            1
+          ],
+          "notice": true,
+          "intro_pcs": [
+            5678
+          ],
+          "replay": true,
+          "handler": "0x0039ba98"
+        },
+        {
+          "pc": 5198,
+          "helper": 4219,
+          "native": 183,
+          "args": [
+            33,
+            1
+          ],
+          "notice": true,
+          "intro_pcs": [
+            6219
+          ],
+          "replay": true,
+          "handler": "0x0039ba98"
+        },
+        {
+          "pc": 5201,
+          "helper": 4234,
+          "native": 191,
+          "args": [
+            67,
+            1
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x0039a5a4"
+        },
+        {
+          "pc": 5204,
+          "native": 191,
+          "args": [
+            61,
+            1
+          ],
+          "notice": false,
+          "replay": true,
+          "handler": "0x0039a5a4"
+        },
+        {
+          "pc": 5207,
+          "native": 191,
+          "args": [
+            62,
+            1
+          ],
+          "notice": false,
+          "replay": true,
+          "handler": "0x0039a5a4"
+        },
+        {
+          "pc": 5210,
+          "native": 191,
+          "args": [
+            63,
+            1
+          ],
+          "notice": false,
+          "replay": true,
+          "handler": "0x0039a5a4"
+        },
+        {
+          "pc": 5213,
+          "native": 191,
+          "args": [
+            65,
+            1
+          ],
+          "notice": false,
+          "replay": true,
+          "handler": "0x0039a5a4"
+        },
+        {
+          "pc": 5216,
+          "helper": 4338,
+          "native": 178,
+          "args": [
+            500
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x00399e34"
+        }
+      ],
+      "challenge_pc": 5256,
+      "finish_pc": 5290,
+      "name": "Paladin",
+      "offer_caller_pc": 5368,
+      "offer_gate_helper": 4807,
+      "text_resource_en_gb": 26592,
+      "choices": {
+        "continue_result": 1,
+        "skip_result": 2,
+        "confirmation": "See message_result/switch blocks within offer_function..first effect; confirmation result 1 continues the skip, result 2 returns 0."
+      },
+      "challenge": 654,
+      "completion": {
+        "challenge_helper": 4549,
+        "challenge_native": [
+          87,
+          654,
+          1,
+          0
+        ],
+        "craft_notice_native": null,
+        "finish_helper": 4019,
+        "finish_args": [
+          2,
+          2,
+          4294967295
+        ],
+        "finish_natives": [
+          [
+            78,
+            1
+          ]
+        ],
+        "teardown_helper": 126,
+        "teardown_natives": [
+          [
+            367
+          ],
+          [
+            322,
+            2
+          ],
+          [
+            41,
+            4294967196
+          ]
+        ],
+        "end_entry_rank_native": [
+          173,
+          9,
+          1
+        ],
+        "preset_phase": [
+          49,
+          3
+        ],
+        "notes": "78 uses the current quest actor/record; never transplant into opening. Replay persistent challenge/rank directly, and use existing SYS003 flags + phase preset for all intro variants. UI/camera/actor cleanup is specific to the master scene. Entry slot 1 clears quest-actor companion slots with 56/78 before setting rank; these are not player skill grants.",
+        "end_entry_pc": 11879,
+        "rank_pc": 11891,
+        "flags": [
+          {
+            "resource": 27679,
+            "pc": 10018,
+            "flag": 14,
+            "value": 1
+          }
+        ],
+        "ignored_actor_natives": [
+          56,
+          78
+        ]
+      },
+      "starting_life_equivalent": "Each native-183 effect lists played-intro PCs calling the identical skill helper 4219. Replay once for all Lives, including starting Life; no second starting-Life grant."
+    },
+    {
+      "life": 11,
+      "quest": 64,
+      "resource": 26148,
+      "sha256": "5fca7ff9044c2a4b614fac9980c12dbf505c1dd0f41133327677e9ea2bbe8009",
+      "offer_function": 5042,
+      "offer_end": 5350,
+      "offer_row": 715,
+      "effects": [
+        {
+          "pc": 5220,
+          "helper": 4168,
+          "native": 181,
+          "args": [
+            980,
+            1
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x00399dac"
+        },
+        {
+          "pc": 5223,
+          "helper": 4219,
+          "native": 183,
+          "args": [
+            1,
+            1
+          ],
+          "notice": true,
+          "intro_pcs": [
+            6153
+          ],
+          "replay": true,
+          "handler": "0x0039ba98"
+        },
+        {
+          "pc": 5226,
+          "helper": 4219,
+          "native": 183,
+          "args": [
+            14,
+            1
+          ],
+          "notice": true,
+          "intro_pcs": [
+            5858
+          ],
+          "replay": true,
+          "handler": "0x0039ba98"
+        },
+        {
+          "pc": 5229,
+          "helper": 4219,
+          "native": 183,
+          "args": [
+            0,
+            1
+          ],
+          "notice": true,
+          "intro_pcs": [
+            7847
+          ],
+          "replay": true,
+          "handler": "0x0039ba98"
+        },
+        {
+          "pc": 5232,
+          "helper": 4338,
+          "native": 178,
+          "args": [
+            500
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x00399e34"
+        }
+      ],
+      "challenge_pc": 5258,
+      "finish_pc": 5338,
+      "name": "Alchemist",
+      "offer_caller_pc": 5523,
+      "offer_gate_helper": 4807,
+      "text_resource_en_gb": 26172,
+      "choices": {
+        "continue_result": 1,
+        "skip_result": 2,
+        "confirmation": "See message_result/switch blocks within offer_function..first effect; confirmation result 1 continues the skip, result 2 returns 0."
+      },
+      "challenge": 794,
+      "completion": {
+        "challenge_helper": 4549,
+        "challenge_native": [
+          87,
+          794,
+          1,
+          0
+        ],
+        "craft_notice_native": [
+          481,
+          11,
+          1
+        ],
+        "finish_helper": 4019,
+        "finish_args": [
+          2,
+          2,
+          4294967295
+        ],
+        "finish_natives": [
+          [
+            78,
+            1
+          ]
+        ],
+        "teardown_helper": 126,
+        "teardown_natives": [
+          [
+            367
+          ],
+          [
+            322,
+            2
+          ],
+          [
+            41,
+            4294967196
+          ]
+        ],
+        "end_entry_rank_native": [
+          173,
+          11,
+          1
+        ],
+        "preset_phase": [
+          64,
+          3
+        ],
+        "notes": "78 uses the current quest actor/record; never transplant into opening. Replay persistent challenge/rank directly, and use existing SYS003 flags + phase preset for all intro variants. UI/camera/actor cleanup is specific to the master scene. Entry slot 1 clears quest-actor companion slots with 56/78 before setting rank; these are not player skill grants.",
+        "end_entry_pc": 10742,
+        "rank_pc": 10754,
+        "flags": [
+          {
+            "resource": 27679,
+            "pc": 10041,
+            "flag": 15,
+            "value": 1
+          }
+        ],
+        "ignored_actor_natives": [
+          56,
+          78
+        ]
+      },
+      "starting_life_equivalent": "Each native-183 effect lists played-intro PCs calling the identical skill helper 4219. Replay once for all Lives, including starting Life; no second starting-Life grant."
+    },
+    {
+      "life": 13,
+      "quest": 73,
+      "resource": 26346,
+      "sha256": "ea1d8200e9eb68d5633af5e6e0f376c22c6e8a0c49dfc76a01b455b1422ceafb",
+      "offer_function": 5042,
+      "offer_end": 5483,
+      "offer_row": 675,
+      "effects": [
+        {
+          "pc": 5308,
+          "helper": 4168,
+          "native": 181,
+          "args": [
+            970,
+            1
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x00399dac"
+        },
+        {
+          "pc": 5311,
+          "helper": 4219,
+          "native": 183,
+          "args": [
+            5,
+            1
+          ],
+          "notice": true,
+          "intro_pcs": [
+            6029
+          ],
+          "replay": true,
+          "handler": "0x0039ba98"
+        },
+        {
+          "pc": 5314,
+          "helper": 4219,
+          "native": 183,
+          "args": [
+            22,
+            1
+          ],
+          "notice": true,
+          "intro_pcs": [
+            6032
+          ],
+          "replay": true,
+          "handler": "0x0039ba98"
+        },
+        {
+          "pc": 5317,
+          "helper": 4219,
+          "native": 183,
+          "args": [
+            17,
+            1
+          ],
+          "notice": true,
+          "intro_pcs": [
+            8483
+          ],
+          "replay": true,
+          "handler": "0x0039ba98"
+        },
+        {
+          "pc": 5320,
+          "helper": 4219,
+          "native": 183,
+          "args": [
+            13,
+            1
+          ],
+          "notice": true,
+          "intro_pcs": [
+            8592
+          ],
+          "replay": true,
+          "handler": "0x0039ba98"
+        },
+        {
+          "pc": 5323,
+          "helper": 4338,
+          "native": 178,
+          "args": [
+            500
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x00399e34"
+        }
+      ],
+      "challenge_pc": 5395,
+      "finish_pc": 5472,
+      "name": "Cook",
+      "offer_caller_pc": 5616,
+      "offer_gate_helper": 4807,
+      "text_resource_en_gb": 26370,
+      "choices": {
+        "continue_result": 1,
+        "skip_result": 2,
+        "confirmation": "See message_result/switch blocks within offer_function..first effect; confirmation result 1 continues the skip, result 2 returns 0."
+      },
+      "challenge": 943,
+      "completion": {
+        "challenge_helper": 4549,
+        "challenge_native": [
+          87,
+          943,
+          1,
+          0
+        ],
+        "craft_notice_native": [
+          481,
+          13,
+          1
+        ],
+        "finish_helper": 4019,
+        "finish_args": [
+          2,
+          2,
+          4294967295
+        ],
+        "finish_natives": [
+          [
+            78,
+            1
+          ]
+        ],
+        "teardown_helper": 126,
+        "teardown_natives": [
+          [
+            367
+          ],
+          [
+            322,
+            2
+          ],
+          [
+            41,
+            4294967196
+          ]
+        ],
+        "end_entry_rank_native": [
+          173,
+          13,
+          1
+        ],
+        "preset_phase": [
+          73,
+          3
+        ],
+        "notes": "78 uses the current quest actor/record; never transplant into opening. Replay persistent challenge/rank directly, and use existing SYS003 flags + phase preset for all intro variants. UI/camera/actor cleanup is specific to the master scene. Entry slot 1 clears quest-actor companion slots with 56/78 before setting rank; these are not player skill grants.",
+        "end_entry_pc": 11425,
+        "rank_pc": 11437,
+        "flags": [
+          {
+            "resource": 27679,
+            "pc": 10058,
+            "flag": 16,
+            "value": 1
+          }
+        ],
+        "ignored_actor_natives": [
+          56,
+          78
+        ]
+      },
+      "starting_life_equivalent": "Each native-183 effect lists played-intro PCs calling the identical skill helper 4219. Replay once for all Lives, including starting Life; no second starting-Life grant."
+    },
+    {
+      "life": 14,
+      "quest": 52,
+      "resource": 26880,
+      "sha256": "f31b1368e2d3ba5b70bbeeb9ee86b5c07a3fc66dd1a2d50c0b111bb9105e9cb4",
+      "offer_function": 5042,
+      "offer_end": 5452,
+      "offer_row": 681,
+      "effects": [
+        {
+          "pc": 5347,
+          "helper": 4168,
+          "native": 181,
+          "args": [
+            17,
+            1
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x00399dac"
+        },
+        {
+          "pc": 5350,
+          "helper": 4219,
+          "native": 183,
+          "args": [
+            35,
+            1
+          ],
+          "notice": true,
+          "intro_pcs": [
+            6491
+          ],
+          "replay": true,
+          "handler": "0x0039ba98"
+        },
+        {
+          "pc": 5353,
+          "helper": 4234,
+          "native": 191,
+          "args": [
+            103,
+            1
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x0039a5a4"
+        },
+        {
+          "pc": 5356,
+          "native": 191,
+          "args": [
+            98,
+            1
+          ],
+          "notice": false,
+          "replay": true,
+          "handler": "0x0039a5a4"
+        },
+        {
+          "pc": 5359,
+          "native": 191,
+          "args": [
+            99,
+            1
+          ],
+          "notice": false,
+          "replay": true,
+          "handler": "0x0039a5a4"
+        },
+        {
+          "pc": 5362,
+          "native": 191,
+          "args": [
+            100,
+            1
+          ],
+          "notice": false,
+          "replay": true,
+          "handler": "0x0039a5a4"
+        },
+        {
+          "pc": 5367,
+          "helper": 4168,
+          "native": 181,
+          "args": [
+            1638,
+            1
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x00399dac"
+        },
+        {
+          "pc": 5370,
+          "helper": 4338,
+          "native": 178,
+          "args": [
+            500
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x00399e34"
+        }
+      ],
+      "challenge_pc": 5382,
+      "finish_pc": 5442,
+      "name": "Mercenary",
+      "offer_caller_pc": 5578,
+      "offer_gate_helper": 4807,
+      "text_resource_en_gb": 26904,
+      "choices": {
+        "continue_result": 1,
+        "skip_result": 2,
+        "confirmation": "See message_result/switch blocks within offer_function..first effect; confirmation result 1 continues the skip, result 2 returns 0."
+      },
+      "challenge": 1030,
+      "completion": {
+        "challenge_helper": 4549,
+        "challenge_native": [
+          87,
+          1030,
+          1,
+          0
+        ],
+        "craft_notice_native": null,
+        "finish_helper": 4019,
+        "finish_args": [
+          2,
+          2,
+          4294967295
+        ],
+        "finish_natives": [
+          [
+            78,
+            1
+          ]
+        ],
+        "teardown_helper": 126,
+        "teardown_natives": [
+          [
+            367
+          ],
+          [
+            322,
+            2
+          ],
+          [
+            41,
+            4294967196
+          ]
+        ],
+        "end_entry_rank_native": [
+          173,
+          14,
+          1
+        ],
+        "preset_phase": [
+          52,
+          3
+        ],
+        "notes": "78 uses the current quest actor/record; never transplant into opening. Replay persistent challenge/rank directly, and use existing SYS003 flags + phase preset for all intro variants. UI/camera/actor cleanup is specific to the master scene. Entry slot 1 clears quest-actor companion slots with 56/78 before setting rank; these are not player skill grants.",
+        "end_entry_pc": 12474,
+        "rank_pc": 12486,
+        "flags": [
+          {
+            "resource": 27679,
+            "pc": 10075,
+            "flag": 17,
+            "value": 1
+          }
+        ],
+        "ignored_actor_natives": [
+          56,
+          78
+        ]
+      },
+      "starting_life_equivalent": "Each native-183 effect lists played-intro PCs calling the identical skill helper 4219. Replay once for all Lives, including starting Life; no second starting-Life grant."
+    },
+    {
+      "life": 16,
+      "quest": 70,
+      "resource": 26280,
+      "sha256": "773ef239a617e356160e194abc0c64d07706371b551a15d37d6345a243b2799b",
+      "offer_function": 5042,
+      "offer_end": 5441,
+      "offer_row": 817,
+      "effects": [
+        {
+          "pc": 5213,
+          "helper": 4168,
+          "native": 181,
+          "args": [
+            959,
+            1
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x00399dac"
+        },
+        {
+          "pc": 5216,
+          "helper": 4219,
+          "native": 183,
+          "args": [
+            3,
+            1
+          ],
+          "notice": true,
+          "intro_pcs": [
+            6268
+          ],
+          "replay": true,
+          "handler": "0x0039ba98"
+        },
+        {
+          "pc": 5219,
+          "helper": 4219,
+          "native": 183,
+          "args": [
+            9,
+            1
+          ],
+          "notice": true,
+          "intro_pcs": [
+            9081
+          ],
+          "replay": true,
+          "handler": "0x0039ba98"
+        },
+        {
+          "pc": 5222,
+          "helper": 4219,
+          "native": 183,
+          "args": [
+            25,
+            1
+          ],
+          "notice": true,
+          "intro_pcs": [
+            6675
+          ],
+          "replay": true,
+          "handler": "0x0039ba98"
+        },
+        {
+          "pc": 5225,
+          "helper": 4219,
+          "native": 183,
+          "args": [
+            24,
+            1
+          ],
+          "notice": true,
+          "intro_pcs": [
+            6678
+          ],
+          "replay": true,
+          "handler": "0x0039ba98"
+        },
+        {
+          "pc": 5228,
+          "helper": 4338,
+          "native": 178,
+          "args": [
+            500
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x00399e34"
+        }
+      ],
+      "challenge_pc": 5299,
+      "finish_pc": 5429,
+      "name": "Carpenter",
+      "offer_caller_pc": 5675,
+      "offer_gate_helper": 4807,
+      "text_resource_en_gb": 26304,
+      "choices": {
+        "continue_result": 1,
+        "skip_result": 2,
+        "confirmation": "See message_result/switch blocks within offer_function..first effect; confirmation result 1 continues the skip, result 2 returns 0."
+      },
+      "challenge": 1168,
+      "completion": {
+        "challenge_helper": 4549,
+        "challenge_native": [
+          87,
+          1168,
+          1,
+          0
+        ],
+        "craft_notice_native": [
+          481,
+          16,
+          1
+        ],
+        "finish_helper": 4019,
+        "finish_args": [
+          2,
+          2,
+          4294967295
+        ],
+        "finish_natives": [
+          [
+            78,
+            1
+          ]
+        ],
+        "teardown_helper": 126,
+        "teardown_natives": [
+          [
+            367
+          ],
+          [
+            322,
+            2
+          ],
+          [
+            41,
+            4294967196
+          ]
+        ],
+        "end_entry_rank_native": [
+          173,
+          16,
+          1
+        ],
+        "preset_phase": [
+          70,
+          3
+        ],
+        "notes": "78 uses the current quest actor/record; never transplant into opening. Replay persistent challenge/rank directly, and use existing SYS003 flags + phase preset for all intro variants. UI/camera/actor cleanup is specific to the master scene. Entry slot 1 clears quest-actor companion slots with 56/78 before setting rank; these are not player skill grants.",
+        "end_entry_pc": 12244,
+        "rank_pc": 12256,
+        "flags": [
+          {
+            "resource": 27679,
+            "pc": 10095,
+            "flag": 18,
+            "value": 1
+          }
+        ],
+        "ignored_actor_natives": [
+          56,
+          78
+        ]
+      },
+      "starting_life_equivalent": "Each native-183 effect lists played-intro PCs calling the identical skill helper 4219. Replay once for all Lives, including starting Life; no second starting-Life grant."
+    },
+    {
+      "life": 17,
+      "quest": 43,
+      "resource": 26970,
+      "sha256": "2d4282509d037c527804ecbf349255aac076501b693ad43cc6b654d28e2fa17c",
+      "offer_function": 5042,
+      "offer_end": 5445,
+      "offer_row": 817,
+      "effects": [
+        {
+          "pc": 5243,
+          "helper": 4168,
+          "native": 181,
+          "args": [
+            45,
+            1
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x00399dac"
+        },
+        {
+          "pc": 5246,
+          "helper": 4219,
+          "native": 183,
+          "args": [
+            34,
+            1
+          ],
+          "notice": true,
+          "intro_pcs": [
+            6101
+          ],
+          "replay": true,
+          "handler": "0x0039ba98"
+        },
+        {
+          "pc": 5249,
+          "helper": 4219,
+          "native": 183,
+          "args": [
+            29,
+            1
+          ],
+          "notice": true,
+          "intro_pcs": [
+            6642
+          ],
+          "replay": true,
+          "handler": "0x0039ba98"
+        },
+        {
+          "pc": 5252,
+          "native": 191,
+          "args": [
+            78,
+            1
+          ],
+          "notice": false,
+          "replay": true,
+          "handler": "0x0039a5a4"
+        },
+        {
+          "pc": 5255,
+          "helper": 4219,
+          "native": 183,
+          "args": [
+            36,
+            1
+          ],
+          "notice": true,
+          "intro_pcs": [
+            6648
+          ],
+          "replay": true,
+          "handler": "0x0039ba98"
+        },
+        {
+          "pc": 5258,
+          "native": 191,
+          "args": [
+            76,
+            1
+          ],
+          "notice": false,
+          "replay": true,
+          "handler": "0x0039a5a4"
+        },
+        {
+          "pc": 5261,
+          "helper": 4219,
+          "native": 183,
+          "args": [
+            30,
+            1
+          ],
+          "notice": true,
+          "intro_pcs": [
+            7689
+          ],
+          "replay": true,
+          "handler": "0x0039ba98"
+        },
+        {
+          "pc": 5264,
+          "native": 191,
+          "args": [
+            75,
+            1
+          ],
+          "notice": false,
+          "replay": true,
+          "handler": "0x0039a5a4"
+        },
+        {
+          "pc": 5267,
+          "helper": 4219,
+          "native": 183,
+          "args": [
+            26,
+            1
+          ],
+          "notice": true,
+          "intro_pcs": [
+            9145
+          ],
+          "replay": true,
+          "handler": "0x0039ba98"
+        },
+        {
+          "pc": 5270,
+          "native": 191,
+          "args": [
+            77,
+            1
+          ],
+          "notice": false,
+          "replay": true,
+          "handler": "0x0039a5a4"
+        },
+        {
+          "pc": 5279,
+          "native": 191,
+          "args": [
+            79,
+            1
+          ],
+          "notice": false,
+          "replay": true,
+          "handler": "0x0039a5a4"
+        },
+        {
+          "pc": 5282,
+          "native": 191,
+          "args": [
+            81,
+            1
+          ],
+          "notice": false,
+          "replay": true,
+          "handler": "0x0039a5a4"
+        },
+        {
+          "pc": 5285,
+          "native": 191,
+          "args": [
+            82,
+            1
+          ],
+          "notice": false,
+          "replay": true,
+          "handler": "0x0039a5a4"
+        },
+        {
+          "pc": 5288,
+          "native": 191,
+          "args": [
+            80,
+            1
+          ],
+          "notice": false,
+          "replay": true,
+          "handler": "0x0039a5a4"
+        },
+        {
+          "pc": 5293,
+          "helper": 4168,
+          "native": 181,
+          "args": [
+            1646,
+            1
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x00399dac"
+        },
+        {
+          "pc": 5296,
+          "helper": 4338,
+          "native": 178,
+          "args": [
+            500
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x00399e34"
+        }
+      ],
+      "challenge_pc": 5369,
+      "finish_pc": 5433,
+      "name": "Magician",
+      "offer_caller_pc": 5579,
+      "offer_gate_helper": 4807,
+      "text_resource_en_gb": 26994,
+      "choices": {
+        "continue_result": 1,
+        "skip_result": 2,
+        "confirmation": "See message_result/switch blocks within offer_function..first effect; confirmation result 1 continues the skip, result 2 returns 0."
+      },
+      "challenge": 1255,
+      "ui_only": [
+        {
+          "pc": 5276,
+          "native": 492,
+          "args": [
+            4294967295,
+            4336,
+            4334,
+            4335,
+            4337
+          ],
+          "handler": "0x003abb3c",
+          "reason": "0x240200 packs message rows into UI notice type 11; no skill/save write."
+        }
+      ],
+      "completion": {
+        "challenge_helper": 4549,
+        "challenge_native": [
+          87,
+          1255,
+          1,
+          0
+        ],
+        "craft_notice_native": null,
+        "finish_helper": 4019,
+        "finish_args": [
+          2,
+          2,
+          4294967295
+        ],
+        "finish_natives": [
+          [
+            78,
+            1
+          ]
+        ],
+        "teardown_helper": 126,
+        "teardown_natives": [
+          [
+            367
+          ],
+          [
+            322,
+            2
+          ],
+          [
+            41,
+            4294967196
+          ]
+        ],
+        "end_entry_rank_native": [
+          173,
+          17,
+          1
+        ],
+        "preset_phase": [
+          43,
+          3
+        ],
+        "notes": "78 uses the current quest actor/record; never transplant into opening. Replay persistent challenge/rank directly, and use existing SYS003 flags + phase preset for all intro variants. UI/camera/actor cleanup is specific to the master scene. Entry slot 1 clears quest-actor companion slots with 56/78 before setting rank; these are not player skill grants.",
+        "end_entry_pc": 14696,
+        "rank_pc": 14708,
+        "flags": [
+          {
+            "resource": 27679,
+            "pc": 10112,
+            "flag": 19,
+            "value": 1
+          }
+        ],
+        "ignored_actor_natives": [
+          56,
+          78
+        ]
+      },
+      "starting_life_equivalent": "Each native-183 effect lists played-intro PCs calling the identical skill helper 4219. Replay once for all Lives, including starting Life; no second starting-Life grant."
+    },
+    {
+      "life": 18,
+      "quest": 61,
+      "resource": 26790,
+      "sha256": "5ac699bde49349e2038045d679e52a8f751bf09d9e9299ac0e70b8916e1fc6f8",
+      "offer_function": 5042,
+      "offer_end": 5530,
+      "offer_row": 737,
+      "effects": [
+        {
+          "pc": 5406,
+          "helper": 4168,
+          "native": 181,
+          "args": [
+            903,
+            1
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x00399dac"
+        },
+        {
+          "pc": 5409,
+          "helper": 4219,
+          "native": 183,
+          "args": [
+            15,
+            1
+          ],
+          "notice": true,
+          "intro_pcs": [
+            6363
+          ],
+          "replay": true,
+          "handler": "0x0039ba98"
+        },
+        {
+          "pc": 5412,
+          "native": 191,
+          "args": [
+            45,
+            1
+          ],
+          "notice": false,
+          "replay": true,
+          "handler": "0x0039a5a4"
+        },
+        {
+          "pc": 5415,
+          "native": 191,
+          "args": [
+            46,
+            1
+          ],
+          "notice": false,
+          "replay": true,
+          "handler": "0x0039a5a4"
+        },
+        {
+          "pc": 5420,
+          "helper": 4168,
+          "native": 181,
+          "args": [
+            1477,
+            2
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x00399dac"
+        },
+        {
+          "pc": 5423,
+          "helper": 4338,
+          "native": 178,
+          "args": [
+            500
+          ],
+          "notice": true,
+          "replay": true,
+          "handler": "0x00399e34"
+        }
+      ],
+      "challenge_pc": 5447,
+      "finish_pc": 5522,
+      "name": "Miner",
+      "offer_caller_pc": 5838,
+      "offer_gate_helper": 4807,
+      "text_resource_en_gb": 26814,
+      "choices": {
+        "continue_result": 1,
+        "skip_result": 2,
+        "confirmation": "See message_result/switch blocks within offer_function..first effect; confirmation result 1 continues the skip, result 2 returns 0."
+      },
+      "challenge": 1329,
+      "completion": {
+        "challenge_helper": 4549,
+        "challenge_native": [
+          87,
+          1329,
+          1,
+          0
+        ],
+        "craft_notice_native": null,
+        "finish_helper": 4019,
+        "finish_args": [
+          2,
+          2,
+          4294967295
+        ],
+        "finish_natives": [
+          [
+            78,
+            1
+          ]
+        ],
+        "teardown_helper": 126,
+        "teardown_natives": [
+          [
+            367
+          ],
+          [
+            322,
+            2
+          ],
+          [
+            41,
+            4294967196
+          ]
+        ],
+        "end_entry_rank_native": [
+          173,
+          18,
+          1
+        ],
+        "preset_phase": [
+          61,
+          3
+        ],
+        "notes": "78 uses the current quest actor/record; never transplant into opening. Replay persistent challenge/rank directly, and use existing SYS003 flags + phase preset for all intro variants. UI/camera/actor cleanup is specific to the master scene. Entry slot 1 clears quest-actor companion slots with 56/78 before setting rank; these are not player skill grants.",
+        "end_entry_pc": 10901,
+        "rank_pc": 10913,
+        "flags": [
+          {
+            "resource": 27679,
+            "pc": 10135,
+            "flag": 20,
+            "value": 1
+          },
+          {
+            "resource": 27679,
+            "pc": 10140,
+            "flag": 140,
+            "value": 1
+          }
+        ],
+        "ignored_actor_natives": [
+          56,
+          78
+        ]
+      },
+      "starting_life_equivalent": "Each native-183 effect lists played-intro PCs calling the identical skill helper 4219. Replay once for all Lives, including starting Life; no second starting-Life grant."
+    }
+  ],
+  "review": "Round 2: corrected helper 4168 native 199 to 181; identified omitted Magician UI-only native 492; verified all 31 played-intro equivalents against source.",
+  "native_contracts": {
+    "183": {
+      "handler": "0x0039ba98",
+      "chain": [
+        "0x00567ab4",
+        "0x002ff770",
+        "0x00287ff0"
+      ],
+      "write_pc": "0x00288034",
+      "field": "profile + 0x0c + 8*skill (signed byte level); XP float at profile + 8 + 8*skill; save profile equivalent: save+0x1fb24+8*skill for level, save+0x1fb20+8*skill for XP",
+      "profile_save_block": "save + 0x1fb18; same profile has Life ranks at +0x130 (save+0x1fc48); save block used by 0x11efcc..0x11efe0",
+      "first_learn_record": "0x2ff7b0..0x2ff7e0: save+0x21f20 bit (skill+0xd3), index helper 0x5b7130(type=2)",
+      "requirements": "Active player stat component (byte +0x8c nonzero, profile pointer +0x94); global player lookup at 0x567abc..0x567ae8. No current-Life or quest-phase test. cmd_183 also appends to script-local eight-slot report queue at 0x450818, after the actual level write."
+    },
+    "191": {
+      "handler": "0x0039a5a4",
+      "chain": [
+        "0x00567950",
+        "0x00238bdc"
+      ],
+      "write_pc": "0x00238c30",
+      "field": "save+0x22464 + 4*(ability>>5), bit ability&31",
+      "requirements": "Explicit ability id; no Life/phase requirement. Dispatches notification type 13 via 0x2afa80; also script-local queue 0x450720."
+    },
+    "173": {
+      "handler": "0x0039ea54",
+      "chain": [
+        "0x005671d0",
+        "0x002ffa64",
+        "0x002c88ec"
+      ],
+      "correction": "Rank byte writer 0x2c8920; rank table techniques at +0x14 processed by 0x2c8990..0x2c89a0 -> 0x238bdc (same ability-bit writer as 191). It does not call skill-level writer 0x287ff0. 0x1d6d34 is a notification path, not proof of skill grants. Rank changes also run craft recipe refresh 0x242d3c. Keep 173 for Novice rank/techniques/recipes."
+    },
+    "481": {
+      "handler": "0x003a4750",
+      "chain": [
+        "0x0023875c",
+        "0x005af5fc",
+        "0x0028dfc0"
+      ],
+      "correction": "Craft rank-row notice (UI type 14); no skill level write. Handler flags are script-manager-local, NOT save fields. Persistent rank techniques come from 173."
+    },
+    "181": {
+      "handler": "0x00399dac",
+      "chain": [
+        "0x0056774c"
+      ],
+      "requirements": "Explicit item id/quantity, may yield for inventory overflow. Helper 4168 adds item_notice(199 is unrelated), toggles option 14 and debug output; replay uses persistent item_change only."
+    },
+    "178": {
+      "handler": "0x00399e34",
+      "chain": [
+        "0x0056781c",
+        "0x003005c8"
+      ],
+      "field": "profile+0x1a4 current Dosh, +0x1a8 earned Dosh",
+      "requirements": "Active player stat component; add 500 once per Life. Helper 4338 adds pure notice native 484."
+    }
+  },
+  "replay_policy": "Replay persistent effects in each source reward order (items, skills, abilities, Dosh), then challenge 87 and terminal end-entry rank 173. No Life switching needed by explicit setters. Skip UI notices, animation/camera/movement, and quest-local actor operations; retain existing completion flag/phase preset and opening teardown. 8000 story Bliss is separate from the twelve 500-Dosh skip rewards.",
+  "ui_only_helpers": {
+    "4219": {
+      "natives": [
+        345
+      ],
+      "chain": [
+        "0x003a09e4",
+        "0x00236718",
+        "0x0028dfc0"
+      ],
+      "note": "Notice type 9 then persistent native 183; debug_line only after write."
+    },
+    "4234": {
+      "natives": [
+        336
+      ],
+      "note": "Ability notice before native 191."
+    },
+    "4168": {
+      "natives": [
+        330,
+        326
+      ],
+      "note": "Option14 input lock, item_notice, debug_line around persistent 181."
+    },
+    "4338": {
+      "natives": [
+        484
+      ],
+      "note": "Dosh notice before native178."
+    },
+    "4549": {
+      "natives": [
+        347,
+        174,
+        481
+      ],
+      "note": "87 uses current-Life switch to choose challenge; 347 requests UI35 (0x39cd68 -> 0x2478a8/0x22add8), then 481 only for craft Lives. Replay explicit challenge87; retain rank173 recipe refresh."
+    }
+  }
+}

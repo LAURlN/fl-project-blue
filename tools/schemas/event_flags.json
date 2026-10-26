@@ -1,0 +1,20 @@
+{
+  "name": "event_flags",
+  "resource_ids": [
+    5417
+  ],
+  "row_size": 4,
+  "columns": [
+    {
+      "name": "label",
+      "type": "utf16",
+      "type_id": 6,
+      "offset": 0,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "4350 flag labels (debug text); row 1963 = Origin Island/EX patch purchased."
+    }
+  ]
+}

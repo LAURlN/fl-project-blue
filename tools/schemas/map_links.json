@@ -1,0 +1,97 @@
+{
+  "name": "map_links",
+  "resource_ids": [
+    5965
+  ],
+  "row_size": 16,
+  "columns": [
+    {
+      "name": "map_pair",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 0,
+      "count": 2,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "medium",
+      "note": "Two map table indexes the link joins."
+    },
+    {
+      "name": "u_04",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 4,
+      "count": 2,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    },
+    {
+      "name": "u_06",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 6,
+      "count": 2,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    },
+    {
+      "name": "label",
+      "type": "utf16",
+      "type_id": 6,
+      "offset": 8,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "medium",
+      "note": "Route label such as \"_001 <-> downtown\"."
+    },
+    {
+      "name": "bits_12_0",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 12,
+      "count": 1,
+      "bits": 1,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    },
+    {
+      "name": "bits_12_1",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 12,
+      "count": 1,
+      "bits": 1,
+      "shift": 1,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    },
+    {
+      "name": "bits_12_2",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 12,
+      "count": 1,
+      "bits": 1,
+      "shift": 2,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    },
+    {
+      "name": "bits_12_3",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 12,
+      "count": 1,
+      "bits": 1,
+      "shift": 3,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    }
+  ]
+}

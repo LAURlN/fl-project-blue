@@ -1,0 +1,7157 @@
+{
+  "format": "fl-eu-script-commands-v1",
+  "commands": [
+    {
+      "id": 0,
+      "handler": "0x003afeb0",
+      "argc": 0,
+      "name": "cmd_000",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 1,
+      "handler": "0x0039ac98",
+      "argc": 0,
+      "name": "cmd_001",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 2,
+      "handler": "0x003b0308",
+      "argc": 1,
+      "name": "wait_frames",
+      "confidence": "high",
+      "operands": [
+        "frames"
+      ],
+      "meaning": "Yield in execution mode 5; stores a u16 frame delay at thread +0x72."
+    },
+    {
+      "id": 3,
+      "handler": "0x0039d6d0",
+      "argc": 1,
+      "name": "cmd_003",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 4,
+      "handler": "0x0039f138",
+      "argc": 0,
+      "name": "wait_camera",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Rewind PC and yield while the active camera controller is busy."
+    },
+    {
+      "id": 5,
+      "handler": "0x0039a7fc",
+      "argc": 0,
+      "name": "cmd_005",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 6,
+      "handler": "0x003a5350",
+      "argc": 0,
+      "name": "wait_field_ready",
+      "confidence": "medium",
+      "operands": [],
+      "meaning": "Rewind PC and yield until field readiness query 0x28e11c succeeds."
+    },
+    {
+      "id": 7,
+      "handler": "0x003a52c0",
+      "argc": 1,
+      "name": "cmd_007",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 8,
+      "handler": "0x003a95fc",
+      "argc": 2,
+      "name": "cmd_008",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 9,
+      "handler": "0x003a54a0",
+      "argc": 1,
+      "name": "cmd_009",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 10,
+      "handler": "0x003a5574",
+      "argc": 1,
+      "name": "cmd_010",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 11,
+      "handler": "0x003a92b8",
+      "argc": 0,
+      "name": "cmd_011",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 12,
+      "handler": "0x003a7b0c",
+      "argc": 0,
+      "name": "cmd_012",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 13,
+      "handler": "0x003a7b5c",
+      "argc": 1,
+      "name": "cmd_013",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 14,
+      "handler": "0x003ac904",
+      "argc": 1,
+      "name": "cmd_014",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 15,
+      "handler": "0x0039a03c",
+      "argc": 0,
+      "name": "cmd_015",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 16,
+      "handler": "0x003b0738",
+      "argc": 0,
+      "name": "cmd_016",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 17,
+      "handler": "0x003a7030",
+      "argc": 0,
+      "name": "cmd_017",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 18,
+      "handler": "0x003ab960",
+      "argc": 0,
+      "name": "wait_ui_14",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Yield/retry until UI task 0x14 completes; unrelated to stock selection."
+    },
+    {
+      "id": 19,
+      "handler": "0x003a96ec",
+      "argc": 1,
+      "name": "cmd_019",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 20,
+      "handler": "0x003a5398",
+      "argc": 1,
+      "name": "cmd_020",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 21,
+      "handler": "0x003aa740",
+      "argc": 0,
+      "name": "cmd_021",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 22,
+      "handler": "0x0039f1ac",
+      "argc": 0,
+      "name": "cmd_022",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 23,
+      "handler": "0x003a7dc0",
+      "argc": 0,
+      "name": "cmd_023",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 24,
+      "handler": "0x003a9784",
+      "argc": 1,
+      "name": "cmd_024",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 25,
+      "handler": "0x003aa78c",
+      "argc": 2,
+      "name": "cmd_025",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 26,
+      "handler": "0x003abf94",
+      "argc": 1,
+      "name": "cmd_026",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 27,
+      "handler": "0x003ae5c4",
+      "argc": 2,
+      "name": "cmd_027",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 28,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_028",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 29,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_029",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 30,
+      "handler": "0x003a39d0",
+      "argc": 2,
+      "name": "cmd_030",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 31,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_031",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 32,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_032",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 33,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_033",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 34,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_034",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 35,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_035",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 36,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_036",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 37,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_037",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 38,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_038",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 39,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_039",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 40,
+      "handler": "0x0039ed2c",
+      "argc": 1,
+      "name": "quest_start",
+      "confidence": "high",
+      "operands": [
+        "arg0"
+      ],
+      "meaning": "Starts the quest named by the argument: SYS003 PC 5559 starts the Origin Island story with cmd_040(118) after the shipped entitlement/progress gate."
+    },
+    {
+      "id": 41,
+      "handler": "0x003a9c28",
+      "argc": 1,
+      "name": "cmd_041",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 42,
+      "handler": "0x0039aaa8",
+      "argc": 1,
+      "name": "cmd_042",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 43,
+      "handler": "0x0039f348",
+      "argc": 1,
+      "name": "cmd_043",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 44,
+      "handler": "0x003ab6c0",
+      "argc": 3,
+      "name": "cmd_044",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 45,
+      "handler": "0x003aab84",
+      "argc": 2,
+      "name": "cmd_045",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 46,
+      "handler": "0x003ac6fc",
+      "argc": 2,
+      "name": "cmd_046",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 47,
+      "handler": "0x003ac510",
+      "argc": 1,
+      "name": "cmd_047",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 48,
+      "handler": "0x003a794c",
+      "argc": 3,
+      "name": "cmd_048",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 49,
+      "handler": "0x003a69a0",
+      "argc": 2,
+      "name": "cmd_049",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 50,
+      "handler": "0x003aa8e8",
+      "argc": 3,
+      "name": "cmd_050",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 51,
+      "handler": "0x003ac3c0",
+      "argc": 0,
+      "name": "cmd_051",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 52,
+      "handler": "0x003ace18",
+      "argc": 0,
+      "name": "cmd_052",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 53,
+      "handler": "0x003acd94",
+      "argc": 0,
+      "name": "cmd_053",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 54,
+      "handler": "0x003a8470",
+      "argc": 2,
+      "name": "cmd_054",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 55,
+      "handler": "0x003a8318",
+      "argc": 1,
+      "name": "cmd_055",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 56,
+      "handler": "0x0039e81c",
+      "argc": 1,
+      "name": "cmd_056",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 57,
+      "handler": "0x003a3be0",
+      "argc": 1,
+      "name": "cmd_057",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 58,
+      "handler": "0x003a3b64",
+      "argc": 0,
+      "name": "cmd_058",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 59,
+      "handler": "0x003a5154",
+      "argc": 3,
+      "name": "cmd_059",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 60,
+      "handler": "0x003a87b8",
+      "argc": 0,
+      "name": "cmd_060",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 61,
+      "handler": "0x003a6a34",
+      "argc": 3,
+      "name": "get_context",
+      "confidence": "high",
+      "operands": [
+        "selector",
+        "out_a",
+        "out_b"
+      ],
+      "meaning": "Writes VM stack slots supplied by address. Selector 0: thread context; 9: shop selector at manager +0x162c."
+    },
+    {
+      "id": 62,
+      "handler": "0x003a8f68",
+      "argc": 2,
+      "name": "cmd_062",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 63,
+      "handler": "0x003a8744",
+      "argc": 1,
+      "name": "quest_phase_get",
+      "confidence": "high",
+      "operands": [
+        "arg0"
+      ],
+      "meaning": "Returns the runtime quest phase as the VM sees it: 3 once the quest is complete, 0 otherwise. SYS003 gates compare it with 3 and 0 (PCs 5524-5534)."
+    },
+    {
+      "id": 64,
+      "handler": "0x0039e11c",
+      "argc": 0,
+      "name": "cmd_064",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 65,
+      "handler": "0x003a0468",
+      "argc": 2,
+      "name": "flag_set",
+      "confidence": "high",
+      "operands": [
+        "flag_id",
+        "value"
+      ],
+      "meaning": "0 clears local save flag; 1 sets through 0x371c14, respecting table 5780 write policy."
+    },
+    {
+      "id": 66,
+      "handler": "0x0039f674",
+      "argc": 1,
+      "name": "flag_test",
+      "confidence": "high",
+      "operands": [
+        "flag_id"
+      ],
+      "meaning": "Returns DLC-aware event_flag_test_with_ec (0x205da8). Bound literal is 4345."
+    },
+    {
+      "id": 67,
+      "handler": "0x003a6338",
+      "argc": 1,
+      "name": "cmd_067",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 68,
+      "handler": "0x003a47c8",
+      "argc": 4,
+      "name": "cmd_068",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3"
+      ]
+    },
+    {
+      "id": 69,
+      "handler": "0x003a8a3c",
+      "argc": 1,
+      "name": "cmd_069",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 70,
+      "handler": "0x003ac2c0",
+      "argc": 0,
+      "name": "cmd_070",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 71,
+      "handler": "0x003ac340",
+      "argc": 0,
+      "name": "cmd_071",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 72,
+      "handler": "0x003af280",
+      "argc": 0,
+      "name": "cmd_072",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 73,
+      "handler": "0x003ae07c",
+      "argc": 1,
+      "name": "cmd_073",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 74,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_074",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 75,
+      "handler": "0x003ac110",
+      "argc": 0,
+      "name": "cmd_075",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 76,
+      "handler": "0x003ac240",
+      "argc": 0,
+      "name": "cmd_076",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 77,
+      "handler": "0x003af200",
+      "argc": 0,
+      "name": "cmd_077",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 78,
+      "handler": "0x003ade8c",
+      "argc": 1,
+      "name": "cmd_078",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 79,
+      "handler": "0x003a4998",
+      "argc": 3,
+      "name": "cmd_079",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 80,
+      "handler": "0x003a3f3c",
+      "argc": 1,
+      "name": "cmd_080",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 81,
+      "handler": "0x003ac490",
+      "argc": 1,
+      "name": "cmd_081",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 82,
+      "handler": "0x003ab5f4",
+      "argc": 2,
+      "name": "cmd_082",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 83,
+      "handler": "0x003a4c58",
+      "argc": 0,
+      "name": "cmd_083",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 84,
+      "handler": "0x003a3b98",
+      "argc": 0,
+      "name": "cmd_084",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 85,
+      "handler": "0x003af714",
+      "argc": 1,
+      "name": "cmd_085",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 86,
+      "handler": "0x003a9af4",
+      "argc": 2,
+      "name": "cmd_086",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 87,
+      "handler": "0x003a76a0",
+      "argc": 3,
+      "name": "cmd_087",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 88,
+      "handler": "0x003a6500",
+      "argc": 1,
+      "name": "cmd_088",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 89,
+      "handler": "0x003a8a9c",
+      "argc": 1,
+      "name": "cmd_089",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 90,
+      "handler": "0x003afad4",
+      "argc": 1,
+      "name": "message",
+      "confidence": "high",
+      "operands": [
+        "text_row"
+      ],
+      "meaning": "Displays calling-thread message row with preceding row as speaker; uses message attributes for NPC override. Yields."
+    },
+    {
+      "id": 91,
+      "handler": "0x003b0114",
+      "argc": 1,
+      "name": "message_global",
+      "confidence": "high",
+      "operands": [
+        "text_row"
+      ],
+      "meaning": "Displays row from global text object; preceding row is speaker. Yields."
+    },
+    {
+      "id": 92,
+      "handler": "0x003b01d4",
+      "argc": 1,
+      "name": "message_parent",
+      "confidence": "medium",
+      "operands": [
+        "text_row"
+      ],
+      "meaning": "Displays text through parent thread resource object. Unused in current bytecode corpus."
+    },
+    {
+      "id": 93,
+      "handler": "0x0039cbcc",
+      "argc": 3,
+      "name": "message_npc",
+      "confidence": "high",
+      "operands": [
+        "npc",
+        "text_slot",
+        "text_row"
+      ],
+      "meaning": "Displays selected NPC text row; resolves NPC through actor manager. Yields."
+    },
+    {
+      "id": 94,
+      "handler": "0x0039e4a8",
+      "argc": 1,
+      "name": "cmd_094",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 95,
+      "handler": "0x003b0350",
+      "argc": 4,
+      "name": "message_named",
+      "confidence": "high",
+      "operands": [
+        "npc",
+        "speaker_row",
+        "text_row",
+        "style"
+      ],
+      "meaning": "Uses calling-thread text; speaker_row -1 resolves NPC name. style 0 sets message option. Yields."
+    },
+    {
+      "id": 96,
+      "handler": "0x003b0f48",
+      "argc": 4,
+      "name": "cmd_096",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3"
+      ]
+    },
+    {
+      "id": 97,
+      "handler": "0x003b10e0",
+      "argc": 4,
+      "name": "cmd_097",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3"
+      ]
+    },
+    {
+      "id": 98,
+      "handler": "0x003b0a24",
+      "argc": 2,
+      "name": "text_argument",
+      "confidence": "medium",
+      "operands": [
+        "kind",
+        "value"
+      ],
+      "meaning": "Queues substitution text. Kind 6 item name; 15 quest title; 0 player name."
+    },
+    {
+      "id": 99,
+      "handler": "0x0039c968",
+      "argc": 0,
+      "name": "message_result",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Returns message/choice result stored on the script manager."
+    },
+    {
+      "id": 100,
+      "handler": "0x0039d43c",
+      "argc": 1,
+      "name": "cmd_100",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 101,
+      "handler": "0x00399e84",
+      "argc": 0,
+      "name": "cmd_101",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 102,
+      "handler": "0x0039d328",
+      "argc": 1,
+      "name": "cmd_102",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 103,
+      "handler": "0x0039e6a8",
+      "argc": 1,
+      "name": "cmd_103",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 104,
+      "handler": "0x003b0678",
+      "argc": 0,
+      "name": "cmd_104",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 105,
+      "handler": "0x003a3cbc",
+      "argc": 0,
+      "name": "cmd_105",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 106,
+      "handler": "0x0039a0dc",
+      "argc": 1,
+      "name": "cmd_106",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 107,
+      "handler": "0x003a70d8",
+      "argc": 2,
+      "name": "cmd_107",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 108,
+      "handler": "0x0039dcd4",
+      "argc": 2,
+      "name": "cmd_108",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 109,
+      "handler": "0x0039df78",
+      "argc": 3,
+      "name": "cmd_109",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 110,
+      "handler": "0x003a9e7c",
+      "argc": 2,
+      "name": "cmd_110",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 111,
+      "handler": "0x003aaaf8",
+      "argc": 2,
+      "name": "cmd_111",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 112,
+      "handler": "0x003aee18",
+      "argc": 3,
+      "name": "cmd_112",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 113,
+      "handler": "0x0039e940",
+      "argc": 2,
+      "name": "cmd_113",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 114,
+      "handler": "0x003ab468",
+      "argc": 8,
+      "name": "cmd_114",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3",
+        "arg4",
+        "arg5",
+        "arg6",
+        "arg7"
+      ]
+    },
+    {
+      "id": 115,
+      "handler": "0x0039e348",
+      "argc": 0,
+      "name": "cmd_115",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 116,
+      "handler": "0x003a74d8",
+      "argc": 2,
+      "name": "cmd_116",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 117,
+      "handler": "0x003b12ac",
+      "argc": 3,
+      "name": "cmd_117",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 118,
+      "handler": "0x003b0514",
+      "argc": 3,
+      "name": "cmd_118",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 119,
+      "handler": "0x0039b33c",
+      "argc": 3,
+      "name": "cmd_119",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 120,
+      "handler": "0x003b09bc",
+      "argc": 1,
+      "name": "cmd_120",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 121,
+      "handler": "0x0039b204",
+      "argc": 5,
+      "name": "cmd_121",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3",
+        "arg4"
+      ]
+    },
+    {
+      "id": 122,
+      "handler": "0x003b0760",
+      "argc": 0,
+      "name": "cmd_122",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 123,
+      "handler": "0x0039a50c",
+      "argc": 3,
+      "name": "cmd_123",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 124,
+      "handler": "0x00399f60",
+      "argc": 3,
+      "name": "cmd_124",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 125,
+      "handler": "0x0039a604",
+      "argc": 2,
+      "name": "cmd_125",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 126,
+      "handler": "0x0039a06c",
+      "argc": 2,
+      "name": "cmd_126",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 127,
+      "handler": "0x0039f880",
+      "argc": 0,
+      "name": "cmd_127",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 128,
+      "handler": "0x003ad088",
+      "argc": 1,
+      "name": "cmd_128",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 129,
+      "handler": "0x003ae3e0",
+      "argc": 0,
+      "name": "cmd_129",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 130,
+      "handler": "0x003a8cb8",
+      "argc": 1,
+      "name": "cmd_130",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 131,
+      "handler": "0x003ac6b0",
+      "argc": 2,
+      "name": "object_enable",
+      "confidence": "high",
+      "operands": [
+        "placement_uid",
+        "enabled"
+      ],
+      "meaning": "Queues event 0x1d -> 0x32e538 type dispatch. Boolean activation, not a resource ID."
+    },
+    {
+      "id": 132,
+      "handler": "0x003a6770",
+      "argc": 5,
+      "name": "cmd_132",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3",
+        "arg4"
+      ]
+    },
+    {
+      "id": 133,
+      "handler": "0x003ab5a8",
+      "argc": 2,
+      "name": "door_enable",
+      "confidence": "high",
+      "operands": [
+        "placement_uid",
+        "enabled"
+      ],
+      "meaning": "Alias of command 131; type-3 UID -> transition activation at 0x357bb0."
+    },
+    {
+      "id": 134,
+      "handler": "0x003a7860",
+      "argc": 2,
+      "name": "route_select",
+      "confidence": "medium",
+      "operands": [
+        "route_id",
+        "selector"
+      ],
+      "meaning": "Calls 0x23eaa8 with route index <218 and signed selector; preserve donor conventions."
+    },
+    {
+      "id": 135,
+      "handler": "0x0039a148",
+      "argc": 8,
+      "name": "cmd_135",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3",
+        "arg4",
+        "arg5",
+        "arg6",
+        "arg7"
+      ]
+    },
+    {
+      "id": 136,
+      "handler": "0x0039b060",
+      "argc": 6,
+      "name": "cmd_136",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3",
+        "arg4",
+        "arg5"
+      ]
+    },
+    {
+      "id": 137,
+      "handler": "0x0039ef78",
+      "argc": 2,
+      "name": "cmd_137",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 138,
+      "handler": "0x003b0808",
+      "argc": 8,
+      "name": "cmd_138",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3",
+        "arg4",
+        "arg5",
+        "arg6",
+        "arg7"
+      ]
+    },
+    {
+      "id": 139,
+      "handler": "0x0039fca8",
+      "argc": 9,
+      "name": "cmd_139",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3",
+        "arg4",
+        "arg5",
+        "arg6",
+        "arg7",
+        "arg8"
+      ]
+    },
+    {
+      "id": 140,
+      "handler": "0x0039f204",
+      "argc": 3,
+      "name": "cmd_140",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 141,
+      "handler": "0x003a037c",
+      "argc": 2,
+      "name": "camera_fade",
+      "confidence": "medium",
+      "operands": [
+        "duration",
+        "mode"
+      ],
+      "meaning": "Calls camera controller 0x359060. duration 0 uses one tick and yields; mode meaning inferred from call sites."
+    },
+    {
+      "id": 142,
+      "handler": "0x003a0a80",
+      "argc": 5,
+      "name": "cmd_142",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3",
+        "arg4"
+      ]
+    },
+    {
+      "id": 143,
+      "handler": "0x003a3d3c",
+      "argc": 2,
+      "name": "cmd_143",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 144,
+      "handler": "0x003ab9c8",
+      "argc": 0,
+      "name": "cmd_144",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 145,
+      "handler": "0x003a08c0",
+      "argc": 4,
+      "name": "cmd_145",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3"
+      ]
+    },
+    {
+      "id": 146,
+      "handler": "0x003aa5d8",
+      "argc": 0,
+      "name": "cmd_146",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 147,
+      "handler": "0x003a63dc",
+      "argc": 3,
+      "name": "cmd_147",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 148,
+      "handler": "0x003a3e84",
+      "argc": 3,
+      "name": "cmd_148",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 149,
+      "handler": "0x003a8524",
+      "argc": 4,
+      "name": "cmd_149",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3"
+      ]
+    },
+    {
+      "id": 150,
+      "handler": "0x003a7598",
+      "argc": 1,
+      "name": "cmd_150",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 151,
+      "handler": "0x003a63b8",
+      "argc": 0,
+      "name": "cmd_151",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 152,
+      "handler": "0x003ae730",
+      "argc": 3,
+      "name": "cmd_152",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 153,
+      "handler": "0x003aadf4",
+      "argc": 0,
+      "name": "cmd_153",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 154,
+      "handler": "0x003aa4e0",
+      "argc": 4,
+      "name": "cmd_154",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3"
+      ]
+    },
+    {
+      "id": 155,
+      "handler": "0x003ae294",
+      "argc": 4,
+      "name": "cmd_155",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3"
+      ]
+    },
+    {
+      "id": 156,
+      "handler": "0x0039cf94",
+      "argc": 0,
+      "name": "cmd_156",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 157,
+      "handler": "0x0039b67c",
+      "argc": 2,
+      "name": "cmd_157",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 158,
+      "handler": "0x0039fc50",
+      "argc": 1,
+      "name": "cmd_158",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 159,
+      "handler": "0x003a42ac",
+      "argc": 9,
+      "name": "cmd_159",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3",
+        "arg4",
+        "arg5",
+        "arg6",
+        "arg7",
+        "arg8"
+      ]
+    },
+    {
+      "id": 160,
+      "handler": "0x003a7198",
+      "argc": 7,
+      "name": "cmd_160",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3",
+        "arg4",
+        "arg5",
+        "arg6"
+      ]
+    },
+    {
+      "id": 161,
+      "handler": "0x003a7900",
+      "argc": 2,
+      "name": "placement_enable",
+      "confidence": "high",
+      "operands": [
+        "placement_uid",
+        "enabled"
+      ],
+      "meaning": "Alias of command 131; engine dispatches by placement UID type."
+    },
+    {
+      "id": 162,
+      "handler": "0x0039e360",
+      "argc": 1,
+      "name": "cmd_162",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 163,
+      "handler": "0x003acbac",
+      "argc": 1,
+      "name": "cmd_163",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 164,
+      "handler": "0x003a0510",
+      "argc": 1,
+      "name": "cmd_164",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 165,
+      "handler": "0x003ab35c",
+      "argc": 2,
+      "name": "cmd_165",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 166,
+      "handler": "0x003a9414",
+      "argc": 5,
+      "name": "cmd_166",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3",
+        "arg4"
+      ]
+    },
+    {
+      "id": 167,
+      "handler": "0x003a7bf0",
+      "argc": 1,
+      "name": "cmd_167",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 168,
+      "handler": "0x003ae3d0",
+      "argc": 0,
+      "name": "cmd_168",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 169,
+      "handler": "0x003aa184",
+      "argc": 0,
+      "name": "cmd_169",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 170,
+      "handler": "0x0039e258",
+      "argc": 5,
+      "name": "cmd_170",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3",
+        "arg4"
+      ]
+    },
+    {
+      "id": 171,
+      "handler": "0x0039a584",
+      "argc": 1,
+      "name": "cmd_171",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ],
+      "meaning": "Sets the current Life (byte at save+0x1fcc8, handler 0x39a584 -> 0x567908). Life intros call it first; 173 grants rank skills for the current Life (inferred from 0x2ffa64/0x1fb528 gate)."
+    },
+    {
+      "id": 172,
+      "handler": "0x00399fc4",
+      "argc": 0,
+      "name": "cmd_172",
+      "confidence": "unknown",
+      "operands": [],
+      "meaning": "Returns the current Life (inferred from use: shipped intro-skip helper reads it, then keys challenge 087 and 481 on it)."
+    },
+    {
+      "id": 173,
+      "handler": "0x0039ea54",
+      "argc": 2,
+      "name": "cmd_173",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ],
+      "meaning": "Rank setter (0x5671d0, 0x39ea54). Rank-1 skill grant applies only when the Life is current (see 171). Free Life (version 3): 171(L), 173(L,1) per Life, then restore."
+    },
+    {
+      "id": 174,
+      "handler": "0x0039e09c",
+      "argc": 1,
+      "name": "cmd_174",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ],
+      "meaning": "Returns the Life rank (0x20ce24 -> 0x1fb64c reads the Life record high byte at save+0x1fc48+4*Life)."
+    },
+    {
+      "id": 175,
+      "handler": "0x0039ae3c",
+      "argc": 0,
+      "name": "cmd_175",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 176,
+      "handler": "0x0039aa68",
+      "argc": 1,
+      "name": "cmd_176",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 177,
+      "handler": "0x00399fe8",
+      "argc": 0,
+      "name": "cmd_177",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 178,
+      "handler": "0x00399e34",
+      "argc": 1,
+      "name": "cmd_178",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 179,
+      "handler": "0x0039aeb0",
+      "argc": 0,
+      "name": "cmd_179",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 180,
+      "handler": "0x0039aa88",
+      "argc": 1,
+      "name": "cmd_180",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 181,
+      "handler": "0x00399dac",
+      "argc": 2,
+      "name": "item_change",
+      "confidence": "high",
+      "operands": [
+        "item_id",
+        "quantity"
+      ],
+      "meaning": "Positive quantity queues item acquisition and yields; negative removes inventory units. UI/overflow handling must finish."
+    },
+    {
+      "id": 182,
+      "handler": "0x00399e54",
+      "argc": 1,
+      "name": "cmd_182",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 183,
+      "handler": "0x0039ba98",
+      "argc": 2,
+      "name": "cmd_183",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 184,
+      "handler": "0x0039c9d4",
+      "argc": 0,
+      "name": "cmd_184",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 185,
+      "handler": "0x0039aed4",
+      "argc": 1,
+      "name": "cmd_185",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 186,
+      "handler": "0x0039b910",
+      "argc": 1,
+      "name": "cmd_186",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 187,
+      "handler": "0x0039f518",
+      "argc": 0,
+      "name": "cmd_187",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 188,
+      "handler": "0x003a4b2c",
+      "argc": 2,
+      "name": "cmd_188",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 189,
+      "handler": "0x003a66c8",
+      "argc": 0,
+      "name": "item_result",
+      "confidence": "medium",
+      "operands": [],
+      "meaning": "Returns whether acquisition state is 0 or 2; used after item_change."
+    },
+    {
+      "id": 190,
+      "handler": "0x003a4030",
+      "argc": 3,
+      "name": "cmd_190",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 191,
+      "handler": "0x0039a5a4",
+      "argc": 2,
+      "name": "cmd_191",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 192,
+      "handler": "0x0039a00c",
+      "argc": 1,
+      "name": "cmd_192",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 193,
+      "handler": "0x0039d2c4",
+      "argc": 3,
+      "name": "cmd_193",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 194,
+      "handler": "0x0039ca54",
+      "argc": 2,
+      "name": "cmd_194",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 195,
+      "handler": "0x003a81cc",
+      "argc": 1,
+      "name": "cmd_195",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 196,
+      "handler": "0x003ac070",
+      "argc": 2,
+      "name": "cmd_196",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 197,
+      "handler": "0x003a9f2c",
+      "argc": 0,
+      "name": "cmd_197",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 198,
+      "handler": "0x003a8204",
+      "argc": 2,
+      "name": "cmd_198",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 199,
+      "handler": "0x0039adb8",
+      "argc": 1,
+      "name": "cmd_199",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 200,
+      "handler": "0x003a7abc",
+      "argc": 2,
+      "name": "actor_option",
+      "confidence": "medium",
+      "operands": [
+        "actor",
+        "option"
+      ],
+      "meaning": "Dispatches actor option codes via 0x46738c; option 0/1 toggles 0x23b760, other options have separate meanings."
+    },
+    {
+      "id": 201,
+      "handler": "0x0039cae4",
+      "argc": 1,
+      "name": "cmd_201",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 202,
+      "handler": "0x0039f910",
+      "argc": 1,
+      "name": "cmd_202",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 203,
+      "handler": "0x0039eb44",
+      "argc": 4,
+      "name": "cmd_203",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3"
+      ]
+    },
+    {
+      "id": 204,
+      "handler": "0x0039e19c",
+      "argc": 4,
+      "name": "cmd_204",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3"
+      ]
+    },
+    {
+      "id": 205,
+      "handler": "0x003a9288",
+      "argc": 1,
+      "name": "cmd_205",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 206,
+      "handler": "0x003a4cbc",
+      "argc": 2,
+      "name": "cmd_206",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 207,
+      "handler": "0x003a418c",
+      "argc": 1,
+      "name": "cmd_207",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 208,
+      "handler": "0x003a9f50",
+      "argc": 2,
+      "name": "cmd_208",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 209,
+      "handler": "0x0039eae4",
+      "argc": 2,
+      "name": "cmd_209",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 210,
+      "handler": "0x0039e14c",
+      "argc": 1,
+      "name": "cmd_210",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 211,
+      "handler": "0x003af108",
+      "argc": 2,
+      "name": "cmd_211",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 212,
+      "handler": "0x003a4d98",
+      "argc": 2,
+      "name": "cmd_212",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 213,
+      "handler": "0x003aace8",
+      "argc": 2,
+      "name": "cmd_213",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 214,
+      "handler": "0x003a7a4c",
+      "argc": 3,
+      "name": "actor_animation",
+      "confidence": "medium",
+      "operands": [
+        "actor",
+        "action",
+        "variant"
+      ],
+      "meaning": "Queues actor action via 0x467330 -> 0x238cb4. Action index is metadata-defined, not a universal animation number."
+    },
+    {
+      "id": 215,
+      "handler": "0x003a6f58",
+      "argc": 1,
+      "name": "cmd_215",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 216,
+      "handler": "0x003a7ab4",
+      "argc": 3,
+      "name": "cmd_216",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 217,
+      "handler": "0x003adc18",
+      "argc": 4,
+      "name": "cmd_217",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3"
+      ]
+    },
+    {
+      "id": 218,
+      "handler": "0x003a6f98",
+      "argc": 1,
+      "name": "cmd_218",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 219,
+      "handler": "0x003acc34",
+      "argc": 1,
+      "name": "cmd_219",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 220,
+      "handler": "0x003ae808",
+      "argc": 1,
+      "name": "cmd_220",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 221,
+      "handler": "0x0039d36c",
+      "argc": 2,
+      "name": "cmd_221",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 222,
+      "handler": "0x0039caa4",
+      "argc": 1,
+      "name": "cmd_222",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 223,
+      "handler": "0x003a4d30",
+      "argc": 3,
+      "name": "cmd_223",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 224,
+      "handler": "0x003a41ec",
+      "argc": 2,
+      "name": "cmd_224",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 225,
+      "handler": "0x003a06c4",
+      "argc": 4,
+      "name": "cmd_225",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3"
+      ]
+    },
+    {
+      "id": 226,
+      "handler": "0x003ac7b0",
+      "argc": 5,
+      "name": "cmd_226",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3",
+        "arg4"
+      ]
+    },
+    {
+      "id": 227,
+      "handler": "0x003ab7ac",
+      "argc": 5,
+      "name": "cmd_227",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3",
+        "arg4"
+      ]
+    },
+    {
+      "id": 228,
+      "handler": "0x003ab760",
+      "argc": 2,
+      "name": "cmd_228",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 229,
+      "handler": "0x0039f9dc",
+      "argc": 0,
+      "name": "cmd_229",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 230,
+      "handler": "0x0039dc2c",
+      "argc": 3,
+      "name": "cmd_230",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 231,
+      "handler": "0x003aa218",
+      "argc": 1,
+      "name": "cmd_231",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 232,
+      "handler": "0x003ae920",
+      "argc": 2,
+      "name": "cmd_232",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 233,
+      "handler": "0x003ae4a4",
+      "argc": 2,
+      "name": "cmd_233",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 234,
+      "handler": "0x003ae458",
+      "argc": 2,
+      "name": "cmd_234",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 235,
+      "handler": "0x003a07e8",
+      "argc": 3,
+      "name": "cmd_235",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 236,
+      "handler": "0x003aa330",
+      "argc": 3,
+      "name": "cmd_236",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 237,
+      "handler": "0x003ad654",
+      "argc": 3,
+      "name": "cmd_237",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 238,
+      "handler": "0x003aa408",
+      "argc": 4,
+      "name": "cmd_238",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3"
+      ]
+    },
+    {
+      "id": 239,
+      "handler": "0x003aa280",
+      "argc": 3,
+      "name": "cmd_239",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 240,
+      "handler": "0x003ad400",
+      "argc": 3,
+      "name": "cmd_240",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 241,
+      "handler": "0x003ae9c4",
+      "argc": 3,
+      "name": "cmd_241",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 242,
+      "handler": "0x003ad508",
+      "argc": 4,
+      "name": "cmd_242",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3"
+      ]
+    },
+    {
+      "id": 243,
+      "handler": "0x003ab8ec",
+      "argc": 2,
+      "name": "cmd_243",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 244,
+      "handler": "0x003a05e4",
+      "argc": 5,
+      "name": "cmd_244",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3",
+        "arg4"
+      ]
+    },
+    {
+      "id": 245,
+      "handler": "0x003a4df8",
+      "argc": 5,
+      "name": "cmd_245",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3",
+        "arg4"
+      ]
+    },
+    {
+      "id": 246,
+      "handler": "0x003a7c20",
+      "argc": 1,
+      "name": "cmd_246",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 247,
+      "handler": "0x0039ecdc",
+      "argc": 2,
+      "name": "cmd_247",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 248,
+      "handler": "0x0039d680",
+      "argc": 2,
+      "name": "cmd_248",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 249,
+      "handler": "0x003ad1e0",
+      "argc": 2,
+      "name": "cmd_249",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 250,
+      "handler": "0x003a880c",
+      "argc": 5,
+      "name": "cmd_250",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3",
+        "arg4"
+      ]
+    },
+    {
+      "id": 251,
+      "handler": "0x003a4f10",
+      "argc": 2,
+      "name": "actor_action",
+      "confidence": "medium",
+      "operands": [
+        "actor",
+        "action"
+      ],
+      "meaning": "Requests actor action through 0x4679b0; behavior depends on compatible actparm/actmot."
+    },
+    {
+      "id": 252,
+      "handler": "0x003a9360",
+      "argc": 4,
+      "name": "actor_action_timed",
+      "confidence": "medium",
+      "operands": [
+        "actor",
+        "action",
+        "duration",
+        "option"
+      ],
+      "meaning": "Immediate action for duration <=0, otherwise uses 0x468280. Action semantics depend on actor."
+    },
+    {
+      "id": 253,
+      "handler": "0x003a0c00",
+      "argc": 2,
+      "name": "actor_action_stop",
+      "confidence": "medium",
+      "operands": [
+        "actor",
+        "action"
+      ],
+      "meaning": "Stops selected actor action; -1 stops listed action slots via 0x467d20."
+    },
+    {
+      "id": 254,
+      "handler": "0x003ad0b8",
+      "argc": 4,
+      "name": "cmd_254",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3"
+      ]
+    },
+    {
+      "id": 255,
+      "handler": "0x003aee08",
+      "argc": 0,
+      "name": "cmd_255",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 256,
+      "handler": "0x003a7f78",
+      "argc": 7,
+      "name": "actor_place",
+      "confidence": "medium",
+      "operands": [
+        "actor",
+        "map_id",
+        "x_milli",
+        "y_milli",
+        "z_milli",
+        "angle",
+        "slot"
+      ],
+      "meaning": "Queues NPC placement through 0x2383f4. XYZ divided by 1000; slot -1 maps to -2. Bounds apply. First ID <2792, map ID <287; NPC definitions select the unit."
+    },
+    {
+      "id": 257,
+      "handler": "0x003aca08",
+      "argc": 4,
+      "name": "actor_spawn",
+      "confidence": "medium",
+      "operands": [
+        "actor",
+        "map_id",
+        "locator",
+        "slot"
+      ],
+      "meaning": "Queues NPC at locator via 0x2383f4; slot -1 maps to -2. Requires compatible unit resources. First ID <2792, map ID <287; NPC definitions select the unit."
+    },
+    {
+      "id": 258,
+      "handler": "0x003ad844",
+      "argc": 7,
+      "name": "npc_spawn",
+      "confidence": "medium",
+      "operands": [
+        "npc_id",
+        "map_id",
+        "x_milli",
+        "y_milli",
+        "z_milli",
+        "angle",
+        "slot"
+      ],
+      "meaning": "Queues NPC spawn via 0x230548 (event 0x1e); NPC ID <2792, map ID <287, slot -1 maps to -2. Locator variant acts only when target map is current. Enemy units remain a separate placement/type-12 path."
+    },
+    {
+      "id": 259,
+      "handler": "0x003aec88",
+      "argc": 4,
+      "name": "npc_spawn_locator",
+      "confidence": "medium",
+      "operands": [
+        "npc_id",
+        "map_id",
+        "locator_uid",
+        "slot"
+      ],
+      "meaning": "Queues NPC spawn via 0x230548 (event 0x1e); NPC ID <2792, map ID <287, slot -1 maps to -2. Locator variant acts only when target map is current. Enemy units remain a separate placement/type-12 path."
+    },
+    {
+      "id": 260,
+      "handler": "0x003a83c0",
+      "argc": 1,
+      "name": "cmd_260",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 261,
+      "handler": "0x003a6380",
+      "argc": 1,
+      "name": "cmd_261",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 262,
+      "handler": "0x003a0540",
+      "argc": 1,
+      "name": "cmd_262",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 263,
+      "handler": "0x003a7150",
+      "argc": 1,
+      "name": "cmd_263",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 264,
+      "handler": "0x003ae868",
+      "argc": 2,
+      "name": "cmd_264",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 265,
+      "handler": "0x0039fb10",
+      "argc": 5,
+      "name": "cmd_265",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3",
+        "arg4"
+      ]
+    },
+    {
+      "id": 266,
+      "handler": "0x003a7cf8",
+      "argc": 1,
+      "name": "cmd_266",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 267,
+      "handler": "0x003af154",
+      "argc": 3,
+      "name": "cmd_267",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 268,
+      "handler": "0x003af3b0",
+      "argc": 3,
+      "name": "cmd_268",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 269,
+      "handler": "0x003aad8c",
+      "argc": 1,
+      "name": "cmd_269",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 270,
+      "handler": "0x0039f9f4",
+      "argc": 1,
+      "name": "cmd_270",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 271,
+      "handler": "0x003a91f0",
+      "argc": 2,
+      "name": "cmd_271",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 272,
+      "handler": "0x003a9524",
+      "argc": 5,
+      "name": "cmd_272",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3",
+        "arg4"
+      ]
+    },
+    {
+      "id": 273,
+      "handler": "0x003ad230",
+      "argc": 3,
+      "name": "cmd_273",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 274,
+      "handler": "0x003ac9d8",
+      "argc": 1,
+      "name": "cmd_274",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 275,
+      "handler": "0x003af670",
+      "argc": 1,
+      "name": "cmd_275",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 276,
+      "handler": "0x003a4970",
+      "argc": 0,
+      "name": "cmd_276",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 277,
+      "handler": "0x003ab448",
+      "argc": 0,
+      "name": "cmd_277",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 278,
+      "handler": "0x003a90e0",
+      "argc": 4,
+      "name": "cmd_278",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3"
+      ]
+    },
+    {
+      "id": 279,
+      "handler": "0x003aac88",
+      "argc": 1,
+      "name": "cmd_279",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 280,
+      "handler": "0x003a8e48",
+      "argc": 1,
+      "name": "cmd_280",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 281,
+      "handler": "0x003ad7e8",
+      "argc": 1,
+      "name": "cmd_281",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 282,
+      "handler": "0x003acc3c",
+      "argc": 8,
+      "name": "cmd_282",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3",
+        "arg4",
+        "arg5",
+        "arg6",
+        "arg7"
+      ]
+    },
+    {
+      "id": 283,
+      "handler": "0x003aeae8",
+      "argc": 0,
+      "name": "cmd_283",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 284,
+      "handler": "0x003a88e0",
+      "argc": 1,
+      "name": "cmd_284",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 285,
+      "handler": "0x003a0574",
+      "argc": 3,
+      "name": "cmd_285",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 286,
+      "handler": "0x003adbcc",
+      "argc": 2,
+      "name": "cmd_286",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 287,
+      "handler": "0x003af088",
+      "argc": 1,
+      "name": "cmd_287",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 288,
+      "handler": "0x003ae720",
+      "argc": 0,
+      "name": "cmd_288",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 289,
+      "handler": "0x003ae8bc",
+      "argc": 3,
+      "name": "cmd_289",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 290,
+      "handler": "0x003ad078",
+      "argc": 0,
+      "name": "cmd_290",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 291,
+      "handler": "0x003ab458",
+      "argc": 0,
+      "name": "cmd_291",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 292,
+      "handler": "0x003a502c",
+      "argc": 1,
+      "name": "cmd_292",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 293,
+      "handler": "0x003ac760",
+      "argc": 3,
+      "name": "cmd_293",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 294,
+      "handler": "0x003af570",
+      "argc": 2,
+      "name": "cmd_294",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 295,
+      "handler": "0x003a4f64",
+      "argc": 3,
+      "name": "cmd_295",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 296,
+      "handler": "0x003a6fa0",
+      "argc": 1,
+      "name": "cmd_296",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 297,
+      "handler": "0x003aaa18",
+      "argc": 0,
+      "name": "cmd_297",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 298,
+      "handler": "0x003af0b0",
+      "argc": 1,
+      "name": "cmd_298",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 299,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_299",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 300,
+      "handler": "0x0039c5dc",
+      "argc": 2,
+      "name": "cmd_300",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 301,
+      "handler": "0x0039c77c",
+      "argc": 2,
+      "name": "cmd_301",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 302,
+      "handler": "0x0039f6e8",
+      "argc": 1,
+      "name": "cmd_302",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 303,
+      "handler": "0x0039c67c",
+      "argc": 0,
+      "name": "cmd_303",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 304,
+      "handler": "0x0039d57c",
+      "argc": 2,
+      "name": "cmd_304",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 305,
+      "handler": "0x0039bce8",
+      "argc": 1,
+      "name": "cmd_305",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 306,
+      "handler": "0x0039f584",
+      "argc": 4,
+      "name": "cmd_306",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3"
+      ]
+    },
+    {
+      "id": 307,
+      "handler": "0x003aa1cc",
+      "argc": 1,
+      "name": "cmd_307",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 308,
+      "handler": "0x003a3ce8",
+      "argc": 1,
+      "name": "cmd_308",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 309,
+      "handler": "0x003a85ec",
+      "argc": 0,
+      "name": "cmd_309",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 310,
+      "handler": "0x003adba4",
+      "argc": 1,
+      "name": "cmd_310",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 311,
+      "handler": "0x003a8ef8",
+      "argc": 3,
+      "name": "cmd_311",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 312,
+      "handler": "0x003ada64",
+      "argc": 1,
+      "name": "cmd_312",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 313,
+      "handler": "0x003a02a8",
+      "argc": 1,
+      "name": "cmd_313",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 314,
+      "handler": "0x0039e0cc",
+      "argc": 1,
+      "name": "cmd_314",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 315,
+      "handler": "0x003a0444",
+      "argc": 0,
+      "name": "cmd_315",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 316,
+      "handler": "0x003ac748",
+      "argc": 0,
+      "name": "cmd_316",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 317,
+      "handler": "0x003a75c0",
+      "argc": 2,
+      "name": "cmd_317",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 318,
+      "handler": "0x003a647c",
+      "argc": 1,
+      "name": "cmd_318",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 319,
+      "handler": "0x003a83f8",
+      "argc": 0,
+      "name": "cmd_319",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 320,
+      "handler": "0x003a73d8",
+      "argc": 1,
+      "name": "cmd_320",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 321,
+      "handler": "0x003aaf8c",
+      "argc": 1,
+      "name": "cmd_321",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 322,
+      "handler": "0x0039b7bc",
+      "argc": 1,
+      "name": "cmd_322",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 323,
+      "handler": "0x0039e510",
+      "argc": 1,
+      "name": "cmd_323",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 324,
+      "handler": "0x0039baf8",
+      "argc": 2,
+      "name": "shop_open",
+      "confidence": "high",
+      "operands": [
+        "shop_id",
+        "mode"
+      ],
+      "meaning": "mode 0 -> UI 0x0e buy, mode 1 -> 0x0f sell. Stores shop selector at 0x6ac0a0; stock 8405 corresponds to shop 0."
+    },
+    {
+      "id": 325,
+      "handler": "0x003a78ac",
+      "argc": 2,
+      "name": "cmd_325",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 326,
+      "handler": "0x0039e3b4",
+      "argc": 3,
+      "name": "item_notice",
+      "confidence": "medium",
+      "operands": [
+        "item_id",
+        "quantity",
+        "option"
+      ],
+      "meaning": "Queues item notification through 0x233144, then suspends; preserve option from donor."
+    },
+    {
+      "id": 327,
+      "handler": "0x0039af04",
+      "argc": 0,
+      "name": "cmd_327",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 328,
+      "handler": "0x003a65dc",
+      "argc": 0,
+      "name": "cmd_328",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 329,
+      "handler": "0x0039c810",
+      "argc": 1,
+      "name": "cmd_329",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 330,
+      "handler": "0x0039bddc",
+      "argc": 2,
+      "name": "cmd_330",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 331,
+      "handler": "0x0039f2f4",
+      "argc": 1,
+      "name": "cmd_331",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 332,
+      "handler": "0x0039ce48",
+      "argc": 3,
+      "name": "cmd_332",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 333,
+      "handler": "0x003a4528",
+      "argc": 3,
+      "name": "cmd_333",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 334,
+      "handler": "0x0039fac4",
+      "argc": 0,
+      "name": "cmd_334",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 335,
+      "handler": "0x003a0888",
+      "argc": 1,
+      "name": "cmd_335",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 336,
+      "handler": "0x0039f02c",
+      "argc": 1,
+      "name": "cmd_336",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 337,
+      "handler": "0x0039b544",
+      "argc": 0,
+      "name": "cmd_337",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 338,
+      "handler": "0x003a6908",
+      "argc": 0,
+      "name": "cmd_338",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 339,
+      "handler": "0x003a9bd0",
+      "argc": 1,
+      "name": "ui_open_20",
+      "confidence": "high",
+      "operands": [
+        "selector"
+      ],
+      "meaning": "Stores selector at 0x6ac200 and opens UI task 0x20. This is not the stock-table shop command."
+    },
+    {
+      "id": 340,
+      "handler": "0x0039b014",
+      "argc": 0,
+      "name": "cmd_340",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 341,
+      "handler": "0x003a7080",
+      "argc": 1,
+      "name": "cmd_341",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 342,
+      "handler": "0x003a89f0",
+      "argc": 0,
+      "name": "cmd_342",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 343,
+      "handler": "0x0039b5e0",
+      "argc": 1,
+      "name": "cmd_343",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 344,
+      "handler": "0x0039cb24",
+      "argc": 0,
+      "name": "cmd_344",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 345,
+      "handler": "0x003a09e4",
+      "argc": 1,
+      "name": "cmd_345",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 346,
+      "handler": "0x003ada40",
+      "argc": 0,
+      "name": "cmd_346",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 347,
+      "handler": "0x0039cd68",
+      "argc": 0,
+      "name": "cmd_347",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 348,
+      "handler": "0x003a8714",
+      "argc": 0,
+      "name": "cmd_348",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 349,
+      "handler": "0x0039fbfc",
+      "argc": 1,
+      "name": "cmd_349",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 350,
+      "handler": "0x003b06ec",
+      "argc": 1,
+      "name": "screen_fade",
+      "confidence": "medium",
+      "operands": [
+        "duration"
+      ],
+      "meaning": "Screen transition controller 0x567d9c; yields. Exact color convention needs gameplay acceptance."
+    },
+    {
+      "id": 351,
+      "handler": "0x0039accc",
+      "argc": 3,
+      "name": "cmd_351",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 352,
+      "handler": "0x00399ebc",
+      "argc": 2,
+      "name": "cmd_352",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 353,
+      "handler": "0x0039c868",
+      "argc": 4,
+      "name": "cmd_353",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3"
+      ]
+    },
+    {
+      "id": 354,
+      "handler": "0x0039a47c",
+      "argc": 3,
+      "name": "cmd_354",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 355,
+      "handler": "0x003a01c4",
+      "argc": 5,
+      "name": "cmd_355",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3",
+        "arg4"
+      ]
+    },
+    {
+      "id": 356,
+      "handler": "0x003a8dec",
+      "argc": 2,
+      "name": "cmd_356",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 357,
+      "handler": "0x0039a784",
+      "argc": 2,
+      "name": "cmd_357",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 358,
+      "handler": "0x003a426c",
+      "argc": 1,
+      "name": "cmd_358",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 359,
+      "handler": "0x0039d024",
+      "argc": 14,
+      "name": "cmd_359",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3",
+        "arg4",
+        "arg5",
+        "arg6",
+        "arg7",
+        "arg8",
+        "arg9",
+        "arg10",
+        "arg11",
+        "arg12",
+        "arg13"
+      ]
+    },
+    {
+      "id": 360,
+      "handler": "0x0039eedc",
+      "argc": 2,
+      "name": "cmd_360",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 361,
+      "handler": "0x003b1b00",
+      "argc": 7,
+      "name": "cmd_361",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3",
+        "arg4",
+        "arg5",
+        "arg6"
+      ]
+    },
+    {
+      "id": 362,
+      "handler": "0x0039a89c",
+      "argc": 7,
+      "name": "cmd_362",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3",
+        "arg4",
+        "arg5",
+        "arg6"
+      ]
+    },
+    {
+      "id": 363,
+      "handler": "0x0039c0a8",
+      "argc": 4,
+      "name": "cmd_363",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3"
+      ]
+    },
+    {
+      "id": 364,
+      "handler": "0x0039d80c",
+      "argc": 9,
+      "name": "cmd_364",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3",
+        "arg4",
+        "arg5",
+        "arg6",
+        "arg7",
+        "arg8"
+      ]
+    },
+    {
+      "id": 365,
+      "handler": "0x003a9834",
+      "argc": 9,
+      "name": "cmd_365",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3",
+        "arg4",
+        "arg5",
+        "arg6",
+        "arg7",
+        "arg8"
+      ]
+    },
+    {
+      "id": 366,
+      "handler": "0x0039d7d4",
+      "argc": 1,
+      "name": "cmd_366",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 367,
+      "handler": "0x003a3b54",
+      "argc": 0,
+      "name": "cmd_367",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 368,
+      "handler": "0x003a0e2c",
+      "argc": 6,
+      "name": "cmd_368",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3",
+        "arg4",
+        "arg5"
+      ]
+    },
+    {
+      "id": 369,
+      "handler": "0x003a5628",
+      "argc": 6,
+      "name": "cmd_369",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3",
+        "arg4",
+        "arg5"
+      ]
+    },
+    {
+      "id": 370,
+      "handler": "0x0039ec54",
+      "argc": 2,
+      "name": "cmd_370",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 371,
+      "handler": "0x0039d63c",
+      "argc": 1,
+      "name": "cmd_371",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 372,
+      "handler": "0x0039e6d8",
+      "argc": 3,
+      "name": "cmd_372",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 373,
+      "handler": "0x003a8ce0",
+      "argc": 5,
+      "name": "cmd_373",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3",
+        "arg4"
+      ]
+    },
+    {
+      "id": 374,
+      "handler": "0x003ac63c",
+      "argc": 1,
+      "name": "cmd_374",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 375,
+      "handler": "0x0039ee64",
+      "argc": 2,
+      "name": "cmd_375",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 376,
+      "handler": "0x003ab9b0",
+      "argc": 0,
+      "name": "cmd_376",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 377,
+      "handler": "0x003a0b98",
+      "argc": 2,
+      "name": "cmd_377",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 378,
+      "handler": "0x0039a850",
+      "argc": 1,
+      "name": "cmd_378",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 379,
+      "handler": "0x0039ad7c",
+      "argc": 0,
+      "name": "cmd_379",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 380,
+      "handler": "0x0039a400",
+      "argc": 3,
+      "name": "cmd_380",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 381,
+      "handler": "0x003b141c",
+      "argc": 2,
+      "name": "cmd_381",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 382,
+      "handler": "0x003b1478",
+      "argc": 2,
+      "name": "audio_cue",
+      "confidence": "medium",
+      "operands": [
+        "arg0",
+        "arg1"
+      ],
+      "meaning": "Two-argument audio cue (row, 0). Both shipped landing sequences pass (0x90029, 0) to bring the world theme back after dialogue (27060 PC 5183, 27090 PC 6433); other sites pass sound-effect rows and 0x201."
+    },
+    {
+      "id": 383,
+      "handler": "0x0039a754",
+      "argc": 1,
+      "name": "cmd_383",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 384,
+      "handler": "0x003b14d4",
+      "argc": 1,
+      "name": "cmd_384",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 385,
+      "handler": "0x003b1504",
+      "argc": 2,
+      "name": "cmd_385",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 386,
+      "handler": "0x0039b588",
+      "argc": 2,
+      "name": "cmd_386",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 387,
+      "handler": "0x0039cfc0",
+      "argc": 2,
+      "name": "cmd_387",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 388,
+      "handler": "0x0039b968",
+      "argc": 2,
+      "name": "cmd_388",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 389,
+      "handler": "0x0039ba10",
+      "argc": 3,
+      "name": "cmd_389",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 390,
+      "handler": "0x0039e0f0",
+      "argc": 0,
+      "name": "cmd_390",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 391,
+      "handler": "0x0039cb8c",
+      "argc": 0,
+      "name": "cmd_391",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 392,
+      "handler": "0x0039afa8",
+      "argc": 0,
+      "name": "cmd_392",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 393,
+      "handler": "0x0039afd4",
+      "argc": 1,
+      "name": "cmd_393",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 394,
+      "handler": "0x0039c9f8",
+      "argc": 2,
+      "name": "cmd_394",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 395,
+      "handler": "0x003a79ec",
+      "argc": 1,
+      "name": "cmd_395",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 396,
+      "handler": "0x003a46f4",
+      "argc": 2,
+      "name": "cmd_396",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 397,
+      "handler": "0x003a4fdc",
+      "argc": 2,
+      "name": "cmd_397",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 398,
+      "handler": "0x003a9014",
+      "argc": 3,
+      "name": "cmd_398",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 399,
+      "handler": "0x003a99f0",
+      "argc": 0,
+      "name": "cmd_399",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 400,
+      "handler": "0x003a909c",
+      "argc": 1,
+      "name": "cmd_400",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 401,
+      "handler": "0x0039e790",
+      "argc": 3,
+      "name": "cmd_401",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 402,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_402",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 403,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_403",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 404,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_404",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 405,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_405",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 406,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_406",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 407,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_407",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 408,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_408",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 409,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_409",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 410,
+      "handler": "0x0039cde8",
+      "argc": 1,
+      "name": "ui_open_14",
+      "confidence": "high",
+      "operands": [
+        "mode"
+      ],
+      "meaning": "Opens UI task 0x14, consumed by wait_ui_14. This is not shop_open."
+    },
+    {
+      "id": 411,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_411",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 412,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_412",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 413,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_413",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 414,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_414",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 415,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_415",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 416,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_416",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 417,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_417",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 418,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_418",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 419,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_419",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 420,
+      "handler": "0x003a6678",
+      "argc": 1,
+      "name": "cmd_420",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 421,
+      "handler": "0x003a413c",
+      "argc": 1,
+      "name": "cmd_421",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 422,
+      "handler": "0x003a658c",
+      "argc": 1,
+      "name": "cmd_422",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 423,
+      "handler": "0x003a3fb8",
+      "argc": 2,
+      "name": "cmd_423",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 424,
+      "handler": "0x0039f7a4",
+      "argc": 3,
+      "name": "cmd_424",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 425,
+      "handler": "0x003a9b94",
+      "argc": 0,
+      "name": "cmd_425",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 426,
+      "handler": "0x003ac40c",
+      "argc": 1,
+      "name": "cmd_426",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 427,
+      "handler": "0x003a8670",
+      "argc": 1,
+      "name": "cmd_427",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 428,
+      "handler": "0x003a6714",
+      "argc": 1,
+      "name": "cmd_428",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 429,
+      "handler": "0x003aaaa4",
+      "argc": 1,
+      "name": "cmd_429",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 430,
+      "handler": "0x0039ae60",
+      "argc": 0,
+      "name": "cmd_430",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 431,
+      "handler": "0x003b02c4",
+      "argc": 1,
+      "name": "cmd_431",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 432,
+      "handler": "0x0039c774",
+      "argc": 1,
+      "name": "debug_line",
+      "confidence": "high",
+      "operands": [
+        "line"
+      ],
+      "meaning": "No-op handler consumes one compiler source-line marker. Does not display text."
+    },
+    {
+      "id": 433,
+      "handler": "0x0039e070",
+      "argc": 1,
+      "name": "debug_value",
+      "confidence": "high",
+      "operands": [
+        "selector"
+      ],
+      "meaning": "Consumes one argument and returns zero in the retail executable."
+    },
+    {
+      "id": 434,
+      "handler": "0x0039f57c",
+      "argc": 2,
+      "name": "cmd_434",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 435,
+      "handler": "0x0039a660",
+      "argc": 2,
+      "name": "cmd_435",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 436,
+      "handler": "0x0039bb98",
+      "argc": 3,
+      "name": "cmd_436",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 437,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_437",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 438,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_438",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 439,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_439",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 440,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_440",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 441,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_441",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 442,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_442",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 443,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_443",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 444,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_444",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 445,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_445",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 446,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_446",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 447,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_447",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 448,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_448",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 449,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_449",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 450,
+      "handler": "0x003a8c14",
+      "argc": 0,
+      "name": "cmd_450",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 451,
+      "handler": "0x003a44a8",
+      "argc": 0,
+      "name": "cmd_451",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 452,
+      "handler": "0x003a8b8c",
+      "argc": 0,
+      "name": "cmd_452",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 453,
+      "handler": "0x003a86c0",
+      "argc": 0,
+      "name": "cmd_453",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 454,
+      "handler": "0x003aaefc",
+      "argc": 0,
+      "name": "cmd_454",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 455,
+      "handler": "0x003a62f0",
+      "argc": 0,
+      "name": "cmd_455",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 456,
+      "handler": "0x0039f510",
+      "argc": 0,
+      "name": "cmd_456",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 457,
+      "handler": "0x003a8198",
+      "argc": 0,
+      "name": "cmd_457",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 458,
+      "handler": "0x003a81bc",
+      "argc": 0,
+      "name": "cmd_458",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 459,
+      "handler": "0x003acb60",
+      "argc": 0,
+      "name": "cmd_459",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 460,
+      "handler": "0x003ae6b4",
+      "argc": 0,
+      "name": "cmd_460",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 461,
+      "handler": "0x003ac028",
+      "argc": 0,
+      "name": "cmd_461",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 462,
+      "handler": "0x003ac04c",
+      "argc": 0,
+      "name": "cmd_462",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 463,
+      "handler": "0x003aa8b4",
+      "argc": 0,
+      "name": "cmd_463",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 464,
+      "handler": "0x003aa8d8",
+      "argc": 0,
+      "name": "cmd_464",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 465,
+      "handler": "0x003a9a00",
+      "argc": 0,
+      "name": "cmd_465",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 466,
+      "handler": "0x003ae3f0",
+      "argc": 1,
+      "name": "cmd_466",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 467,
+      "handler": "0x003a9a24",
+      "argc": 0,
+      "name": "cmd_467",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 468,
+      "handler": "0x003ad9fc",
+      "argc": 0,
+      "name": "cmd_468",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 469,
+      "handler": "0x003aede4",
+      "argc": 0,
+      "name": "cmd_469",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 470,
+      "handler": "0x003a9ad0",
+      "argc": 0,
+      "name": "cmd_470",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 471,
+      "handler": "0x0039b1f4",
+      "argc": 0,
+      "name": "cmd_471",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 472,
+      "handler": "0x0039cbb8",
+      "argc": 0,
+      "name": "cmd_472",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 473,
+      "handler": "0x0039e4fc",
+      "argc": 0,
+      "name": "cmd_473",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 474,
+      "handler": "0x003a7334",
+      "argc": 0,
+      "name": "cmd_474",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 475,
+      "handler": "0x003aaf6c",
+      "argc": 0,
+      "name": "cmd_475",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 476,
+      "handler": "0x0039fe6c",
+      "argc": 0,
+      "name": "cmd_476",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 477,
+      "handler": "0x003a8c38",
+      "argc": 0,
+      "name": "cmd_477",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 478,
+      "handler": "0x003a7370",
+      "argc": 0,
+      "name": "cmd_478",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 479,
+      "handler": "0x003a44d4",
+      "argc": 0,
+      "name": "cmd_479",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 480,
+      "handler": "0x003aa10c",
+      "argc": 2,
+      "name": "cmd_480",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 481,
+      "handler": "0x003a4750",
+      "argc": 2,
+      "name": "cmd_481",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ],
+      "meaning": "Life/rank skill grant used by the shipped intro-skip helper: 0x3a4750 -> 0x23875c (finds (life,rank) row via 0x5af5fc, shows notice) and sets save flags. Row contents not decoded; not emitted by Free Life."
+    },
+    {
+      "id": 482,
+      "handler": "0x0039b4b0",
+      "argc": 2,
+      "name": "cmd_482",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 483,
+      "handler": "0x003a68d4",
+      "argc": 0,
+      "name": "cmd_483",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 484,
+      "handler": "0x0039e8ec",
+      "argc": 1,
+      "name": "cmd_484",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 485,
+      "handler": "0x003a3df8",
+      "argc": 1,
+      "name": "cmd_485",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 486,
+      "handler": "0x003aa638",
+      "argc": 1,
+      "name": "cmd_486",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 487,
+      "handler": "0x003aa018",
+      "argc": 0,
+      "name": "bliss_unclaimed_test",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Returns fl_has_unclaimed_bliss (0x5b68ac): true while any achieved row of save+0x2e000 is unclaimed. 27679 tests `487 == 1` before opening the report."
+    },
+    {
+      "id": 488,
+      "handler": "0x003a0da4",
+      "argc": 0,
+      "name": "cmd_488",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 489,
+      "handler": "0x0039d3bc",
+      "argc": 1,
+      "name": "cmd_489",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 490,
+      "handler": "0x0039e44c",
+      "argc": 0,
+      "name": "cmd_490",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 491,
+      "handler": "0x003acf60",
+      "argc": 6,
+      "name": "cmd_491",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3",
+        "arg4",
+        "arg5"
+      ]
+    },
+    {
+      "id": 492,
+      "handler": "0x003abb3c",
+      "argc": 5,
+      "name": "cmd_492",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2",
+        "arg3",
+        "arg4"
+      ]
+    },
+    {
+      "id": 493,
+      "handler": "0x0039c19c",
+      "argc": 0,
+      "name": "cmd_493",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 494,
+      "handler": "0x003a700c",
+      "argc": 0,
+      "name": "cmd_494",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 495,
+      "handler": "0x0039fa4c",
+      "argc": 2,
+      "name": "item_remove_notice",
+      "confidence": "medium",
+      "operands": [
+        "item_id",
+        "quantity"
+      ],
+      "meaning": "Notification/UI after quest consumption; actual removal is command 593."
+    },
+    {
+      "id": 496,
+      "handler": "0x003a0114",
+      "argc": 1,
+      "name": "cmd_496",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 497,
+      "handler": "0x003a016c",
+      "argc": 1,
+      "name": "cmd_497",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 498,
+      "handler": "0x003aae18",
+      "argc": 1,
+      "name": "cmd_498",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 499,
+      "handler": "0x0039f950",
+      "argc": 0,
+      "name": "cmd_499",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 500,
+      "handler": "0x0039e630",
+      "argc": 1,
+      "name": "cmd_500",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 501,
+      "handler": "0x0039cdbc",
+      "argc": 0,
+      "name": "cmd_501",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 502,
+      "handler": "0x003aa0d4",
+      "argc": 0,
+      "name": "cmd_502",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 503,
+      "handler": "0x0039e66c",
+      "argc": 1,
+      "name": "cmd_503",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 504,
+      "handler": "0x0039e564",
+      "argc": 0,
+      "name": "cmd_504",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 505,
+      "handler": "0x0039e5d4",
+      "argc": 1,
+      "name": "cmd_505",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 506,
+      "handler": "0x0039ff7c",
+      "argc": 1,
+      "name": "cmd_506",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 507,
+      "handler": "0x0039ff40",
+      "argc": 1,
+      "name": "cmd_507",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 508,
+      "handler": "0x003acf08",
+      "argc": 2,
+      "name": "cmd_508",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 509,
+      "handler": "0x003ace9c",
+      "argc": 1,
+      "name": "cmd_509",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 510,
+      "handler": "0x0039a378",
+      "argc": 1,
+      "name": "cmd_510",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 511,
+      "handler": "0x003b13b4",
+      "argc": 0,
+      "name": "cmd_511",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 512,
+      "handler": "0x003a4638",
+      "argc": 2,
+      "name": "cmd_512",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 513,
+      "handler": "0x0039ff08",
+      "argc": 1,
+      "name": "cmd_513",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 514,
+      "handler": "0x0039ffb8",
+      "argc": 2,
+      "name": "cmd_514",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 515,
+      "handler": "0x003a45e8",
+      "argc": 2,
+      "name": "cmd_515",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 516,
+      "handler": "0x003a0058",
+      "argc": 0,
+      "name": "cmd_516",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 517,
+      "handler": "0x003ac5a0",
+      "argc": 0,
+      "name": "cmd_517",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 518,
+      "handler": "0x003adb2c",
+      "argc": 1,
+      "name": "cmd_518",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 519,
+      "handler": "0x003acecc",
+      "argc": 1,
+      "name": "cmd_519",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 520,
+      "handler": "0x003adb68",
+      "argc": 1,
+      "name": "cmd_520",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 521,
+      "handler": "0x0039b428",
+      "argc": 1,
+      "name": "cmd_521",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 522,
+      "handler": "0x003a002c",
+      "argc": 0,
+      "name": "cmd_522",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 523,
+      "handler": "0x0039a33c",
+      "argc": 0,
+      "name": "cmd_523",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 524,
+      "handler": "0x0039e598",
+      "argc": 1,
+      "name": "cmd_524",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 525,
+      "handler": "0x0039b464",
+      "argc": 0,
+      "name": "cmd_525",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 526,
+      "handler": "0x003a00a4",
+      "argc": 1,
+      "name": "cmd_526",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 527,
+      "handler": "0x003a4688",
+      "argc": 0,
+      "name": "cmd_527",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 528,
+      "handler": "0x003a8c74",
+      "argc": 0,
+      "name": "cmd_528",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 529,
+      "handler": "0x003aa098",
+      "argc": 1,
+      "name": "cmd_529",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 530,
+      "handler": "0x0039c06c",
+      "argc": 1,
+      "name": "cmd_530",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 531,
+      "handler": "0x0039f0a4",
+      "argc": 1,
+      "name": "cmd_531",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 532,
+      "handler": "0x003b1888",
+      "argc": 3,
+      "name": "cmd_532",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 533,
+      "handler": "0x003a0df0",
+      "argc": 1,
+      "name": "cmd_533",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 534,
+      "handler": "0x003aa704",
+      "argc": 1,
+      "name": "cmd_534",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 535,
+      "handler": "0x0039f0e0",
+      "argc": 1,
+      "name": "cmd_535",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 536,
+      "handler": "0x003a7d58",
+      "argc": 1,
+      "name": "cmd_536",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 537,
+      "handler": "0x003ad808",
+      "argc": 1,
+      "name": "cmd_537",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 538,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_538",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 539,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_539",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 540,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_540",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 541,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_541",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 542,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_542",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 543,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_543",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 544,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_544",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 545,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_545",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 546,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_546",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 547,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_547",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 548,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_548",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 549,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_549",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 550,
+      "handler": "0x003a6368",
+      "argc": 0,
+      "name": "cmd_550",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 551,
+      "handler": "0x003a4248",
+      "argc": 0,
+      "name": "cmd_551",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 552,
+      "handler": "0x003ab6ac",
+      "argc": 0,
+      "name": "cmd_552",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 553,
+      "handler": "0x003ab660",
+      "argc": 1,
+      "name": "cmd_553",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 554,
+      "handler": "0x003ab424",
+      "argc": 0,
+      "name": "cmd_554",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 555,
+      "handler": "0x003a4118",
+      "argc": 0,
+      "name": "cmd_555",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 556,
+      "handler": "0x003aac18",
+      "argc": 1,
+      "name": "cmd_556",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 557,
+      "handler": "0x0039af68",
+      "argc": 1,
+      "name": "cmd_557",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 558,
+      "handler": "0x003aa1b8",
+      "argc": 0,
+      "name": "cmd_558",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 559,
+      "handler": "0x0039c6d8",
+      "argc": 0,
+      "name": "cmd_559",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 560,
+      "handler": "0x003aaa80",
+      "argc": 0,
+      "name": "cmd_560",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 561,
+      "handler": "0x003a810c",
+      "argc": 2,
+      "name": "cmd_561",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 562,
+      "handler": "0x0039f56c",
+      "argc": 0,
+      "name": "cmd_562",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 563,
+      "handler": "0x0039f53c",
+      "argc": 1,
+      "name": "cmd_563",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 564,
+      "handler": "0x003a62f8",
+      "argc": 1,
+      "name": "cmd_564",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 565,
+      "handler": "0x003ac6a0",
+      "argc": 0,
+      "name": "cmd_565",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 566,
+      "handler": "0x003a8afc",
+      "argc": 2,
+      "name": "cmd_566",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 567,
+      "handler": "0x003a7054",
+      "argc": 0,
+      "name": "cmd_567",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 568,
+      "handler": "0x003aa03c",
+      "argc": 0,
+      "name": "cmd_568",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 569,
+      "handler": "0x0039ae8c",
+      "argc": 0,
+      "name": "player_level_get",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Returns the player level; the Origin Island story gate requires >= 50 (SYS003 PC 5536), which Free Life deliberately does not lower."
+    },
+    {
+      "id": 570,
+      "handler": "0x003ab2f4",
+      "argc": 0,
+      "name": "cmd_570",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 571,
+      "handler": "0x003ab0cc",
+      "argc": 0,
+      "name": "cmd_571",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 572,
+      "handler": "0x003ac67c",
+      "argc": 0,
+      "name": "cmd_572",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 573,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_573",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 574,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_574",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 575,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_575",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 576,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_576",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 577,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_577",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 578,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_578",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 579,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_579",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 580,
+      "handler": "0x003a0c50",
+      "argc": 1,
+      "name": "quest_text_load",
+      "confidence": "high",
+      "operands": [
+        "active_slot"
+      ],
+      "meaning": "Loads dialogue base from active quest record, not quest row ID. Yields."
+    },
+    {
+      "id": 581,
+      "handler": "0x003b1554",
+      "argc": 3,
+      "name": "quest_message",
+      "confidence": "high",
+      "operands": [
+        "active_slot",
+        "column",
+        "option"
+      ],
+      "meaning": "Displays quest dialogue column 0..6 with substitutions from runtime quest record. Yields."
+    },
+    {
+      "id": 582,
+      "handler": "0x0039ef34",
+      "argc": 1,
+      "name": "cmd_582",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 583,
+      "handler": "0x003abab8",
+      "argc": 0,
+      "name": "cmd_583",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 584,
+      "handler": "0x003aba28",
+      "argc": 1,
+      "name": "quest_for_npc",
+      "confidence": "high",
+      "operands": [
+        "npc_id"
+      ],
+      "meaning": "Returns active quest slot for NPC or -1 after finished/full/disabled/multiplayer checks."
+    },
+    {
+      "id": 585,
+      "handler": "0x003ac944",
+      "argc": 1,
+      "name": "quest_objective_test",
+      "confidence": "high",
+      "operands": [
+        "active_slot"
+      ],
+      "meaning": "Tests inventory item count and quality, or monster kill counter for a slaying quest."
+    },
+    {
+      "id": 586,
+      "handler": "0x003a0d08",
+      "argc": 2,
+      "name": "quest_state_set",
+      "confidence": "high",
+      "operands": [
+        "active_slot",
+        "state"
+      ],
+      "meaning": "State 2 accepts (save byte |=2); state 3 completes (|=8 and |=0x10). Other values ignored."
+    },
+    {
+      "id": 587,
+      "handler": "0x003a0ccc",
+      "argc": 1,
+      "name": "quest_state",
+      "confidence": "high",
+      "operands": [
+        "active_slot"
+      ],
+      "meaning": "Returns 1 offered, 2 accepted, 3 completion pending, 4 finished; 0 when no slot."
+    },
+    {
+      "id": 588,
+      "handler": "0x003a5094",
+      "argc": 2,
+      "name": "quest_reward",
+      "confidence": "high",
+      "operands": [
+        "active_slot",
+        "selector"
+      ],
+      "meaning": "Selector 0 reward item, 1 quantity, 2 Dosh, 3 points, 4 objective kind."
+    },
+    {
+      "id": 589,
+      "handler": "0x0039ef5c",
+      "argc": 1,
+      "name": "cmd_589",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 590,
+      "handler": "0x003ad700",
+      "argc": 0,
+      "name": "quest_refresh",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Refreshes active quest list via 0x260af4; fixed 400 quest rows and 60 slots."
+    },
+    {
+      "id": 591,
+      "handler": "0x003a7c70",
+      "argc": 1,
+      "name": "quest_complete_notice",
+      "confidence": "high",
+      "operands": [
+        "active_slot"
+      ],
+      "meaning": "Queues completion notification/reward UI; side effects do not replace quest_state_set."
+    },
+    {
+      "id": 592,
+      "handler": "0x003ad730",
+      "argc": 3,
+      "name": "quest_request",
+      "confidence": "high",
+      "operands": [
+        "active_slot",
+        "selector",
+        "alternative"
+      ],
+      "meaning": "Selector 0 item alternative, 1 quantity, 2 quality requirement."
+    },
+    {
+      "id": 593,
+      "handler": "0x003ae534",
+      "argc": 3,
+      "name": "quest_consume",
+      "confidence": "high",
+      "operands": [
+        "item_id",
+        "quantity",
+        "quality"
+      ],
+      "meaning": "Removes up to requested eligible units; returns actual removed count."
+    },
+    {
+      "id": 594,
+      "handler": "0x003abb04",
+      "argc": 1,
+      "name": "quest_suppress_for_npc",
+      "confidence": "high",
+      "operands": [
+        "npc_id"
+      ],
+      "meaning": "Finds active slot by NPC then sets save bit 4 to suppress repeat talk during event."
+    },
+    {
+      "id": 595,
+      "handler": "0x003ac980",
+      "argc": 0,
+      "name": "cmd_595",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 596,
+      "handler": "0x003aef34",
+      "argc": 0,
+      "name": "cmd_596",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 597,
+      "handler": "0x003af350",
+      "argc": 0,
+      "name": "cmd_597",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 598,
+      "handler": "0x003aef94",
+      "argc": 0,
+      "name": "cmd_598",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 599,
+      "handler": "0x003aeff8",
+      "argc": 1,
+      "name": "cmd_599",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 600,
+      "handler": "0x003b062c",
+      "argc": 2,
+      "name": "cmd_600",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 601,
+      "handler": "0x003aae70",
+      "argc": 0,
+      "name": "cmd_601",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 602,
+      "handler": "0x003b0784",
+      "argc": 0,
+      "name": "cmd_602",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 603,
+      "handler": "0x0039a0b8",
+      "argc": 0,
+      "name": "cmd_603",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 604,
+      "handler": "0x003a625c",
+      "argc": 2,
+      "name": "cmd_604",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 605,
+      "handler": "0x0039c744",
+      "argc": 1,
+      "name": "cmd_605",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 606,
+      "handler": "0x003abf6c",
+      "argc": 0,
+      "name": "cmd_606",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 607,
+      "handler": "0x003ae810",
+      "argc": 0,
+      "name": "cmd_607",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 608,
+      "handler": "0x003aa6c4",
+      "argc": 1,
+      "name": "cmd_608",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 609,
+      "handler": "0x003ae32c",
+      "argc": 1,
+      "name": "cmd_609",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 610,
+      "handler": "0x003ac998",
+      "argc": 1,
+      "name": "cmd_610",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 611,
+      "handler": "0x003aeebc",
+      "argc": 1,
+      "name": "cmd_611",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 612,
+      "handler": "0x0039b9cc",
+      "argc": 2,
+      "name": "cmd_612",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 613,
+      "handler": "0x003ae6fc",
+      "argc": 1,
+      "name": "cmd_613",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 614,
+      "handler": "0x003a7544",
+      "argc": 0,
+      "name": "cmd_614",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 615,
+      "handler": "0x003a9f08",
+      "argc": 0,
+      "name": "cmd_615",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 616,
+      "handler": "0x0039cb68",
+      "argc": 0,
+      "name": "cmd_616",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 617,
+      "handler": "0x003ac0d8",
+      "argc": 1,
+      "name": "cmd_617",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 618,
+      "handler": "0x003af808",
+      "argc": 0,
+      "name": "cmd_618",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 619,
+      "handler": "0x003af6f0",
+      "argc": 0,
+      "name": "cmd_619",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 620,
+      "handler": "0x0039bc70",
+      "argc": 0,
+      "name": "cmd_620",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 621,
+      "handler": "0x003abc5c",
+      "argc": 2,
+      "name": "cmd_621",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 622,
+      "handler": "0x003a526c",
+      "argc": 1,
+      "name": "cmd_622",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 623,
+      "handler": "0x003a9e30",
+      "argc": 0,
+      "name": "cmd_623",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 624,
+      "handler": "0x003af478",
+      "argc": 0,
+      "name": "cmd_624",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 625,
+      "handler": "0x003a9308",
+      "argc": 1,
+      "name": "cmd_625",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 626,
+      "handler": "0x003a8610",
+      "argc": 1,
+      "name": "cmd_626",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 627,
+      "handler": "0x003a8e70",
+      "argc": 2,
+      "name": "cmd_627",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 628,
+      "handler": "0x003a7554",
+      "argc": 0,
+      "name": "cmd_628",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 629,
+      "handler": "0x003acc10",
+      "argc": 0,
+      "name": "cmd_629",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 630,
+      "handler": "0x003a4594",
+      "argc": 0,
+      "name": "cmd_630",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 631,
+      "handler": "0x003b06d4",
+      "argc": 0,
+      "name": "cmd_631",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 632,
+      "handler": "0x003af788",
+      "argc": 0,
+      "name": "cmd_632",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 633,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_633",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 634,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_634",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 635,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_635",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 636,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_636",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 637,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_637",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 638,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_638",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 639,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_639",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 640,
+      "handler": "0x003b07a8",
+      "argc": 1,
+      "name": "cmd_640",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 641,
+      "handler": "0x0039fea8",
+      "argc": 1,
+      "name": "cmd_641",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 642,
+      "handler": "0x003a0a3c",
+      "argc": 1,
+      "name": "cmd_642",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 643,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_643",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 644,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_644",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 645,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_645",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 646,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_646",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 647,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_647",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 648,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_648",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 649,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_649",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 650,
+      "handler": "0x003a8c8c",
+      "argc": 0,
+      "name": "cmd_650",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 651,
+      "handler": "0x003a46c8",
+      "argc": 0,
+      "name": "cmd_651",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 652,
+      "handler": "0x003a00e8",
+      "argc": 1,
+      "name": "cmd_652",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 653,
+      "handler": "0x003a73ac",
+      "argc": 0,
+      "name": "cmd_653",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 654,
+      "handler": "0x003ae394",
+      "argc": 1,
+      "name": "cmd_654",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 655,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_655",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 656,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_656",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 657,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_657",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 658,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_658",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 659,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_659",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 660,
+      "handler": "0x003af698",
+      "argc": 0,
+      "name": "cmd_660",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 661,
+      "handler": "0x003af7e8",
+      "argc": 0,
+      "name": "cmd_661",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 662,
+      "handler": "0x0039c660",
+      "argc": 0,
+      "name": "cmd_662",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 663,
+      "handler": "0x003aa054",
+      "argc": 1,
+      "name": "cmd_663",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 664,
+      "handler": "0x003aa074",
+      "argc": 0,
+      "name": "cmd_664",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 665,
+      "handler": "0x003ac55c",
+      "argc": 1,
+      "name": "cmd_665",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 666,
+      "handler": "0x003ac57c",
+      "argc": 0,
+      "name": "cmd_666",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 667,
+      "handler": "0x003af454",
+      "argc": 0,
+      "name": "cmd_667",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 668,
+      "handler": "0x003af6bc",
+      "argc": 0,
+      "name": "cmd_668",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 669,
+      "handler": "0x003af7f8",
+      "argc": 0,
+      "name": "cmd_669",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 670,
+      "handler": "0x003ae6d8",
+      "argc": 0,
+      "name": "cmd_670",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 671,
+      "handler": "0x003af1dc",
+      "argc": 0,
+      "name": "cmd_671",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 672,
+      "handler": "0x003af5bc",
+      "argc": 0,
+      "name": "cmd_672",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 673,
+      "handler": "0x003a842c",
+      "argc": 0,
+      "name": "cmd_673",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 674,
+      "handler": "0x003ac46c",
+      "argc": 0,
+      "name": "cmd_674",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 675,
+      "handler": "0x003ac43c",
+      "argc": 1,
+      "name": "cmd_675",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 676,
+      "handler": "0x003ae7e4",
+      "argc": 0,
+      "name": "cmd_676",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 677,
+      "handler": "0x003ae270",
+      "argc": 0,
+      "name": "cmd_677",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 678,
+      "handler": "0x003ae7c0",
+      "argc": 0,
+      "name": "cmd_678",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 679,
+      "handler": "0x003b0348",
+      "argc": 0,
+      "name": "reserved_679",
+      "confidence": "high",
+      "operands": [],
+      "meaning": "Default no-op handler; consumes the declared arguments."
+    },
+    {
+      "id": 680,
+      "handler": "0x003af5f0",
+      "argc": 1,
+      "name": "cmd_680",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 681,
+      "handler": "0x003a8b4c",
+      "argc": 0,
+      "name": "cmd_681",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 682,
+      "handler": "0x003af82c",
+      "argc": 0,
+      "name": "cmd_682",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 683,
+      "handler": "0x003af534",
+      "argc": 0,
+      "name": "cmd_683",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 684,
+      "handler": "0x003af300",
+      "argc": 1,
+      "name": "cmd_684",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 685,
+      "handler": "0x003aae9c",
+      "argc": 1,
+      "name": "cmd_685",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 686,
+      "handler": "0x003aef24",
+      "argc": 0,
+      "name": "cmd_686",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 687,
+      "handler": "0x0039c98c",
+      "argc": 1,
+      "name": "cmd_687",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 688,
+      "handler": "0x003a8950",
+      "argc": 2,
+      "name": "cmd_688",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1"
+      ]
+    },
+    {
+      "id": 689,
+      "handler": "0x003ad9d8",
+      "argc": 0,
+      "name": "cmd_689",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 690,
+      "handler": "0x003ac3dc",
+      "argc": 0,
+      "name": "cmd_690",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 691,
+      "handler": "0x003acb84",
+      "argc": 0,
+      "name": "cmd_691",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 692,
+      "handler": "0x003af330",
+      "argc": 1,
+      "name": "cmd_692",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 693,
+      "handler": "0x003af6e0",
+      "argc": 0,
+      "name": "cmd_693",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 694,
+      "handler": "0x003ae848",
+      "argc": 1,
+      "name": "cmd_694",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 695,
+      "handler": "0x003af5cc",
+      "argc": 0,
+      "name": "cmd_695",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 696,
+      "handler": "0x003af0e8",
+      "argc": 1,
+      "name": "cmd_696",
+      "confidence": "unknown",
+      "operands": [
+        "arg0"
+      ]
+    },
+    {
+      "id": 697,
+      "handler": "0x003adb08",
+      "argc": 0,
+      "name": "cmd_697",
+      "confidence": "unknown",
+      "operands": []
+    },
+    {
+      "id": 698,
+      "handler": "0x003af49c",
+      "argc": 3,
+      "name": "cmd_698",
+      "confidence": "unknown",
+      "operands": [
+        "arg0",
+        "arg1",
+        "arg2"
+      ]
+    },
+    {
+      "id": 699,
+      "handler": "0x003af74c",
+      "argc": 0,
+      "name": "cmd_699",
+      "confidence": "unknown",
+      "operands": []
+    }
+  ],
+  "evidence": {
+    "binary_base": "0x00100000",
+    "initializer": "0x003a0fa8",
+    "argc_table": "0x00627f78",
+    "vm": "0x001f54c4",
+    "note": "Handler and argc are exact EU metadata for every slot. Names are inferred and separately confidence-rated; unknown commands are intentionally unnamed."
+  },
+  "free_life_v4_research": {
+  "date": "2026-10-25",
+  "task": "free-life-skills-v4",
+  "supersedes": "v3 meaning fields for natives 171/173/481; retained historically above",
+  "evidence": "free_life_intro_skips.json",
+  "commands": {
+    "183": {
+      "handler": "0x0039ba98",
+      "chain": [
+        "0x00567ab4",
+        "0x002ff770",
+        "0x00287ff0"
+      ],
+      "write_pc": "0x00288034",
+      "field": "profile + 0x0c + 8*skill (signed byte level); XP float at profile + 8 + 8*skill; save profile equivalent: save+0x1fb24+8*skill for level, save+0x1fb20+8*skill for XP",
+      "profile_save_block": "save + 0x1fb18; same profile has Life ranks at +0x130 (save+0x1fc48); save block used by 0x11efcc..0x11efe0",
+      "first_learn_record": "0x2ff7b0..0x2ff7e0: save+0x21f20 bit (skill+0xd3), index helper 0x5b7130(type=2)",
+      "requirements": "Active player stat component (byte +0x8c nonzero, profile pointer +0x94); global player lookup at 0x567abc..0x567ae8. No current-Life or quest-phase test. cmd_183 also appends to script-local eight-slot report queue at 0x450818, after the actual level write."
+    },
+    "191": {
+      "handler": "0x0039a5a4",
+      "chain": [
+        "0x00567950",
+        "0x00238bdc"
+      ],
+      "write_pc": "0x00238c30",
+      "field": "save+0x22464 + 4*(ability>>5), bit ability&31",
+      "requirements": "Explicit ability id; no Life/phase requirement. Dispatches notification type 13 via 0x2afa80; also script-local queue 0x450720."
+    },
+    "173": {
+      "handler": "0x0039ea54",
+      "chain": [
+        "0x005671d0",
+        "0x002ffa64",
+        "0x002c88ec"
+      ],
+      "correction": "Rank byte writer 0x2c8920; rank table techniques at +0x14 processed by 0x2c8990..0x2c89a0 -> 0x238bdc (same ability-bit writer as 191). It does not call skill-level writer 0x287ff0. 0x1d6d34 is a notification path, not proof of skill grants. Rank changes also run craft recipe refresh 0x242d3c. Keep 173 for Novice rank/techniques/recipes."
+    },
+    "481": {
+      "handler": "0x003a4750",
+      "chain": [
+        "0x0023875c",
+        "0x005af5fc",
+        "0x0028dfc0"
+      ],
+      "correction": "Craft rank-row notice (UI type 14); no skill level write. Handler flags are script-manager-local, NOT save fields. Persistent rank techniques come from 173."
+    },
+    "181": {
+      "handler": "0x00399dac",
+      "chain": [
+        "0x0056774c"
+      ],
+      "requirements": "Explicit item id/quantity, may yield for inventory overflow. Helper 4168 adds item_notice(199 is unrelated), toggles option 14 and debug output; replay uses persistent item_change only."
+    },
+    "178": {
+      "handler": "0x00399e34",
+      "chain": [
+        "0x0056781c",
+        "0x003005c8"
+      ],
+      "field": "profile+0x1a4 current Dosh, +0x1a8 earned Dosh",
+      "requirements": "Active player stat component; add 500 once per Life. Helper 4338 adds pure notice native 484."
+    }
+  },
+  "ui_only_helpers": {
+    "4219": {
+      "natives": [
+        345
+      ],
+      "chain": [
+        "0x003a09e4",
+        "0x00236718",
+        "0x0028dfc0"
+      ],
+      "note": "Notice type 9 then persistent native 183; debug_line only after write."
+    },
+    "4234": {
+      "natives": [
+        336
+      ],
+      "note": "Ability notice before native 191."
+    },
+    "4168": {
+      "natives": [
+        330,
+        326
+      ],
+      "note": "Option14 input lock, item_notice, debug_line around persistent 181."
+    },
+    "4338": {
+      "natives": [
+        484
+      ],
+      "note": "Dosh notice before native178."
+    },
+    "4549": {
+      "natives": [
+        347,
+        174,
+        481
+      ],
+      "note": "87 uses current-Life switch to choose challenge; 347 requests UI35 (0x39cd68 -> 0x2478a8/0x22add8), then 481 only for craft Lives. Replay explicit challenge87; retain rank173 recipe refresh."
+    }
+  }
+}
+}

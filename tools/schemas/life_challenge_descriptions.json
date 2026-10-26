@@ -1,0 +1,94 @@
+{
+  "name": "life_challenge_descriptions",
+  "resource_ids": [
+    5811,
+    5812,
+    5813,
+    5814,
+    5815,
+    5816,
+    5817,
+    5818,
+    5819
+  ],
+  "row_size": 20,
+  "columns": [
+    {
+      "name": "objective_text",
+      "type": "utf16",
+      "type_id": 10,
+      "offset": 0,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "Objective sentence, e.g. \"Make 5 items of Origin Island clothing\"."
+    },
+    {
+      "name": "prerequisite",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 4,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "65535 none."
+    },
+    {
+      "name": "reward_points",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 8,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "medium",
+      "note": "100..3000; 100 on placeholder rows."
+    },
+    {
+      "name": "rank",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 10,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "medium",
+      "note": "Matches life_challenges.rank."
+    },
+    {
+      "name": "active",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 12,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "1 on real, localised challenges; 0 on cut placeholders."
+    },
+    {
+      "name": "u_0e",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 14,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": ""
+    },
+    {
+      "name": "extra_text",
+      "type": "utf16",
+      "type_id": 10,
+      "offset": 16,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "Second text pointer (mostly empty)."
+    }
+  ]
+}

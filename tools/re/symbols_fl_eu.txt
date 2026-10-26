@@ -1,0 +1,376 @@
+# Fantasy Life EU v00 (CTR-P-AFLP) code.bin, base 0x00100000. Format: 0xADDRESS name  # comment
+# "(inferred)" = role deduced from decompilation/data flow, not from a symbol or string.
+# Segments: text 0x100000-0x61cc68, rodata 0x61d000, data 0x6a4000, bss 0x6dc000 (size 0xcca88).
+
+# --- boot / services ---
+0x001056b0 fl_early_init                 # (inferred) boot init: rom mount 0x10a09c (call 0x105718), archive_file_open (0x10572c), ec_flags_reset_and_init (0x10595c)
+0x001130d8 nn_am_app_init                # connects "am:app" (string 0x6601c4)
+0x0011312c nn_aoc_services_init          # am:app + nim:aoc ("nim:aoc" 0x657fa4) once, guarded by a byte flag
+0x001137fc nn_nim_aoc_connect            # (inferred) srv:GetServiceHandle wrapper for nim:aoc
+0x00109f88 archive_file_open             # (obj, path, align, mode): reads u32 count N from the file header, allocs 13*N, sets magic 0x03c4e060; N is not hard-coded
+0x0010a09c rom_mount_with_extra_patch    # nn::fs MountRom(maxDirs=0x10,maxFiles=0x10) + optional extra "patch:" ROM; patch size args are -1 at the only call so it is skipped
+0x006abcc0 g_archive_path_table          # (data) +8 -> "rom:/_file_archive.bin" (0x69d96f)
+0x0074ca60 g_file_archive                # (bss) archive object; +0x44 count N, +0x4c offsets, +0x50 sizes, +0x54 table base, +0x58 compression bytes, +0x40 magic
+
+# --- resource ID -> request (cLibPackBin / ResourceDataManager) ---
+0x0017fe14 resource_manager_get          # singleton accessor (inferred)
+0x001d86ac resource_request              # (mgr, handle, resID, ...) generic load request
+0x001d8a54 resource_load_into_object     # (obj, resID, flags...) used for table resources, e.g. resID 0x1694 -> 5780
+0x001e1174 resource_obj_bind             # tiny wrapper -> 0x1ecbc4
+0x001ecbc4 resource_obj_request          # sets state bytes then calls resource_request
+0x0013d3d8 resource_load_core            # dispatches: loose-override path (flag byte==1) vs archive path
+0x001b2dc8 archive_lookup_offset         # id >= count -> NULL; else offsets[id]; optional overlay table at +100
+0x001b2d64 archive_override_lookup       # (inferred) id -> override record index, loose-file path
+0x0013ac54 container_fixup_index         # fixes pointers of magic 0x530e30c3 (the relationship-index resource ID 1)
+0x001fb74c scr_table_row                 # (table obj, row) -> row pointer, NULL if out of range; magic DAT_001fb790, type byte==2
+
+# --- DLC / EC (e-commerce) core ---
+0x00107df0 ec_contents_get               # returns *(0x6adad0+4) = cAppECContents singleton
+0x00107e00 ec_flags_reset_and_init       # creates ECContents (0x10f334/0x10f3f8) then zeroes cAppECFlagData bitset
+0x0010f334 ec_contents_create            # (inferred) allocs 0x68-byte cAppECContents
+0x0010f3f8 ec_contents_setup             # (inferred) stores title base id +0xc, +0x10; calls nn_aoc_services_init
+0x0020aab0 ec_flag_data_get              # returns &g_ECFlagData (0x748a24)
+0x00748a24 g_ECFlagData                  # (bss) cAppECFlagData: +0 vtable 0x68dea8, +4..+0x24 = 256-bit bitset (8 words), +0x24 = word count 8
+0x0068dea8 vt_cAppECFlagData             # typeinfo 0x679644 ("14cAppECFlagData" 0x67ef1d); dtors 0x28ba58/0x28ba54
+0x0068de98 vt_cAppECContents             # typeinfo 0x67963c ("14cAppECContents" 0x67ef0c); dtors 0x28b9a0/0x28b8dc
+0x006adad0 g_ec_state                   # (data) +2 short = content slot checked for "link" state (0), +4 -> cAppECContents*, +0xc
+0x006ae170 g_ec_contents_ptr             # (data) pointer holder used by 0x5ab6bc/0x5ab7fc
+0x0022f4c4 ec_flag_test                  # bool ECFlag bit(short idx)
+0x00205da8 event_flag_test_with_ec       # (localBitset, eventFlagId): ECFlag bit via table 5780 OR local save bit; ~150 callers
+0x005b63f0 event_flag_test_with_ec_b     # variant of the above, returns bool
+0x00371a90 ex_feature_flag_apply         # if event flag 1963 (0x7ab) is ECFlag-set: player-flags |= 0x800
+0x00371c14 event_flag_set_unless_ec_ro   # (bitset,id): sets local bit unless table 5780 row bit0 (c01) is set
+0x00371b94 ex_gate_check_flag_0x75       # (inferred) uses table row 0x75 bit0
+0x0020cc54 event_flag_attr_table_get     # returns &g_event_flag_attr_table (0x7005c0)
+0x007005c0 g_event_flag_attr_table       # (bss) scr table object loaded from resource 5780 (0x1694 in 0x2cfd9c)
+0x002c95a0 table_5780_loader_a           # (inferred) static-init-style loader calling 0x2cfd9c
+0x002cfd9c table_5780_load               # resource_load_into_object(table, 0x1694,...) = resource 5780
+0x005ab6bc ec_flags_rebuild              # for each AOC entry: bit(idx-1) = owned && installed && !invalid (entry[idx-1])
+0x005ab7fc ec_check_first_content        # returns 2 if first DLC content owned; used by save-slot UI + "VERSION"/"FL_LINK" record
+0x005ab798 ec_first_content_ok           # (inferred) used by slot UI
+0x005b2b88 ec_entry_at                   # mgr->entries + i*0x10
+0x00592528 ec_entry_less                 # comparator: u16 index ascending
+0x0032ba5c ec_refresh_list               # (mgr, verifyMount): count(-1) + list from index 1; builds entries
+0x0032be88 ec_build_entries              # 24-byte AM records -> 16-byte entries; optional "content:" mount verify
+0x0032b9fc ec_entry_set                  # copies a 16-byte entry into mgr->entries[i]
+0x0032ba1c ec_report_error               # (inferred)
+0x0032b824 ec_result_classify            # maps result code to 0/2/4/6
+0x0032b93c ec_list_step                  # (inferred)
+0x0032bc38 ec_load_content_names         # reads ContentInfoArchive_<REGION>_<lang>.bin through 0x4800c8 -> 200-byte records
+0x0032c428 ec_mount_content              # "content:" add-on archive for a content index (2 mount slots, 0x14 bytes each at mgr+0x30)
+0x0032c5cc ec_unmount_content           # releases a "content:" mount slot by name
+0x00480378 s_ContentInfoArchive_fmt      # rodata "/ContentInfoArchive_%s_%s.bin"
+0x004805e8 s_MetaDataContentHeader       # rodata "/MetaDataContentHeader.bin"
+0x004800c8 ec_read_content_info_archive  # opens content index 0 RomFS file; record = 200 bytes at 8 + 200*idx
+0x0022bc5c ec_refresh_and_report         # refresh list (verify=0) + ec_flags_rebuild + "VERSION"/"FL_LINK" telemetry record
+0x0028b00c ec_task_update                # (inferred) cAppECContents::cReadTask state machine ("cAppECContents::cReadTask" 0x2ca2d4)
+0x0028b444 ec_task_close                 # (inferred) closes the Payable Content task, frees mount
+0x0028b670 ec_task_exit_refresh          # runs ec_flags_rebuild on exit
+0x00296618 slot_ui_state_a               # (inferred) save-slot UI state; calls ec_flags_rebuild
+0x00297408 slot_ui_state_b               # (inferred) calls ec_flags_rebuild
+0x00316a98 slot_select_ui_update         # (inferred) uses ec_check_first_content
+0x00317000 slot_select_ec_check          # (inferred)
+
+# --- AOC records / SDK wrappers ---
+0x005bccc4 aoc_info_is_installed         # record+0x10 bit0
+0x005bcd60 aoc_info_is_owned             # record+0x10 bit1
+0x005bccd0 aoc_info_size_rounded         # (inferred)
+0x005bcd14 aoc_info_size_blocks          # (inferred)
+0x005bce5c nn_result_normalize           # (inferred) Result code normaliser (module/desc bit tests)
+0x005bd42c nn_am_dlc_count_minus_one     # count(0x1001) - 1: content index 0 excluded
+0x005bd3c0 nn_am_dlc_list_from_one       # ListDLCContentInfos with start index + 1
+0x004827c0 nn_am_dlc_title_query         # (inferred) builds DLC title id 0x0004008C + program unique id, queries AM
+0x0047dccc nn_am_list_dlc_content_infos  # IPC am:app 0x1003 (header const at 0x47dce0)
+0x0047dda8 nn_am_get_dlc_content_info_count # IPC am:app 0x1001 (header const at 0x47ddb8)
+0x0047dbb8 am_app_cmd_1004_site          # DeleteContents-class command
+0x0047dc18 am_app_cmd_1002_site          # FindDLCContentInfos
+0x0047dd48 am_app_cmd_1005_site          # GetDLCTitleInfos
+0x0047de08 am_app_cmd_100d_site          # GetPatchTitleInfos
+0x00483240 nn_fs_open_addon_archive      # wrapper -> 0x48316c: path {unique id, 0x0004008C, media=1, index}
+0x0048316c nn_fs_open_addon_archive_ex   # builds 12-byte binary path; archive via 0x484600 (id 0x2345678a at 0x4847ac)
+0x00484600 fs_open_archive_obj           # (inferred) OpenArchive(0x2345678a, binary path) + wrapper object
+0x00483624 nn_fs_open_addon_archive_v    # (inferred) variant used with media/low-id mount
+
+# --- Item/recipe authoring and shop inventory (2026-10-24) ---
+0x00147ca0 item_instance_init           # (inferred) initializes a 60-byte inventory item from global ID at +4
+0x001fd520 item_tables_get              # returns the SCR-table manager used by item metadata/stats/text
+0x001fd52c item_table_row               # (mgr, tableKind, globalID), mgr + kind*0x3c; kind 0 = item names/metadata
+0x00204454 item_category_stats_row      # (mgr, tableKind, globalID); subtracts mgr+0x2d0+4*category before stats lookup
+0x0025d0ac shop_inventory_load          # (tableObj, shopID): 8405+ID for 0..69; 8474+(ID-70) for >=70; shop 0 = Castele weapons
+0x0029fe0c shop_menu_initialize         # (inferred) stores shopID at +0xaa54, loads inventory via 0x25d0ac, prepares shop UI
+0x002d0540 crafting_recipe_tables_load  # loads SCRs 8388..8392 from resource-ID array 0x62c9fc into five 0x3c-byte table objects
+0x005af414 crafting_recipe_count        # (manager, craftingLifeSlot): table row count through 0x209d14
+0x002e06b0 crafted_recipe_bit_test      # (savePart, craftingLifeSlot, row), bitset +0x3b42; prefixes fixed counts at 0x62d6cc
+0x0062d6cc recipe_save_bit_counts       # fixed u32 counts 171,341,229,186,371; appending Carpenter row 229 aliases Cooking row 0
+
+# --- maps, placements, monster spawning (Phase 2) ---
+0x0076be7c g_field_placement_manager     # (inferred) loaded placement groups, 0x44-byte runtime slots; not the map-resource table
+0x002512a4 placement_group_state         # (mgr,slot) -> slots[slot]+8; 0x44 stride
+0x005a9758 placement_type_record         # (mgr,slot,type,index) -> 0x34-byte placement record through type pointer index
+0x005a97a0 placement_type_count          # (mgr,slot,type) -> signed count at placement header+0x1c+8*type
+0x00357c94 field_arrange_transitions     # (inferred) type 3; reference@+8 -> route row; payload@+0x30 supplies arrival/aux volumes
+0x003d6174 field_spawn_index_load        # (inferred) requests resource 8695 at manager+0x7c (literal 0x3d6194)
+0x003d5ae0 field_spawn_table_for_map     # (inferred) searches 8695 by map ID, loads referenced per-area spawn table
+0x003d65d0 field_spawn_groups_for_map    # (inferred) map-group selector; type 12 payload count range/conditions/points; first lines skip a layer by time: selector -2 (first placement file) is skipped at time slot 3 (0x17c328) when the last argument is set, selector 3 (second file) only spawns at slot 3: first file = day, second = night spawns
+0x003d544c field_spawn_one_monster       # (inferred) weighted monster choice; payload points, level key, unit definition and spawn flags
+0x003328e0 monster_loot_table_load       # (inferred) requests resource 6930 (literal 0x332900)
+0x00332904 monster_loot_group_index      # (inferred) one walk over 6930 for monster IDs 0..274 (literal 275 @0x332980): manager+0x3c+id*8 = {first row, count, count of level key<=100}; reads the monster ID of the row after each row, so a table ending in a new last block needs a terminator row (fl_mod adds monster_id 0xffff)
+0x003328d0 monster_loot_block            # (inferred) returns manager+0x3c+monster*8, the loot block descriptor built by 0x332904
+0x0032246c item_bounty_source_lookup     # (inferred) switch on item row byte +0x16; one case loops monsters 0..274 (literal 0x113 @0x3226c0) over 0x3328d0 blocks and matches the first row's bounty item (+0x20); reads only rows inside blocks
+
+# --- NintendoWare particle effects / PICA submission (gfx2, static) ---
+0x002a7894 fl_effect_node_update         # (inferred) cFwkEffectNode vtable +0x0c; scene update + effect emitter transforms
+0x001f74cc nw_gfx_particle_model_create  # (inferred) allocates 0x270, ParticleModel vtable 0x69c0c0, builds shapes
+0x00201d1c nw_gfx_particle_shape_create  # (inferred) ParticleShape vtable 0x69c0f4, double-buffered attributes/index storage
+0x002071e0 nw_gfx_particle_shape_commands # (inferred) loader/fixed-attribute commands and identity GS input map 0x28b/c
+0x0053b6bc nw_gfx_particle_model_accept  # (inferred) RTTI-backed ParticleModel visitor dispatch slot 0x44
+0x0053fce4 nw_gfx_particle_emitter_accept # (inferred) RTTI-backed ParticleEmitter visitor dispatch slot 0x40
+0x00545624 nw_gfx_particle_material_activate # (inferred) ParticleMaterialActivator vtable +0x0c; six TEV stages, alpha/blend/depth
+0x0054a148 nw_gfx_shader_program_commands # (inferred) shader lookup and cached VS/GS command construction
+0x005c61c0 nw_gfx_shader_bind_commands   # (inferred) uploads selected VS/GS and calls 0x5c5a08
+0x005c5a08 nw_gfx_shader_pipeline_commands # (inferred) GS config/input/output/entry, VS output counts, rasterizer output map
+
+# --- Phase 1c VM, native commands, quest lifecycle and placement activation ---
+0x001f54c4 script_vm_execute                    # 18-form stack VM, native command dispatch and resumable execution
+0x001ff6d4 script_vm_fetch                      # 5-byte opcode/u32 unaligned fetch; increments instruction PC
+0x003a0fa8 script_commands_initialize           # copies 700 ARM member-function pointer slots; argc bytes at 0x627f78
+0x00627f78 script_command_argc                  # 700 one-byte native argument counts, independently checked against catalog
+0x00303924 script_argument                      # reads argument by declared argc and stack top
+0x00303880 script_result                        # writes native return slot, interpreter retains it during argument cleanup
+0x00303944 script_output_argument               # writes stack slot whose address/index was passed as argument
+0x00203968 script_global_function_pc            # u16 target at section0 +4+4*entry_count +2+2*global_ordinal
+0x0039d988 script_thread_update                 # (inferred) readiness/delay checks and script execution scheduler
+0x003a3850 script_thread_run                    # saves thread mode/stack context, runs VM in mode 5, restores context
+0x0057b26c script_message_resource_load         # loads wrapper SCR section0 and section1 attribute count/pointer
+0x003afe2c script_message_lookup                # calling-thread text resource vtable lookup; does not select an archive ID
+0x002e3e38 script_association_table_load        # loads resource 8697; literal ID at 0x2e3e58
+0x005a4a98 field_select_layers                  # 8697 kind1/mapID match; +0x24 flag switches resources[4/5] to [6/7]
+0x002330fc field_queue_layer                    # queues event 2 with resource ID, signed time selector and event-group boolean
+0x005a3e20 field_load_layer                     # delegates resource/time/group selection to 0x2cb650
+0x002cb650 field_layer_resource_request         # placement resource slot request; time filter at field+0x5ea8, group byte +0x5f27
+0x00251528 placement_resource_request           # loads/reuses a 0x44-byte runtime slot by archive resource ID
+0x002cac94 field_arrange_layer                  # time selector -2 always, otherwise 0x17c328; arrange NPCs, doors, enemies and other types
+0x002559a8 field_event_queue_dispatch           # queue event2 loads layer; event0x1d activates placement UID; 0x1e/0x1f NPC spawn/place
+0x00232ed8 field_queue_placement_enable         # queues event0x1d UID/boolean; commands 131/133/161
+0x002ca6cc field_placement_enable               # combines persistent override state and dispatches placement UID activation
+0x0032e538 field_placement_enable_dispatch      # UID type bits -> runtime object activation; placement type3 to transition
+0x00357bb0 field_transition_enable              # lookup UID in runtime type2 objects and toggle activation
+0x005b56d4 field_transition_arrival             # (inferred) lookup route in loaded type3 placement payloads, with fallback paths
+0x005a7048 field_request_map_change             # (inferred) queues transition to selected map; stores map in travel state
+0x005a6f98 field_request_route_change           # (inferred) select route/current map then call map-change request
+0x00260af4 side_quest_refresh                   # 400-row eligibility/probability/prerequisite checks, 60 active slots
+0x0026054c side_quest_accept                    # save byte +0x21c9c+questID |=2; max 30 accepted
+0x00260894 side_quest_complete                  # save byte |=8 and |=0x10, updates monster tracking
+0x0020cb24 side_quest_slot_for_npc              # find runtime 0xb0-byte active quest record by client NPC ID
+0x0020cbc8 side_quest_state                     # 1 offered,2 accepted,3 pending completion,4 finished
+0x0026163c side_quest_objective_test            # inventory ID/quality/count checks or monster counter comparison
+0x002616e0 side_quest_maintain                  # retires pending completions and rebuilds quest/NPC state
+0x0056774c script_inventory_change              # positive acquisition queue; negative inventory removal
+0x003b0308 script_wait_frames                   # native 2, argc 1, high; Yield in execution mode 5; stores a u16 frame delay at thread +0x72.
+0x0039f138 script_wait_camera                   # native 4, argc 0, high; Rewind PC and yield while the active camera controller is busy.
+0x003a5350 script_wait_field_ready              # native 6, argc 0, medium; Rewind PC and yield until field readiness query 0x28e11c succeeds.
+0x003ab960 script_wait_ui_14                    # native 18, argc 0, high; Yield/retry until UI task 0x14 completes; unrelated to stock selection.
+0x003a6a34 script_get_context                   # native 61, argc 3, high; Writes VM stack slots supplied by address. Selector 0: thread context; 9: shop selector at manager +0x162c.
+0x003a0468 script_flag_set                      # native 65, argc 2, high; 0 clears local save flag; 1 sets through 0x371c14, respecting table 5780 write policy.
+0x0039f674 script_flag_test                     # native 66, argc 1, high; Returns DLC-aware event_flag_test_with_ec (0x205da8). Bound literal is 4345.
+0x003afad4 script_message                       # native 90, argc 1, high; Displays calling-thread message row with preceding row as speaker; uses message attributes for NPC override. Yields.
+0x003b0114 script_message_global                # native 91, argc 1, high; Displays row from global text object; preceding row is speaker. Yields.
+0x003b01d4 script_message_parent                # native 92, argc 1, medium; Displays text through parent thread resource object. Unused in current bytecode corpus.
+0x0039cbcc script_message_npc                   # native 93, argc 3, high; Displays selected NPC text row; resolves NPC through actor manager. Yields.
+0x003b0350 script_message_named                 # native 95, argc 4, high; Uses calling-thread text; speaker_row -1 resolves NPC name. style 0 sets message option. Yields.
+0x003b0a24 script_text_argument                 # native 98, argc 2, medium; Queues substitution text. Kind 6 item name; 15 quest title; 0 player name.
+0x0039c968 script_message_result                # native 99, argc 0, high; Returns message/choice result stored on the script manager.
+0x003ac6b0 script_object_enable                 # native 131, argc 2, high; Queues event 0x1d -> 0x32e538 type dispatch. Boolean activation, not a resource ID.
+0x003ab5a8 script_door_enable                   # native 133, argc 2, high; Alias of command 131; type-3 UID -> transition activation at 0x357bb0.
+0x003a7860 script_route_select                  # native 134, argc 2, medium; Calls 0x23eaa8 with route index <218 and signed selector; preserve donor conventions.
+0x003a037c script_camera_fade                   # native 141, argc 2, medium; Calls camera controller 0x359060. duration 0 uses one tick and yields; mode meaning inferred from call sites.
+0x003a7900 script_placement_enable              # native 161, argc 2, high; Alias of command 131; engine dispatches by placement UID type.
+0x00399dac script_item_change                   # native 181, argc 2, high; Positive quantity queues item acquisition and yields; negative removes inventory units. UI/overflow handling must finish.
+0x003a66c8 script_item_result                   # native 189, argc 0, medium; Returns whether acquisition state is 0 or 2; used after item_change.
+0x003a7abc script_actor_option                  # native 200, argc 2, medium; Dispatches actor option codes via 0x46738c; option 0/1 toggles 0x23b760, other options have separate meanings.
+0x003a7a4c script_actor_animation               # native 214, argc 3, medium; Queues actor action via 0x467330 -> 0x238cb4. Action index is metadata-defined, not a universal animation number.
+0x003a4f10 script_actor_action                  # native 251, argc 2, medium; Requests actor action through 0x4679b0; behavior depends on compatible actparm/actmot.
+0x003a9360 script_actor_action_timed            # native 252, argc 4, medium; Immediate action for duration <=0, otherwise uses 0x468280. Action semantics depend on actor.
+0x003a0c00 script_actor_action_stop             # native 253, argc 2, medium; Stops selected actor action; -1 stops listed action slots via 0x467d20.
+0x003a7f78 script_actor_place                   # native 256, argc 7, medium; Queues NPC placement through 0x2383f4. XYZ divided by 1000; slot -1 maps to -2. Bounds apply. First ID <2792, map ID <287; NPC definitions select the unit.
+0x003aca08 script_actor_spawn                   # native 257, argc 4, medium; Queues NPC at locator via 0x2383f4; slot -1 maps to -2. Requires compatible unit resources. First ID <2792, map ID <287; NPC definitions select the unit.
+0x003ad844 script_npc_spawn                     # native 258, argc 7, medium; Queues NPC spawn via 0x230548 (event 0x1e); NPC ID <2792, map ID <287, slot -1 maps to -2. Locator variant acts only when target map is current. Enemy units remain a separate placement/type-12 path.
+0x003aec88 script_npc_spawn_locator             # native 259, argc 4, medium; Queues NPC spawn via 0x230548 (event 0x1e); NPC ID <2792, map ID <287, slot -1 maps to -2. Locator variant acts only when target map is current. Enemy units remain a separate placement/type-12 path.
+0x0039baf8 script_shop_open                     # native 324, argc 2, high; mode 0 -> UI 0x0e buy, mode 1 -> 0x0f sell. Stores shop selector at 0x6ac0a0; stock 8405 corresponds to shop 0.
+0x0039e3b4 script_item_notice                   # native 326, argc 3, medium; Queues item notification through 0x233144, then suspends; preserve option from donor.
+0x003a9bd0 script_ui_open_20                    # native 339, argc 1, high; Stores selector at 0x6ac200 and opens UI task 0x20. This is not the stock-table shop command.
+0x003b06ec script_screen_fade                   # native 350, argc 1, medium; Screen transition controller 0x567d9c; yields. Exact color convention needs gameplay acceptance.
+0x0039cde8 script_ui_open_14                    # native 410, argc 1, high; Opens UI task 0x14, consumed by wait_ui_14. This is not shop_open.
+0x0039c774 script_debug_line                    # native 432, argc 1, high; No-op handler consumes one compiler source-line marker. Does not display text.
+0x0039e070 script_debug_value                   # native 433, argc 1, high; Consumes one argument and returns zero in the retail executable.
+0x0039fa4c script_item_remove_notice            # native 495, argc 2, medium; Notification/UI after quest consumption; actual removal is command 593.
+0x003a0c50 script_quest_text_load               # native 580, argc 1, high; Loads dialogue base from active quest record, not quest row ID. Yields.
+0x003b1554 script_quest_message                 # native 581, argc 3, high; Displays quest dialogue column 0..6 with substitutions from runtime quest record. Yields.
+0x003aba28 script_quest_for_npc                 # native 584, argc 1, high; Returns active quest slot for NPC or -1 after finished/full/disabled/multiplayer checks.
+0x003ac944 script_quest_objective_test          # native 585, argc 1, high; Tests inventory item count and quality, or monster kill counter for a slaying quest.
+0x003a0d08 script_quest_state_set               # native 586, argc 2, high; State 2 accepts (save byte |=2); state 3 completes (|=8 and |=0x10). Other values ignored.
+0x003a0ccc script_quest_state                   # native 587, argc 1, high; Returns 1 offered, 2 accepted, 3 completion pending, 4 finished; 0 when no slot.
+0x003a5094 script_quest_reward                  # native 588, argc 2, high; Selector 0 reward item, 1 quantity, 2 Dosh, 3 points, 4 objective kind.
+0x003ad700 script_quest_refresh                 # native 590, argc 0, high; Refreshes active quest list via 0x260af4; fixed 400 quest rows and 60 slots.
+0x003a7c70 script_quest_complete_notice         # native 591, argc 1, high; Queues completion notification/reward UI; side effects do not replace quest_state_set.
+0x003ad730 script_quest_request                 # native 592, argc 3, high; Selector 0 item alternative, 1 quantity, 2 quality requirement.
+0x003ae534 script_quest_consume                 # native 593, argc 3, high; Removes up to requested eligible units; returns actual removed count.
+0x003abb04 script_quest_suppress_for_npc        # native 594, argc 1, high; Finds active slot by NPC then sets save bit 4 to suppress repeat talk during event.
+
+# Quiet House ordinary route audit (2026-10-24; no guest execution).
+0x005b5d04 field_route_row                      # route bank high nibble, row low 12 bits -> SCR lookup; no <218 guard here
+0x005b5d40 field_route_count                    # sum of the two dynamically loaded SCR route-table counts
+0x005b5590 field_find_route_for_map             # scan dynamic route count for map in endpoint selector 0/1
+0x005b55ec field_route_destination              # route row + current map -> opposite map (special route-kind handling retained)
+0x005b569c field_route_door_selector            # matching endpoint -> signed door byte at route +6/+7
+
+
+# --- Controller / HID / field camera audit (EU v00, static; controller task) ---
+0x00477814 ds_ipad_update                    # ds::IPad vtable 0x696ed0 slot0; HID sample, signed Circle Pad axes, activity bit 0x1000
+0x0048b37c ds_ctr_pad_read                   # HID sample ring read + Circle Pad processing, pressed/released state, applet focus gate
+0x00532804 nn_hid_pad_ring_read              # copies ordinary HID 0x10-byte pad samples, stable timestamp/index checks
+0x00532730 nn_hid_fold_select_into_start     # maps Select bit 4 to Start bit 8 in held/pressed/released samples
+0x00626ae0 fl_field_input_default_masks      # 35 action masks; index31=L(0x200), index32=R(0x100); no ZL/ZR defaults
+0x0028c6f8 fl_field_input_restore_defaults   # iterates 35 default action entries through 0x132954
+0x002af51c fl_camera_button_rotation         # default/free field camera; actions31/32 choose rotation flags1/2; simultaneous press flag4 recenter
+0x003d78ec fl_field_camera_default_update    # cAppFieldCamera_Default vtable0x691468 slot0x30; calls camera button rotation
+0x005d0980 fl_input_action_pressed           # action index -> configured mask, global input pressed bits minus blocked inputs
+0x0015f648 fl_input_action_held              # action index -> configured mask, global input held bits minus blocked inputs
+0x002de680 fl_ui_touch_input_dispatch        # cFwkUITouchInput vtable0x68ed80; forwards to UI dispatch0x13d930
+# Free Life / S7 static audit (2026-10-25; no guest execution).
+0x001dd7cc fl_save_object_get                   # returns in-memory save object at 0x705f50; offsets are not raw file offsets
+0x001fd7d0 fl_event_bitset_get                  # save+0x22244 or multiplayer-selected bitset
+0x001a1b04 fl_quest_phase_byte                  # quest <174 -> byte at 0x70359c+quest; 0 unstarted, 1 active, 2 completed
+0x003fe824 fl_quest_phase_get                   # exposes runtime byte as VM phase 0/2/3
+0x003fe888 fl_quest_phase_set                   # VM phase 0/2/3 -> byte 0/1/2, does not itself tear down active quest
+0x003fe8e8 fl_quest_complete_active             # removes matching active record, marks phase byte complete
+0x003a9c28 script_quest_complete                # native 41; active quest teardown, end callback, yields; -100 means calling quest
+0x003a8f68 script_quest_phase_set               # native 62; phase 3 queues successful end callback
+0x003a4998 script_bliss_achievement_set         # native 79(row,achieved,notify): save+0x2e000, 3 bits/row
+0x003a3f3c script_bliss_achieved_test           # native 80, achievement bit 3*row
+0x003ac490 script_bliss_claimed_test            # native 81, claimed bit 3*row+2
+0x003a76a0 script_life_challenge_set            # native 87(id,achieved,notify): save+0x2dc40, five bits/challenge; state bits +2/+3/+4
+0x0039ea54 script_life_rank_set                 # native 173(life,rank), calls normal setter and actor refresh
+0x005671d0 fl_life_rank_set                     # save+0x1fc48+4*Life, low24 stars/high8 rank; grants rank skills
+0x0039cb24 script_bliss_report_open             # native 344, normal unclaimed Bliss settlement UI
+0x00300e24 fl_actor_bliss_get                   # actor stat component +0x94 -> profile +0x1a0
+0x00300e9c fl_actor_bliss_set                   # normal clamped accumulated Bliss setter
+0x002eb48c fl_bliss_settlement_step             # credits unclaimed achievement row+0x16 rewards, marks claimed, calculates bonus milestones
+0x005b68ac fl_has_unclaimed_bliss               # scans 255 rows: achieved set, claimed unset in save+0x2e000
+0x0024972c fl_has_unselected_bliss_bonus        # 26 bonus-choice bits at save+0x2e060; DLC-specific options retain flag test
+0x0027065c fl_new_player_initialize             # fresh player/profile/quest/achievement state, studied read-only
+
+# Multiplayer capacity audit (EU v00, 2026-10-25; static only; descriptive/inferred names).
+0x0010a4f8 fl_net_create                        # cAppNet vtable 0x696454; allocates 0x1978 bytes, calls 0x130ac8
+0x00130ac8 fl_net_initialize                    # clears net+8/0x1788 bytes; three-entry byte groups at +0x284 and +0x287
+0x001468a4 fl_net_schedule_message              # (inferred) peer/type pending bits; peer -2 iterates exactly three active slots
+0x00146b10 fl_net_message_sequence              # (inferred) per-peer/type sequence; slot0/1/2 bands 0x0000/0x1000/0x2000
+0x0059c478 fl_net_suppress_message              # (inferred) sets per-peer message bits at net+0x158+56*peer; -2 loops three
+0x0059c60c fl_net_clear_message_suppression     # (inferred) clears 63 type bits per peer; all-peer path loops three
+0x001472a0 fl_session_send_game_payload         # station >=0 -> 0x139024; negative -> broadcast 0x13917c
+0x00139024 fl_session_send_to_station           # (inferred) rejects application payload >0x500; queues transport output
+0x0013917c fl_session_send_broadcast            # (inferred) rejects application payload >0x500; 0x1598c4 supplies station 0xff
+0x00148404 fl_station_to_field_player           # (inferred) manager bytes +0xf/+0x10/+0x11 -> 0/1/2; else -1
+0x00146ba8 fl_field_player_clear_sync_state     # (inferred) clears indexed profile/sync blocks via global 0x6ad948, includes 0x1280-byte/player block
+0x0012eccc fl_net_send_control20                # (inferred) builds 20-byte control payload; per-peer/type ack table +0x1174+384*peer+6*type
+0x0012f0e8 fl_net_receive_game_message          # (inferred) dispatches received header kind at payload+2; continuation includes 0x12fa98 state copy
+0x0059c2c4 fl_net_begin_host                    # (inferred) advertising/profile setup -> 0x59df28, default-capacity sentinel -1
+0x0059df28 fl_net_create_session_default_cap    # (inferred) negative capacity ->3 at 0x59dfec, then 0x47a1f4
+0x00472de0 fl_session_job_setup                 # (inferred) clamps capacity 1..3, allocates count-sized buffer at job+0x8c, stores count +0x80
+0x00286934 fl_local_session_begin_host          # cSessionLocal vtable 0x68ddcc +0x24; stores capacity at +0x38
+0x00286d14 fl_local_session_host_worker         # (inferred) reads capacity +0x38 and calls local library 0x26f680
+0x00287624 fl_local_session_begin_join          # cSessionLocal vtable 0x68ddcc +0x28; configures async join
+0x0026f680 fl_local_library_host                # (inferred) UDS interface vtable +0x10 ->0x502de8 ->0x4fe3fc
+0x004fe3fc fl_uds_base_register_gathering        # UdsNodeBase error string 0x662e80; clamps max entries to12; calls 0x525598
+0x004fdc70 fl_uds_base_connect                  # (inferred) SDK connect 0x525640; copies maximum from NetworkStruct+0x1d; requires status9
+0x00525420 nn_uds_begin_host_checked            # (inferred SDK name) max nodes 2..16; builds info via0x525d28, calls IPC0x526ce0
+0x00525d28 nn_uds_build_network_info            # (inferred SDK name) count -> NetworkStruct+0x1d; attributes0x8000
+0x00525640 nn_uds_connect_checked               # (inferred SDK name) continuation f_00525650; calls IPC0x526d5c; alias nn_uds_connect_network: SDK validation then IPC ConnectToNetwork; sole Pia caller0x4fdcc4 sets type1
+0x005265b8 nn_uds_send_checked                  # (inferred SDK name) ceiling0x5c6=1478B; calls IPC0x527160
+0x00525280 nn_uds_pull_checked                  # (inferred SDK name) binding lookup, buffer checks and optional wait ->IPC0x526c3c
+0x00526ce0 nn_uds_ipc_begin_host                # (inferred SDK name) header0x001d0044, SVC0x32; alias nn_uds_ipc_BeginHostingNetwork: header 0x001d0044 at 0x00526cf0
+0x00526d5c nn_uds_ipc_connect                   # (inferred SDK name) header0x001e0084, SVC0x32; alias nn_uds_ipc_ConnectToNetwork: header 0x001e0084 at 0x00526d70
+0x00527160 nn_uds_ipc_send                      # (inferred SDK name) header0x00170182, SVC0x32; alias nn_uds_ipc_SendTo: header 0x00170182 at 0x00527174
+0x00526c3c nn_uds_ipc_pull                      # (inferred SDK name) header0x001400c0, SVC0x32; alias nn_uds_ipc_PullPacket: header 0x001400c0 at 0x00526c54
+0x0035bc08 fl_avatar_frame_mgr_delete           # cAppUIAvatarFrameMgr vtable0x690068; destroys 3 friend frames stride0x298 at+0x420
+# mp-local static SDK/UDS audit (2026-10-25; EU v00; no guest execution).
+0x0020d964 svc_get_handle_info                  # SVC29 ABI wrapper: saves out pointer, writes r1:r2 to *out
+0x00486eb0 nn_os_get_process_creation_ticks     # GetHandleInfo(current process,0), returns stable process creation ticks
+0x00526b9c nn_uds_generate_handle                # process creation low32 XORs handle halfwords; salt at +0xa
+0x00526c08 nn_uds_ipc_GetChannel # header 0x001a0000 at 0x00526c18
+0x00526ca8 nn_uds_ipc_EjectClient # header 0x00050040 at 0x00526cb4
+0x00526d34 nn_uds_ipc_DestroyNetwork # header 0x00080000 at 0x00526d40
+0x00526dc0 nn_uds_ipc_ScanOnConnection # header 0x00220402 at 0x00526dd0
+0x00526e38 nn_uds_ipc_DisconnectNetwork # header 0x000a0000 at 0x00526e44
+0x00526e60 nn_uds_ipc_GetApplicationData # header 0x00110040 at 0x00526e74
+0x00526ec0 nn_uds_ipc_GetNodeInformation # header 0x000d0040 at 0x00526ed0
+0x00526f10 nn_uds_ipc_SetApplicationData # header 0x00100042 at 0x00526f1c
+0x00526f54 nn_uds_ipc_GetConnectionStatus # header 0x000b0000 at 0x00526f64
+0x00526fa4 nn_uds_ipc_InitializeWithVersion # header 0x001b0302 at 0x00526fb8
+0x00527018 nn_uds_ipc_SetProbeResponseParam # header 0x00210080 at 0x00527024
+0x00527060 nn_uds_ipc_UpdateNetworkAttribute # header 0x00070080 at 0x0052706c
+0x005270a0 nn_uds_ipc_DecryptBeaconData # header 0x001f0006 at 0x005270b0
+0x00527114 nn_uds_ipc_Bind # header 0x00120100 at 0x00527128
+0x005271d4 nn_uds_ipc_Unbind # header 0x00130040 at 0x005271e4
+0x0052721c nn_uds_ipc_Shutdown # header 0x00030000 at 0x00527228
+0x00527244 nn_uds_ipc_RecvBeaconBroadcastData # header 0x000f0404 at 0x0052725c
+# Free camera / heading-up minimap audit (2026-10-25; static + offline tests, no guest execution).
+0x002af664 fl_camera_set_yaw                # cAppFieldCamera vtable slot 0x44: wrap yaw into (-pi,pi], clamp to +-[this+0x10c], set dirty bit [this+0xe0]&1; [this+0xfc] is the yaw
+0x002af660 fl_camera_set_yaw_veneer         # mov r0,r0 then 0x2af664; the pointer both field camera vtables (0x691468, 0x68ff48) hold at slot 0x44
+0x002af0fc fl_camera_apply_params           # (this, params): [this+0x10c] = params[+0x28] deg->rad (the yaw clamp); also +0x114/+0x11c/+0x120, pitch through slot 0x40
+0x003d7680 fl_field_camera_default_reset    # default camera slot 0x34: calls set_yaw directly with a constant (not through the vtable)
+0x003d80e4 fl_field_camera_default_params   # default camera slot 0x38: [this+0x15c]=1, then 0x2af0fc(this, params)
+0x003d81b0 fl_field_camera_default_pitch    # default camera slot 0x40: pitch limit from params[+0x14], deg->rad
+0x003d7768 fl_field_camera_default_set_154  # default camera slot 0x50: [this+0x154] = s0
+0x003d76d4 fl_field_camera_default_flag     # default camera slot 0x3c: sets byte [this+0x15d]
+0x00359540 fl_field_camera_free_dtor        # cAppFieldCamera_Free (vtable 0x68ff48) slot 0x00; its update is 0x3593d0, setter still the shared 0x2af664
+0x00477894 fl_ipad_circle_pad_store         # ds::IPad update 0x477814 stores Circle Pad X from frame+0xc to +0x2c and Y from frame+0xe to +0x30
+# Free Life v2: Origin Island story skip and Bliss report music (2026-10-25; static, no guest execution).
+0x00244188 fl_bliss_unclaimed_query            # loads the manager global at 0x244190, tail-calls 0x5b68ac
+0x003aa018 script_bliss_unclaimed_test         # native 487; returns fl_has_unclaimed_bliss as the command result
+0x0023edc8 fl_bliss_report_request             # native 344 helper: only if unclaimed, request UI task 40
+0x0028f5b4 fl_ui_task_request                  # (manager, 40, -1) from 0x23edc8; native 344 therefore does not block the event
+0x0039ae8c script_player_level_get             # native 569; Origin Island story gate needs level >= 50 (SYS003 PC 5536)
+0x0039ed2c script_quest_start                  # native 40; SYS003 PC 5559 starts the DLC story with quest 118
+0x003a8744 script_quest_phase_query            # native 63; 3 = complete, 0 = not started (SYS003 PCs 5524-5534)
+0x003b1478 script_audio_cue                    # native 382(row, 0); 27060 PC 5183 and 27090 PC 6433 restore BGM 0x90029 after dialogue
+
+# Free Life v3: per-Life rank-1 skill grants (2026-10-25; static, no guest execution).
+0x0039a584 script_life_current_set             # native 171(life): calls 0x567908; selects the current Life (intros do this first)
+0x00399fc4 script_life_current_get             # native 172: current Life (inferred from use in the intro-skip helper)
+0x0020ce24 fl_life_rank_get                    # Life rank: 0x1fb64c over save+0x1fc48 table (high byte)
+0x00567908 fl_life_current_set                 # writes current-Life byte at save+0x1fcc8 (0x1f800+0x318+0x1b0)
+0x0023875c fl_life_rank_notice                 # (inferred) (life,rank) row lookup 0x5af5fc, UI notice via 0x28dfc0; called by 481
+0x005af5fc fl_life_rank_row_find               # (inferred) searches table rows for byte0=life, byte1=rank
+0x003a4750 script_life_rank_skill_grant        # native 481(life,rank): 0x23875c, then save flags (+0x9cb4 bit 23, +0x182c+0xe20 bit0, +0x980c+0x14c byte6)
+0x002ffa64 fl_life_rank_set_core               # (inferred) rank store path behind 0x5671d0; skill path gated on slot-3 Life == life
+
+# Free Life v4 corrections (2026-10-25; supersede v3 skill-grant interpretations above).
+0x0039ba98 script_player_skill_level_set      # native183(skill,level): 0x567ab4 -> 0x2ff770 -> 0x287ff0; script report queue AFTER persistent write
+0x00567ab4 fl_player_skill_level_set          # global player -> stat component +0xd4; no current-Life/quest-phase gate
+0x002ff770 fl_stat_skill_level_set            # active profile +0x94; first-learn log save+0x21f20 bit skill+0xd3; calls 0x287ff0
+0x00287ff0 fl_profile_skill_level_set         # level at profile+0xc+8*skill (store 0x288034); XP float at profile+8+8*skill; clamps from skill data
+0x0039a5a4 script_player_ability_learned_set   # native191(id,bool): 0x567950 -> 0x238bdc
+0x00238bdc fl_save_ability_learned_set         # save+0x22464, bit id; store0x238c30; dispatch notification13
+0x002c88ec fl_profile_life_rank_set           # rank store0x2c8920; table+0x14 techniques -> 0x238bdc, NOT skill levels; craft recipe refresh0x242d3c
+0x003a4750 script_craft_rank_notice_v4        # correction: native481 -> 0x23875c -> UI14; handler flags script-local, not save fields; no skill grant
+0x0023875c fl_craft_rank_notice_v4            # rank-row lookup + four notice fields -> 0x28dfc0; no skill write
+0x003abb3c script_message_group_notice       # native492(-1,rows*4), Magician skip PC5276 -> 0x240200 -> UI11; no skill write
+0x00240200 fl_message_group_notice           # pack message rows -> 0x28dfc0(type11)
+0x003005c8 fl_stat_dosh_add                   # native178 through0x56781c: profile+0x1a4 current,+0x1a8 earned Dosh
+# Co-op freedom (EU v00, 2026-10-25; static; see docs/coop-freedom.md).
+0x003a86c0 script_mp_role                      # native 453: 0 solo, 1 host with visitors, 2 host portal open, 3 visitor; 161 calls in 54 scripts
+0x003aaa18 script_mp_bounty_multiplier         # native 297: 1 solo, else members+1 (0x246938); Bounty cash-in
+0x0024534c fl_mp_host_with_visitors            # *0x6ad9a4 bit0 && own station(+0xc of *0x6ad948) == host(+0xd) && members(+0x8700) != 1
+0x00246fac fl_mp_host_portal_open              # *0x6ad9a4 bit2 && (members <= 1 || !bit0)
+0x001a17b0 fl_mp_is_visitor                    # bit0 && own station != host station
+0x001a16dc fl_mp_is_host_or_hosting            # bit2 || (bit0 && own == host); natives 451, others
+0x0018a1d0 fl_net_connected                    # (this+8) & 1
+0x0018a1dc fl_net_portal_open                  # ((this+8) >> 2) & 1
+0x0015e70c fl_net_flag10                       # ((this+8) >> 10) & 1, meaning not traced
+0x001dd338 fl_net_session_active               # bit2 || bit0 || bit10 of *0x6ad9a4+8; 74 direct callers (save, menus, request icons)
+0x0020bb10 fl_npc_request_icon                 # (inferred) NPC request icon; -1/none while fl_net_session_active
+0x0020baf4 fl_quest_accepted_full              # (quests) -> accepted count at +0x2958 >= 30
+0x0020ce58 fl_quest_slot_disabled              # (inferred) (quests, slot) -> slot unavailable
+0x003a44a8 script_mp_desk_host                 # native 451 (inferred): multiplayer-desk host action
+0x003a8b8c script_mp_desk_visitor              # native 452 (inferred): multiplayer-desk visitor action

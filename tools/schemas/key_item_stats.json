@@ -1,0 +1,28 @@
+{
+  "name": "key_item_stats",
+  "resource_ids": [
+    6774,
+    6775,
+    6776,
+    6777,
+    6778,
+    6779,
+    6780,
+    6781,
+    6782
+  ],
+  "row_size": 4,
+  "columns": [
+    {
+      "name": "u_00",
+      "type": "utf16",
+      "type_id": 6,
+      "offset": 0,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    }
+  ]
+}

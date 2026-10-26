@@ -1,0 +1,42 @@
+{
+  "name": "map_resources",
+  "resource_ids": [
+    8716
+  ],
+  "row_size": 48,
+  "columns": [
+    {
+      "name": "resources",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 0,
+      "count": 10,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "Ten archive IDs per map (model, collision, ...); 0xffffffff absent."
+    },
+    {
+      "name": "variants_pointer",
+      "type": "pointer",
+      "type_id": 9,
+      "offset": 40,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "Opaque nested record kept at its original section offset."
+    },
+    {
+      "name": "related_map",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 44,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": ""
+    }
+  ]
+}

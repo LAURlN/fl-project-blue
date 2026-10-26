@@ -1,0 +1,28 @@
+{
+  "name": "item_symbols",
+  "resource_ids": [
+    6702,
+    6703,
+    6704,
+    6705,
+    6706,
+    6707,
+    6708,
+    6709,
+    6710
+  ],
+  "row_size": 4,
+  "columns": [
+    {
+      "name": "symbolic_id",
+      "type": "utf16",
+      "type_id": 6,
+      "offset": 0,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "ID_Item_<group>_<serial>_<variant> string; same row order as items. Some original IDs repeat; new IDs should be unique."
+    }
+  ]
+}

@@ -1,7 +1,7 @@
-﻿# Fantasy Life PC - launcher window (WPF, Windows PowerShell 5.1, no extra dependencies).
+# Fantasy Life PC - launcher window (WPF, Windows PowerShell 5.1, no extra dependencies).
 #
 # Dot-sourced by play.ps1, which defines $Here, $PlayScript and the Get-FL*/Start-FL*/
-# Invoke-FL* library functions. Slow work (update check, update, firewall, icon) runs
+# Invoke-FL* library functions. Slow work (ROM validation, mod builds, firewall, icon) runs
 # in background runspaces that dot-source "play.ps1 -LibraryOnly"; the UI polls their
 # results with a DispatcherTimer, so the window never freezes and Play is always
 # available, even offline.
@@ -149,6 +149,37 @@ $script:FLLauncherXaml = @'
       </Setter>
     </Style>
 
+    <Style x:Key="ModChipToggle" TargetType="ToggleButton">
+      <Setter Property="Cursor" Value="Hand"/>
+      <Setter Property="Foreground" Value="#3F5E26"/>
+      <Setter Property="Margin" Value="0,0,6,6"/>
+      <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="ToggleButton">
+            <Border x:Name="Pill" CornerRadius="11" Padding="11,4" Background="#EAF5DD" BorderBrush="#A9CF86" BorderThickness="1">
+              <StackPanel Orientation="Horizontal">
+                <TextBlock x:Name="Check" Text="&#xE73E;" FontFamily="Segoe MDL2 Assets" FontSize="11"
+                           Foreground="#4E8F2E" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                <ContentPresenter VerticalAlignment="Center"/>
+              </StackPanel>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="Pill" Property="BorderBrush" Value="#C99A45"/></Trigger>
+              <Trigger Property="IsChecked" Value="False">
+                <Setter TargetName="Pill" Property="Background" Value="#F3EEE4"/>
+                <Setter TargetName="Pill" Property="BorderBrush" Value="#D6C7AE"/>
+                <Setter TargetName="Check" Property="Visibility" Value="Collapsed"/>
+                <Setter Property="Foreground" Value="#8A6E50"/>
+                <Setter Property="Opacity" Value="0.9"/>
+              </Trigger>
+              <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.5"/></Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
     <Style x:Key="Card" TargetType="Border">
       <Setter Property="CornerRadius" Value="16"/>
       <Setter Property="Background" Value="#D9FFFFFF"/>
@@ -268,36 +299,47 @@ $script:FLLauncherXaml = @'
 
         <!-- Version and update -->
         <Border Style="{StaticResource Card}">
-          <Grid>
-            <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="*"/>
-              <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-              <RowDefinition Height="Auto"/>
-              <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <StackPanel>
-              <StackPanel Orientation="Horizontal">
-                <Ellipse x:Name="StatusDot" Width="11" Height="11" Fill="#B9A88E" Margin="0,1,9,0" VerticalAlignment="Center"/>
-                <TextBlock x:Name="StatusTitle" Text="Checking for updates..." FontSize="16" FontWeight="Bold" Foreground="{StaticResource Ink}"/>
+          <StackPanel>
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+              </Grid.ColumnDefinitions>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+              </Grid.RowDefinitions>
+              <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                  <Ellipse x:Name="StatusDot" Width="11" Height="11" Fill="#B9A88E" Margin="0,1,9,0" VerticalAlignment="Center"/>
+                  <TextBlock x:Name="StatusTitle" Text="Checking for updates..." FontSize="16" FontWeight="Bold" Foreground="{StaticResource Ink}"/>
+                </StackPanel>
+                <TextBlock x:Name="StatusDetail" Foreground="{StaticResource InkSoft}" TextWrapping="Wrap" Margin="20,3,0,0"/>
+                <TextBox x:Name="VersionText" IsReadOnly="True" BorderThickness="0" Background="Transparent" Padding="0"
+                         Foreground="#A68D6C" FontSize="11" Margin="20,3,0,0" TextWrapping="Wrap" Cursor="IBeam"/>
               </StackPanel>
-              <TextBlock x:Name="StatusDetail" Foreground="{StaticResource InkSoft}" TextWrapping="Wrap" Margin="20,3,0,0"/>
-              <TextBox x:Name="VersionText" IsReadOnly="True" BorderThickness="0" Background="Transparent" Padding="0"
-                       Foreground="#A68D6C" FontSize="11" Margin="20,3,0,0" TextWrapping="Wrap" Cursor="IBeam"/>
-            </StackPanel>
-            <Button x:Name="UpdateButton" Grid.Column="1" Style="{StaticResource GoldButton}" VerticalAlignment="Center"
-                    Margin="14,0,0,0" Visibility="Collapsed">
-              <StackPanel Orientation="Horizontal">
-                <TextBlock Text="&#xE896;" FontFamily="Segoe MDL2 Assets" FontSize="14" Margin="0,1,8,0"/>
-                <TextBlock x:Name="UpdateButtonText" Text="Update now"/>
+              <Button x:Name="UpdateButton" Grid.Column="1" Style="{StaticResource GoldButton}" VerticalAlignment="Center"
+                      Margin="14,0,0,0" Visibility="Collapsed">
+                <StackPanel Orientation="Horizontal">
+                  <TextBlock Text="&#xE896;" FontFamily="Segoe MDL2 Assets" FontSize="14" Margin="0,1,8,0"/>
+                  <TextBlock x:Name="UpdateButtonText" Text="Update now"/>
+                </StackPanel>
+              </Button>
+              <StackPanel x:Name="ProgressPanel" Grid.Row="1" Grid.ColumnSpan="2" Margin="20,10,0,0" Visibility="Collapsed">
+                <ProgressBar x:Name="Progress" Height="10" Minimum="0" Maximum="100" Foreground="#F2AE2E" Background="#F3E4C2" BorderThickness="0"/>
+                <TextBlock x:Name="ProgressText" Foreground="{StaticResource InkSoft}" FontSize="12" Margin="0,4,0,0"/>
               </StackPanel>
-            </Button>
-            <StackPanel x:Name="ProgressPanel" Grid.Row="1" Grid.ColumnSpan="2" Margin="20,10,0,0" Visibility="Collapsed">
-              <ProgressBar x:Name="Progress" Height="10" Minimum="0" Maximum="100" Foreground="#F2AE2E" Background="#F3E4C2" BorderThickness="0"/>
-              <TextBlock x:Name="ProgressText" Foreground="{StaticResource InkSoft}" FontSize="12" Margin="0,4,0,0"/>
-            </StackPanel>
-          </Grid>
+            </Grid>
+            <Border Height="1" Background="#E8D3A8" Margin="0,10,0,8" Opacity="0.6"/>
+            <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+              <TextBlock x:Name="RomStatus" Text="ROM Status: not configured" VerticalAlignment="Center" Foreground="{StaticResource InkSoft}"/>
+              <Button x:Name="SelectRomButton" Content="Select .3ds ROM..." Grid.Column="1" Style="{StaticResource BaseButton}" Padding="10,4"/>
+            </Grid>
+            <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+              <TextBlock x:Name="DlcStatus" Text="DLC Status: optional" VerticalAlignment="Center" Foreground="{StaticResource InkSoft}"/>
+              <Button x:Name="AddDlcButton" Content="Add DLC (.cia)..." Grid.Column="1" Style="{StaticResource BaseButton}" Padding="10,4"/>
+            </Grid>
+          </StackPanel>
         </Border>
 
         <!-- Save profile and mods -->
@@ -317,7 +359,20 @@ $script:FLLauncherXaml = @'
                 <ColumnDefinition Width="*"/>
               </Grid.ColumnDefinitions>
               <TextBlock Text="Mods" FontWeight="Bold" Foreground="{StaticResource Ink}" VerticalAlignment="Top" Margin="0,4,0,0" FontSize="14"/>
-              <WrapPanel x:Name="ModChips" Grid.Column="1"/>
+              <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <WrapPanel x:Name="ModChips"/>
+                <StackPanel Grid.Column="1"><Button x:Name="ManageModsButton" Content="Manage / GameBanana" Style="{StaticResource LinkButton}"/><Button x:Name="AddModButton" Style="{StaticResource LinkButton}" VerticalAlignment="Top"
+                        ToolTip="Install a mod from a .zip file (built overlay package, or a source mod when the build tools are available). You can also drop a .zip onto this window.">
+                  <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="&#xE710;" FontFamily="Segoe MDL2 Assets" Margin="0,2,6,0"/>
+                    <TextBlock Text="Add Mod (.zip)"/>
+                  </StackPanel>
+                </Button></StackPanel>
+              </Grid>
             </Grid>
           </StackPanel>
         </Border>
@@ -357,10 +412,16 @@ $script:FLLauncherXaml = @'
             <ColumnDefinition Width="*"/>
           </Grid.ColumnDefinitions>
           <StackPanel Orientation="Horizontal">
-            <Button x:Name="SettingsButton" Style="{StaticResource LinkButton}" ToolTip="Controls, resolution and online (relay) settings">
+            <Button x:Name="SettingsButton" Style="{StaticResource LinkButton}" ToolTip="Keyboard and controller button bindings">
+              <StackPanel Orientation="Horizontal">
+                <TextBlock Text="&#xE765;" FontFamily="Segoe MDL2 Assets" Margin="0,2,6,0"/>
+                <TextBlock Text="Input / Controls"/>
+              </StackPanel>
+            </Button>
+            <Button x:Name="GameSettingsButton" Style="{StaticResource LinkButton}" ToolTip="Resolution, widescreen, co-op freedom, audio, and online relay settings">
               <StackPanel Orientation="Horizontal">
                 <TextBlock Text="&#xE713;" FontFamily="Segoe MDL2 Assets" Margin="0,2,6,0"/>
-                <TextBlock Text="Game settings"/>
+                <TextBlock Text="Game Settings"/>
               </StackPanel>
             </Button>
             <Button x:Name="FirewallButton" Style="{StaticResource LinkButton}" ToolTip="Allow LAN / Hamachi / Radmin / ZeroTier multiplayer through Windows Firewall (one admin prompt)">
@@ -406,6 +467,275 @@ $script:FLJobPrelude = {
     if ($Params) { & $job @Params } else { & $job }
 }
 
+# The manager shares launcher styles and background jobs.
+function New-FLMButton {
+    param([string]$Text, [scriptblock]$Action, $Tag)
+    $b = New-Object Windows.Controls.Button
+    $b.Content = $Text; $b.Tag = $Tag
+    $b.Style = $script:FL.Window.Resources['BaseButton']
+    $b.Padding = New-Object Windows.Thickness 8,5,8,5
+    $b.Margin = New-Object Windows.Thickness 3
+    if ($Action) { $b.Add_Click($Action) }
+    return $b
+}
+
+function Invoke-FLMWork {
+    param([string]$Body, [hashtable]$Params, [scriptblock]$Done)
+    if ($script:FLM.Busy) { return }
+    $script:FLM.Busy = $true
+    $script:FLM.UI.Status.Text = "Working..."
+    $script:FLM.UI.Tabs.IsEnabled = $false
+    $script:FLM.Done = $Done
+    $callback = {
+        param($Result, $ErrorText)
+        if (-not $script:FLM) { return }
+        $script:FLM.Busy = $false
+        $script:FLM.UI.Tabs.IsEnabled = $true
+        try {
+            if ($ErrorText) { throw $ErrorText }
+            if ($Result -and $Result.PSObject.Properties.Name -contains 'Ok' -and -not $Result.Ok) { throw $Result.Message }
+            $script:FLM.UI.Status.Text = $(if ($Result -and $Result.Message) { $Result.Message } else { "Ready" })
+            & $script:FLM.Done $Result
+        } catch { $script:FLM.UI.Status.Text = $_.Exception.Message }
+    }
+    & $script:FL.StartJob "mod-manager" $Body $Params $callback
+}
+
+function Update-FLMInstalled {
+    & $script:FL.ReloadMods
+    $list = $script:FLM.UI.Installed
+    $list.Children.Clear()
+    $mods = @($script:FL.Mods)
+    $script:FLM.UI.Summary.Text = "$(@($mods | Where-Object Enabled).Count) enabled / $($mods.Count) installed  •  Load order: top to bottom"
+    foreach ($mod in $mods) {
+        $card = New-Object Windows.Controls.Border
+        $card.Style = $script:FL.Window.Resources['Card']
+        $card.Padding = New-Object Windows.Thickness 12
+        $row = New-Object Windows.Controls.StackPanel
+        $check = New-Object Windows.Controls.CheckBox
+        $check.Content = "$($mod.Name)  [$($mod.Kind)]"
+        $check.FontWeight = 'SemiBold'; $check.FontSize = 14
+        $check.IsChecked = $mod.Enabled; $check.Tag = $mod
+        $check.Add_Click({
+            param($sender)
+            $prefs = Read-FLPrefs
+            $folder = $sender.Tag.Folder
+            $prefs.disabled_mods = @($prefs.disabled_mods | Where-Object { $_ -ne $folder })
+            if (-not $sender.IsChecked) { $prefs.disabled_mods += $folder }
+            Write-FLPrefs -Path (Get-FLPrefsPath) -Prefs $prefs
+            Update-FLMInstalled
+        })
+        [void]$row.Children.Add($check)
+        $detail = New-Object Windows.Controls.TextBlock
+        $detail.Text = $mod.Folder + $(if ($mod.Submitter) { "  •  by $($mod.Submitter) (GameBanana)" } elseif ($mod.Author) { "  •  by $($mod.Author)" }) + $(if ($mod.SourceOnly) { "  •  Source project: merge/build required" })
+        $detail.Foreground = $script:FL.Window.Resources['InkSoft']; $detail.Margin = New-Object Windows.Thickness 0,5,0,5
+        $detail.TextWrapping = 'Wrap'
+        [void]$row.Children.Add($detail)
+        $buttons = New-Object Windows.Controls.WrapPanel
+        foreach ($step in @(-1,1)) {
+            $label = if ($step -eq -1) { "▲" } else { "▼" }
+            $b = New-FLMButton $label {
+                param($sender)
+                $order = @($script:FL.Mods | ForEach-Object { $_.Folder })
+                $index = [array]::IndexOf($order, $sender.Tag.Folder)
+                $next = $index + $sender.Tag.Step
+                if ($next -lt 0 -or $next -ge $order.Count) { return }
+                $swap = $order[$index]; $order[$index] = $order[$next]; $order[$next] = $swap
+                Set-FLModOrder $order
+                Update-FLMInstalled
+            } @{ Folder = $mod.Folder; Step = $step }
+            [void]$buttons.Children.Add($b)
+        }
+        [void]$buttons.Children.Add((New-FLMButton "Open Folder" { param($sender) Start-Process explorer.exe -ArgumentList ('"' + $sender.Tag.Path + '"') } $mod))
+        if ($mod.Removable) {
+            [void]$buttons.Children.Add((New-FLMButton "Uninstall" {
+                param($sender)
+                if ([Windows.MessageBox]::Show($script:FLM.Window, "Uninstall '$($sender.Tag.Name)'?", "Uninstall mod", 'YesNo', 'Question') -ne 'Yes') { return }
+                try { [void](Remove-FLMod -Folder $sender.Tag.Folder); Update-FLMInstalled } catch { $script:FLM.UI.Status.Text = $_.Exception.Message }
+            } $mod))
+        }
+        [void]$row.Children.Add($buttons)
+        $card.Child = $row
+        [void]$list.Children.Add($card)
+    }
+}
+
+function Update-FLMBrowse {
+    $script:FLM.UI.Results.Children.Clear()
+    foreach ($mod in @($script:FLM.Records)) {
+        $card = New-Object Windows.Controls.Border
+        $card.Style = $script:FL.Window.Resources['Card']
+        $card.Padding = New-Object Windows.Thickness 12
+        $row = New-Object Windows.Controls.StackPanel
+        $title = New-Object Windows.Controls.TextBlock
+        $title.Text = $mod.Name; $title.FontSize = 16; $title.FontWeight = 'SemiBold'; $title.TextWrapping = 'Wrap'
+        [void]$row.Children.Add($title)
+        $text = New-Object Windows.Controls.TextBlock
+        $text.Text = "$($mod.Category)  •  $($mod.Submitter)  •  $($mod.Likes) likes / $($mod.Views) views"
+        $text.TextWrapping = 'Wrap'; $text.Margin = New-Object Windows.Thickness 0,6,0,6
+        $text.Foreground = $script:FL.Window.Resources['InkSoft']
+        [void]$row.Children.Add($text)
+        $actions = New-Object Windows.Controls.WrapPanel
+        [void]$actions.Children.Add((New-FLMButton "Open in Browser" {
+            param($sender)
+            try { Assert-FLHttpsUrl $sender.Tag.ProfileUrl; Start-Process $sender.Tag.ProfileUrl } catch { $script:FLM.UI.Status.Text = $_.Exception.Message }
+        } $mod))
+        $label = if ($mod.InstalledFolder) { "Reinstall / Update" } else { "Install" }
+        [void]$actions.Children.Add((New-FLMButton $label {
+            param($sender)
+            $script:FLM.SelectedMod = $sender.Tag
+            Invoke-FLMWork 'param($Id) [pscustomobject]@{ Files = @(Get-FLGameBananaModFiles -ModId $Id) }' @{ Id = $sender.Tag.Id } {
+                param($result)
+                if (-not @($result.Files).Count) { $script:FLM.UI.Status.Text = "No HTTPS downloads available."; return }
+                $script:FLM.UI.Files.ItemsSource = @($result.Files)
+                $script:FLM.UI.Files.SelectedIndex = 0
+                $script:FLM.UI.Picker.Visibility = 'Visible'
+                $script:FLM.UI.Status.Text = "Choose a file for '$($script:FLM.SelectedMod.Name)', then Install selected file."
+            }
+        } $mod))
+        [void]$row.Children.Add($actions); $card.Child = $row
+        [void]$script:FLM.UI.Results.Children.Add($card)
+    }
+    $script:FLM.UI.Page.Text = "Page $($script:FLM.Page)"
+    $script:FLM.UI.Prev.IsEnabled = $script:FLM.Page -gt 1
+    $script:FLM.UI.Next.IsEnabled = $script:FLM.HasNext
+}
+
+function Search-FLMBrowse {
+    $script:FLM.UI.Picker.Visibility = 'Collapsed'
+    Invoke-FLMWork 'param($Page,$Search,$Category) [pscustomobject]@{ Records = @(Search-FLGameBananaMods -Page $Page -Search $Search -Category $Category) }' @{ Page = $script:FLM.Page; Search = $script:FLM.UI.Search.Text; Category = $script:FLM.UI.Category.Text } {
+        param($result)
+        $script:FLM.Records = @($result.Records)
+        $script:FLM.HasNext = $true
+        Update-FLMBrowse
+        $script:FLM.UI.Status.Text = "$(@($result.Records).Count) results on page $($script:FLM.Page)."
+    }
+}
+
+function Show-FLModManager {
+    if ($script:FLM -and $script:FLM.Window.IsVisible) { [void]$script:FLM.Window.Activate(); return }
+    $xaml = @'
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ Title="Fantasy Life — Mod Manager" Width="940" Height="730" MinWidth="780" MinHeight="560" WindowStartupLocation="CenterOwner"
+ Background="#FFF8E7" Foreground="#4A3420" FontFamily="Segoe UI" FontSize="13">
+ <Border BorderBrush="#C9A56B" Background="#FFF8E7" BorderThickness="2" Padding="20">
+ <DockPanel>
+  <StackPanel DockPanel.Dock="Top" Margin="0,0,0,14">
+   <TextBlock Text="Mod Manager &amp; Modpacks" FontSize="27" FontWeight="Bold"/>
+   <TextBlock Text="Your adventures, your way" Foreground="#8A6E50" Margin="0,4,0,0"/>
+  </StackPanel>
+  <TextBlock x:Name="Status" DockPanel.Dock="Bottom" Text="Ready" TextWrapping="Wrap" Margin="0,12,0,0" Foreground="#8A6E50"/>
+  <TabControl x:Name="Tabs" Background="#FFFDF7" BorderBrush="#D6BC8C" Padding="12">
+   <TabItem Header="Installed Mods &amp; Modpacks">
+    <DockPanel>
+     <TextBlock x:Name="Summary" DockPanel.Dock="Top" Margin="0,8,0,10"/>
+     <WrapPanel DockPanel.Dock="Bottom" Margin="0,10,0,0">
+      <Button x:Name="Add" Content="Add Mod / Modpack (.zip)"/>
+      <Button x:Name="Export" Content="Export Enabled as Modpack (.zip)"/>
+      <Button x:Name="Merge" Content="Merge Sources (build-stack)"/>
+     </WrapPanel>
+     <ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel x:Name="Installed"/></ScrollViewer>
+    </DockPanel>
+   </TabItem>
+   <TabItem Header="Browse GameBanana">
+    <DockPanel>
+     <StackPanel DockPanel.Dock="Top">
+      <WrapPanel Margin="0,8,0,10">
+       <TextBlock Text="Search" VerticalAlignment="Center" Margin="3"/><TextBox x:Name="Search" Width="180" Margin="3" Padding="7" ToolTip="Search mod names"/>
+       <TextBlock Text="Category" VerticalAlignment="Center" Margin="3"/><TextBox x:Name="Category" Width="100" Margin="3" Padding="7" ToolTip="Filter category on this page"/>
+       <Button x:Name="SearchButton" Content="Search / Refresh"/>
+       <Button x:Name="Prev" Content="Prev"/>
+       <TextBlock x:Name="Page" Text="Page 1" VerticalAlignment="Center" Margin="8,0"/>
+       <Button x:Name="Next" Content="Next"/>
+      </WrapPanel>
+      <TextBlock Text="Fantasy Life on GameBanana • Search to load available mods. ZIP downloads supported." Foreground="#8A6E50" Margin="3,0,0,10" TextWrapping="Wrap"/>
+      <StackPanel x:Name="Picker" Visibility="Collapsed" Margin="0,0,0,12">
+       <ComboBox x:Name="Files" DisplayMemberPath="Name"/>
+       <TextBlock x:Name="FileDetail" TextWrapping="Wrap" Margin="3,6"/>
+       <Button x:Name="InstallFile" Content="Install selected file" HorizontalAlignment="Left"/>
+      </StackPanel>
+     </StackPanel>
+     <ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel x:Name="Results"/></ScrollViewer>
+    </DockPanel>
+   </TabItem>
+  </TabControl>
+ </DockPanel>
+ </Border>
+</Window>
+'@
+    $window = [Windows.Markup.XamlReader]::Parse($xaml)
+    $window.Owner = $script:FL.Window
+    $ui = @{}
+    foreach ($name in @('Status','Tabs','Summary','Installed','Add','Export','Merge','Search','Category','SearchButton','Prev','Next','Page','Picker','Files','FileDetail','InstallFile','Results')) { $ui[$name] = $window.FindName($name) }
+    $script:FLM = @{ Window = $window; UI = $ui; Page = 1; Records = @(); Busy = $false; SelectedMod = $null; HasNext = $false }
+    foreach ($name in @('Add','Export','Merge','SearchButton','Prev','Next','InstallFile')) {
+        $ui[$name].Style = $script:FL.Window.Resources['BaseButton']
+        $ui[$name].Padding = New-Object Windows.Thickness 8,6,8,6
+        $ui[$name].Margin = New-Object Windows.Thickness 3
+    }
+    $ui.Merge.Visibility = $(if (Get-FLModToolchain) { 'Visible' } else { 'Collapsed' })
+    $ui.Add.Add_Click({
+        $dlg = New-Object Microsoft.Win32.OpenFileDialog
+        $dlg.Filter = 'Mod / modpack ZIP (*.zip)|*.zip'
+        if ($dlg.ShowDialog($script:FLM.Window)) {
+            if ((Test-FLZipNeedsArchive $dlg.FileName) -and -not (Confirm-FLModExtraction)) { return }
+            Invoke-FLMWork 'param($Path) Install-FLModZip -ZipPath $Path' @{ Path = $dlg.FileName } { Update-FLMInstalled }
+        }
+    })
+    $ui.Export.Add_Click({
+        $dlg = New-Object Microsoft.Win32.SaveFileDialog
+        $dlg.Filter = 'Modpack ZIP (*.zip)|*.zip'; $dlg.FileName = 'Fantasy-Life-modpack.zip'
+        if ($dlg.ShowDialog($script:FLM.Window)) {
+            Invoke-FLMWork 'param($Path) Export-FLModpackZip -OutputPath $Path' @{ Path = $dlg.FileName } { }
+        }
+    })
+    $ui.Merge.Add_Click({
+        if (-not (Confirm-FLModExtraction)) { return }
+        Invoke-FLMWork @'
+$mods = @((Get-FLMods -Config (Get-FLConfig) -LocalVersion (Get-FLLocalVersion -Config (Get-FLConfig))).Mods | Where-Object Enabled)
+$tmp = Join-Path ([IO.Path]::GetTempPath()) ("fl-merge-" + [guid]::NewGuid().ToString("N") + ".zip")
+try {
+    [void](Export-FLModpackZip -OutputPath $tmp -MergeSources)
+    $result = Install-FLModZip -ZipPath $tmp
+    if (-not $result.Ok) { return $result }
+    $prefs = Read-FLPrefs
+    $prefs.disabled_mods = @(@($prefs.disabled_mods) + @($mods | ForEach-Object { $_.Folder }) | Select-Object -Unique)
+    Write-FLPrefs -Path (Get-FLPrefsPath) -Prefs $prefs
+    [pscustomobject]@{ Ok = $true; Message = "Merged modpack installed; original mods disabled. Scripts and plugins preserved." }
+} finally { if (Test-Path -LiteralPath $tmp) { Remove-Item -LiteralPath $tmp -Force } }
+'@ @{} { Update-FLMInstalled }
+    })
+    $ui.SearchButton.Add_Click({ $script:FLM.Page = 1; Search-FLMBrowse })
+    $ui.Search.Add_KeyDown({ param($sender,$e) if ($e.Key -eq 'Return') { $script:FLM.Page = 1; Search-FLMBrowse } })
+    $ui.Prev.Add_Click({ if ($script:FLM.Page -gt 1) { $script:FLM.Page--; Search-FLMBrowse } })
+    $ui.Next.Add_Click({ $script:FLM.Page++; Search-FLMBrowse })
+    $ui.Files.Add_SelectionChanged({
+        $file = $script:FLM.UI.Files.SelectedItem
+        if ($file) { $script:FLM.UI.FileDetail.Text = "$($file.Description)  •  $([Math]::Round($file.Size / 1MB, 2)) MB" }
+    })
+    $ui.InstallFile.Add_Click({
+        $file = $script:FLM.UI.Files.SelectedItem
+        if (-not $file) { return }
+        if ((Get-FLModToolchain) -and -not (Test-Path -LiteralPath (Join-Path (Get-FLModToolchain).Archive '.fl_archive\manifest.json'))) {
+            if (-not (Confirm-FLModExtraction)) { return }
+        }
+        Invoke-FLMWork 'param($Mod,$File) Install-FLGameBananaMod -Mod $Mod -File $File' @{ Mod = $script:FLM.SelectedMod; File = $file } {
+            $script:FLM.UI.Picker.Visibility = 'Collapsed'
+            Update-FLMInstalled
+            $installed = @($script:FL.Mods)
+            foreach ($record in $script:FLM.Records) { $record.InstalledFolder = (@($installed | Where-Object { $_.GameBananaId -eq $record.Id }) | Select-Object -First 1).Folder }
+            Update-FLMBrowse
+        }
+    })
+    $window.Add_Closing({ param($sender,$e) if ($script:FLM.Busy -and $script:FL.Window.IsVisible) { $e.Cancel = $true; $script:FLM.UI.Status.Text = "Please wait for the current operation to finish." } })
+    Update-FLMInstalled
+    Update-FLMBrowse
+    $script:FL.Window.Content.IsEnabled = $false
+    $window.Add_Closed({ $script:FL.Window.Content.IsEnabled = $true })
+    $window.Show()
+}
+
+
 function Show-FLLauncherWindow {
     param(
         $Config,
@@ -415,6 +745,7 @@ function Show-FLLauncherWindow {
         [switch]$NoFirewall,
         [string]$AfterUpdate = "",
         [switch]$Preview,
+        [switch]$PreviewModManager,
         [string]$Screenshot = ""
     )
 
@@ -425,10 +756,11 @@ function Show-FLLauncherWindow {
     foreach ($name in @("Frame", "Header", "SkyTop", "SkyBottom", "HillBackTop", "HillBackBottom", "HillFrontTop", "HillFrontBottom",
                         "Logo", "Subtitle", "ChannelBadge", "ChannelText", "MinButton", "CloseButton",
                         "Notice", "NoticeGlyph", "NoticeTitle", "NoticeText", "NoticeLog", "NoticeAction", "NoticeActionText", "NoticeClose",
-                        "StatusDot", "StatusTitle", "StatusDetail", "VersionText", "UpdateButton", "UpdateButtonText",
-                        "ProgressPanel", "Progress", "ProgressText", "ProfilePanel", "ModChips",
+                        "StatusDot", "StatusTitle", "StatusDetail", "VersionText", "UpdateButton", "UpdateButtonText", "ProgressPanel", "Progress", "ProgressText",
+                        "RomStatus", "DlcStatus", "SelectRomButton", "AddDlcButton",
+                        "ProfilePanel", "ModChips", "AddModButton", "ManageModsButton",
                         "PlayModsButton", "PlayModsSub", "PlayVanillaButton", "PlayHint",
-                        "SettingsButton", "FirewallButton", "LogButton", "FolderButton", "NetDot", "NetText")) {
+                        "SettingsButton", "GameSettingsButton", "FirewallButton", "LogButton", "FolderButton", "NetDot", "NetText")) {
         $ui[$name] = $window.FindName($name)
     }
 
@@ -522,15 +854,17 @@ function Show-FLLauncherWindow {
         param([bool]$Busy)
         $script:FL.Busy = $Busy
         $u = $script:FL.UI
-        foreach ($c in @($u.PlayModsButton, $u.PlayVanillaButton, $u.SettingsButton, $u.UpdateButton, $u.FirewallButton)) { $c.IsEnabled = -not $Busy }
+        foreach ($c in @($u.PlayModsButton, $u.PlayVanillaButton, $u.SettingsButton, $u.GameSettingsButton, $u.UpdateButton, $u.SelectRomButton, $u.AddDlcButton, $u.FirewallButton, $u.AddModButton)) { if ($c) { $c.IsEnabled = -not $Busy } }
         if (-not $Busy) { & $script:FL.RefreshPlayButtons }
     }
 
     $script:FL.SavePrefs = {
         try {
-            $obj = [ordered]@{ save = $script:FL.SelectedSave }
-            New-Item -ItemType Directory -Path (Split-Path -Parent $script:FL.PrefsFile) -Force | Out-Null
-            [IO.File]::WriteAllText($script:FL.PrefsFile, ($obj | ConvertTo-Json), (New-Object Text.UTF8Encoding($false)))
+            $prefs = Read-FLPrefs -Path $script:FL.PrefsFile
+            $prefs.save = $script:FL.SelectedSave
+            $prefs.disabled_mods = @($script:FL.DisabledMods)
+            $prefs.user_mods = @($script:FL.UserMods)
+            Write-FLPrefs -Path $script:FL.PrefsFile -Prefs $prefs
         } catch {}
     }
 
@@ -539,7 +873,10 @@ function Show-FLLauncherWindow {
     $script:FL.LocalVersion = $local
     $modInfo = Get-FLMods -Config $Config -LocalVersion $local
     $script:FL.Mods = @($modInfo.Mods)
+    $script:FL.DisabledMods = @($modInfo.Prefs.disabled_mods)
+    $script:FL.UserMods = @($modInfo.Prefs.user_mods)
 
+    # Installed version line
     if ($Config.IsTest) {
         $ui.SkyTop.Color = [Windows.Media.ColorConverter]::ConvertFromString("#F7A35C")
         $ui.SkyBottom.Color = [Windows.Media.ColorConverter]::ConvertFromString("#FDE1B8")
@@ -550,6 +887,23 @@ function Show-FLLauncherWindow {
         $window.Title = "Fantasy Life (Test)"
         $ui.Frame.BorderBrush = & $brush "#E4572E"
         $ui.Frame.BorderThickness = New-Object Windows.Thickness 2
+        $ui.StatusDot.Fill = & $brush "#E4572E"
+        $ui.StatusTitle.Text = "Test build"
+        $parts = @()
+        if ($local -and $local.date) { $parts += "published " + (& $script:FL.FormatDate $local.date) }
+        $parts += "local only, never updates"
+        $ui.StatusDetail.Text = ($parts -join " - ")
+        $vt = @()
+        if ($local -and $local.label) { $vt += "Label: $($local.label)" }
+        if ($local -and $local.exe_sha256) { $vt += "exe $(([string]$local.exe_sha256).Substring(0, [Math]::Min(12, ([string]$local.exe_sha256).Length)))" }
+        $ui.VersionText.Text = ($vt -join "  |  ")
+    } else {
+        if ($local) {
+            $ui.StatusDetail.Text = "Installed build from " + (& $script:FL.FormatDate $local.updated_at)
+            $ui.VersionText.Text = "Build $($local.version)  |  mod digest $($local.mod_digest)"
+        } else {
+            $ui.StatusDetail.Text = "No version.json found."
+        }
     }
 
     # Save profiles: freelife and story, plus any other existing profile folder.
@@ -580,79 +934,197 @@ function Show-FLLauncherWindow {
         [void]$ui.ProfilePanel.Children.Add($rb)
     }
 
-    # Mod chips (later: make these toggles for per-mod picking).
-    $missing = @($script:FL.Mods | Where-Object { -not $_.Present })
-    if ($script:FL.Mods.Count -eq 0) {
-        $t = New-Object Windows.Controls.TextBlock
-        $t.Text = "This build has no mods."
-        $t.Foreground = & $brush "#8A6E50"
-        $t.Margin = New-Object Windows.Thickness 0, 4, 0, 0
-        [void]$ui.ModChips.Children.Add($t)
-    }
-    foreach ($mod in $script:FL.Mods) {
-        $chip = New-Object Windows.Controls.Border
-        $chip.CornerRadius = New-Object Windows.CornerRadius 11
-        $chip.Padding = New-Object Windows.Thickness 11, 4, 11, 4
-        $chip.Margin = New-Object Windows.Thickness 0, 0, 6, 6
-        $chip.BorderThickness = New-Object Windows.Thickness 1
-        if ($mod.Present) {
-            $chip.Background = & $brush "#EAF5DD"; $chip.BorderBrush = & $brush "#A9CF86"
+    # Mod chips: toggleable pills (green check = enabled, muted = off, red =
+    # missing). Right-click a removable mod to uninstall it.
+    $script:FL.BuildModTooltip = {
+        param($mod)
+        $lines = New-Object System.Collections.ArrayList
+        [void]$lines.Add([string]$mod.Name)
+        $meta = @()
+        if ($mod.Author) { $meta += "by $($mod.Author)" }
+        if ($mod.Version) { $meta += "v$($mod.Version)" }
+        if ($meta.Count) { [void]$lines.Add(($meta -join "  |  ")) }
+        [void]$lines.Add("data\yw2-recomp\mods\fantasylife\$($mod.Folder)")
+        if (-not $mod.Present -and $mod.SourceOnly) {
+            [void]$lines.Add("Source mod (not built) - will not load.")
+        } elseif (-not $mod.Present) {
+            [void]$lines.Add("MISSING - update the game or disable this mod.")
+        } elseif ($mod.Enabled) {
+            [void]$lines.Add("Enabled - loaded when you press Play.")
         } else {
-            $chip.Background = & $brush "#FDE6DF"; $chip.BorderBrush = & $brush "#E07A5F"
+            [void]$lines.Add("Disabled - click to enable.")
         }
-        $t = New-Object Windows.Controls.TextBlock
-        $t.Text = $(if ($mod.Present) { $mod.Name } else { "$($mod.Name) (missing)" })
-        $t.Foreground = & $brush "#3F5E26"
-        $t.FontSize = 12
-        $t.FontWeight = "SemiBold"
-        $chip.Child = $t
-        $chip.ToolTip = "data\yw2-recomp\mods\fantasylife\$($mod.Folder)"
-        [void]$ui.ModChips.Children.Add($chip)
+        if ($mod.Shipped) { [void]$lines.Add("Ships with this build (toggle only; not uninstallable).") }
+        elseif ($mod.Removable) { [void]$lines.Add("Right-click to uninstall.") }
+        return ($lines -join "`n")
     }
-    $count = $script:FL.Mods.Count
-    $ui.PlayModsSub.Text = $(if ($count -eq 0) { "this build has no mods" } elseif ($count -eq 1) { "with 1 mod" } else { "with $count mods" })
-    $script:FL.ModsBlocked = ($missing.Count -gt 0)
+
+    $script:FL.SetModEnabled = {
+        param([string]$Folder, [bool]$Enabled)
+        $mod = @($script:FL.Mods | Where-Object { $_.Folder -eq $Folder }) | Select-Object -First 1
+        if (-not $mod) { return }
+        $mod.Enabled = $Enabled
+        $disabled = @($script:FL.DisabledMods)
+        $user = @($script:FL.UserMods)
+        if ($Enabled) {
+            $disabled = @($disabled | Where-Object { $_ -ne $Folder })
+            # Enabling a non-shipped folder records it as a player install so
+            # it stays enabled (and removable) across reloads.
+            if (-not $mod.Shipped -and $user -notcontains $Folder) { $user += $Folder }
+        } else {
+            if ($disabled -notcontains $Folder) { $disabled += $Folder }
+        }
+        $script:FL.DisabledMods = $disabled
+        $script:FL.UserMods = $user
+        & $script:FL.SavePrefs
+        & $script:FL.UpdatePlaySub
+        & $script:FL.RefreshModState
+    }
+
+    $script:FL.RebuildChips = {
+        $u = $script:FL.UI
+        $b = $script:FL.Brush
+        $u.ModChips.Children.Clear()
+        $mods = @($script:FL.Mods)
+        if ($mods.Count -eq 0) {
+            $t = New-Object Windows.Controls.TextBlock
+            $t.Text = "This build has no mods."
+            $t.Foreground = & $b "#8A6E50"
+            $t.Margin = New-Object Windows.Thickness 0, 4, 0, 0
+            [void]$u.ModChips.Children.Add($t)
+        }
+        foreach ($mod in $mods) {
+            if ($mod.Present) {
+                $chip = New-Object System.Windows.Controls.Primitives.ToggleButton
+                $chip.Style = $script:FL.Window.FindResource("ModChipToggle")
+                $chip.Content = [string]$mod.Name
+                $chip.Tag = [string]$mod.Folder
+                $chip.IsChecked = [bool]$mod.Enabled
+                $chip.ToolTip = & $script:FL.BuildModTooltip $mod
+                $folder = [string]$mod.Folder
+                $chip.Add_Checked({ param($s, $e) if ($s.Tag) { & $script:FL.SetModEnabled ([string]$s.Tag) $true } })
+                $chip.Add_Unchecked({ param($s, $e) if ($s.Tag) { & $script:FL.SetModEnabled ([string]$s.Tag) $false } })
+                if ($mod.Removable) {
+                    $menu = New-Object Windows.Controls.ContextMenu
+                    $item = New-Object Windows.Controls.MenuItem
+                    $item.Header = "Uninstall '$($mod.Name)'"
+                    $item.Tag = $folder
+                    $itemName = [string]$mod.Name
+                    $itemFolder = [string]$mod.Folder
+                    $item.Add_Click({
+                        $answer = [Windows.MessageBox]::Show(
+                            "Uninstall '$itemName' ($itemFolder)?`n`nThe folder data\yw2-recomp\mods\fantasylife\$itemFolder is deleted. This cannot be undone from the launcher.",
+                            "Uninstall mod", "YesNo", "Warning")
+                        if ($answer -ne "Yes") { return }
+                        try {
+                            $result = Remove-FLMod -Folder $itemFolder
+                            Write-FLLauncherLog "Uninstall: $($result.Message)"
+                            & $script:FL.ReloadMods
+                            & $script:FL.SetNotice "success" "Mod uninstalled" "$itemName was removed."
+                        } catch {
+                            & $script:FL.SetNotice "error" "Uninstall failed" $_.Exception.Message
+                        }
+                    }.GetNewClosure())
+                    $menu.Items.Add($item)
+                    $chip.ContextMenu = $menu
+                }
+                [void]$u.ModChips.Children.Add($chip)
+            } else {
+                $chip = New-Object Windows.Controls.Border
+                $chip.CornerRadius = New-Object Windows.CornerRadius 11
+                $chip.Padding = New-Object Windows.Thickness 11, 4, 11, 4
+                $chip.Margin = New-Object Windows.Thickness 0, 0, 6, 6
+                $chip.BorderThickness = New-Object Windows.Thickness 1
+                if ($mod.SourceOnly) {
+                    $chip.Background = & $b "#F3EEE4"; $chip.BorderBrush = & $b "#D6C7AE"
+                } else {
+                    $chip.Background = & $b "#FDE6DF"; $chip.BorderBrush = & $b "#E07A5F"
+                }
+                $t = New-Object Windows.Controls.TextBlock
+                $t.Text = $(if ($mod.SourceOnly) { "$($mod.Name) (source)" } else { "$($mod.Name) (missing)" })
+                $t.Foreground = & $b $(if ($mod.SourceOnly) { "#8A6E50" } else { "#8A3020" })
+                $t.FontSize = 12
+                $t.FontWeight = "SemiBold"
+                $chip.Child = $t
+                $chip.ToolTip = & $script:FL.BuildModTooltip $mod
+                [void]$u.ModChips.Children.Add($chip)
+            }
+        }
+    }
+
+    $script:FL.UpdatePlaySub = {
+        $u = $script:FL.UI
+        $mods = @($script:FL.Mods)
+        $total = $mods.Count
+        $loadable = @($mods | Where-Object { $_.Present -and -not $_.SourceOnly })
+        $enabledCount = @($loadable | Where-Object { $_.Enabled }).Count
+        if ($total -eq 0) {
+            $u.PlayModsSub.Text = "this build has no mods"
+        } elseif ($loadable.Count -eq 0) {
+            $u.PlayModsSub.Text = "no loadable mods"
+        } elseif ($enabledCount -eq 0) {
+            $u.PlayModsSub.Text = "all mods off (like vanilla)"
+        } elseif ($enabledCount -eq $loadable.Count -and $loadable.Count -eq $total) {
+            $u.PlayModsSub.Text = $(if ($total -eq 1) { "with 1 mod" } else { "with $total mods" })
+        } else {
+            $u.PlayModsSub.Text = "with $enabledCount of $total mods"
+        }
+    }
+
+    $script:FL.RefreshModState = {
+        $stack = Test-FLModStack -ModInfo ([pscustomobject]@{ Mods = $script:FL.Mods })
+        $script:FL.ModsBlocked = ($stack.Missing.Count -gt 0 -or $stack.Conflicts.Count -gt 0)
+        $script:FL.Conflicts = $stack.Conflicts
+        if ($stack.Conflicts.Count -gt 0) {
+            $c = $stack.Conflicts[0]
+            $extra = if ($stack.Conflicts.Count -gt 1) { " (+$(($stack.Conflicts.Count - 1)) more)" } else { "" }
+            $labelA = if ($c.NameA -eq $c.NameB) { $c.FolderA } else { $c.NameA }
+            $labelB = if ($c.NameA -eq $c.NameB) { $c.FolderB } else { $c.NameB }
+            & $script:FL.SetNotice "warn" "Mod conflict" "Mod conflict on resource $($c.Id): '$labelA' and '$labelB'$extra. Disable one or use a merged stack. Play is blocked until this is fixed."
+        } elseif ($stack.Missing.Count -gt 0) {
+            & $script:FL.SetNotice "error" "Some mods are missing" ("Missing: " + (@($stack.Missing | ForEach-Object { $_.Folder }) -join ", ") + ". Update the game, or disable the mod(s).")
+        }
+        & $script:FL.RefreshPlayButtons
+    }
+
+    $script:FL.ReloadMods = {
+        $modInfo = Get-FLMods -Config $script:FL.Config -LocalVersion $script:FL.LocalVersion
+        $script:FL.Mods = @($modInfo.Mods)
+        $script:FL.DisabledMods = @($modInfo.Prefs.disabled_mods)
+        $script:FL.UserMods = @($modInfo.Prefs.user_mods)
+        & $script:FL.RebuildChips
+        & $script:FL.UpdatePlaySub
+        & $script:FL.RefreshModState
+    }
+
+    & $script:FL.RebuildChips
+    & $script:FL.UpdatePlaySub
 
     $script:FL.RefreshPlayButtons = {
         $u = $script:FL.UI
         $u.PlayModsButton.IsEnabled = -not $script:FL.ModsBlocked
         $u.PlayVanillaButton.IsEnabled = $true
         $u.SettingsButton.IsEnabled = $true
+        $u.GameSettingsButton.IsEnabled = $true
         $u.FirewallButton.IsEnabled = $true
+        if ($u.AddModButton) { $u.AddModButton.IsEnabled = $true }
     }
     & $script:FL.RefreshPlayButtons
 
-    # Installed version line
-    if ($Config.IsTest) {
-        $ui.StatusDot.Fill = & $brush "#E4572E"
-        $ui.StatusTitle.Text = "Test build"
-        $parts = @()
-        if ($local -and $local.date) { $parts += "published " + (& $script:FL.FormatDate $local.date) }
-        $parts += "local only, never updates"
-        $ui.StatusDetail.Text = ($parts -join " - ")
-        $vt = @()
-        if ($local -and $local.label) { $vt += "Label: $($local.label)" }
-        if ($local -and $local.exe_sha256) { $vt += "exe $(([string]$local.exe_sha256).Substring(0, [Math]::Min(12, ([string]$local.exe_sha256).Length)))" }
-        $ui.VersionText.Text = ($vt -join "  |  ")
-    } else {
-        if ($local) {
-            $ui.StatusDetail.Text = "Installed build from " + (& $script:FL.FormatDate $local.updated_at)
-            $ui.VersionText.Text = "Build $($local.version)  |  mod digest $($local.mod_digest)"
-        } else {
-            $ui.StatusDetail.Text = "No version.json found."
-        }
-    }
-
     if ($modInfo.Note) { & $script:FL.SetNotice "warn" "Mod list" $modInfo.Note }
-    if ($missing.Count -gt 0) {
-        & $script:FL.SetNotice "error" "Some mods are missing" ("Missing: " + (@($missing | ForEach-Object { $_.Folder }) -join ", ") + ". Update the game, or play vanilla.")
-    }
+    & $script:FL.RefreshModState
     if ($AfterUpdate) {
         $now = if ($local -and $local.version) { [string]$local.version } else { "the latest build" }
         & $script:FL.SetNotice "success" "Updated!" "You are now on $now."
     }
 
     & $script:FL.LoadLogo
+
+    $script:FL.RefreshSetup = {
+        $u=$script:FL.UI
+        $u.RomStatus.Text='ROM Status: '+$(if (Get-FLRomPath) { 'Ready' } else { 'Select your decrypted EU dump' })
+        $u.DlcStatus.Text='DLC Status: '+$(if (Get-FLDlcPath) { 'Installed' } else { 'Optional — not installed' })
+    }
 
     # ---- update status -------------------------------------------------
     $script:FL.ApplyStatus = {
@@ -689,26 +1161,19 @@ function Show-FLLauncherWindow {
             }
             "Offline" {
                 $u.StatusDot.Fill = & $b "#B9A88E"
-                $u.StatusTitle.Text = "Couldn't check for updates"
-                $u.StatusDetail.Text = $Status.Message + " You can still play."
+                $u.StatusTitle.Text = "Couldn't check for updates (offline)"
                 $u.UpdateButtonText.Text = "Check again"
                 $u.UpdateButton.Visibility = "Visible"
             }
-            "Skipped" {
-                $u.StatusDot.Fill = & $b "#B9A88E"
-                $u.StatusTitle.Text = "Update check skipped"
-            }
             default {
                 $u.StatusDot.Fill = & $b "#B9A88E"
-                $u.StatusTitle.Text = "Updates not set up"
-                if ($Status.Message) { $u.StatusDetail.Text = $Status.Message }
+                if ($Status.Message) { $u.StatusTitle.Text = $Status.Message }
             }
         }
     }
 
     $script:FL.CheckUpdates = {
         $u = $script:FL.UI
-        $script:FL.StatusDone = $false
         $u.StatusDot.Fill = & $script:FL.Brush "#B9A88E"
         $u.StatusTitle.Text = "Checking for updates..."
         $u.UpdateButton.Visibility = "Collapsed"
@@ -719,6 +1184,65 @@ function Show-FLLauncherWindow {
             } else {
                 & $script:FL.ApplyStatus $Result
             }
+        }
+    }
+
+    # ---- update -------------------------------------------------------
+    $script:FL.RunUpdate = {
+        $u = $script:FL.UI
+        if ($script:FL.Status -and $script:FL.Status.State -eq "Offline") { & $script:FL.CheckUpdates; return }
+        if ((Get-FLRunningGames).Count -gt 0) {
+            & $script:FL.SetNotice "warn" "Close Fantasy Life first" "The game is still running from this install; close it, then update."
+            return
+        }
+        & $script:FL.SetBusy $true
+        $u.Notice.Visibility = "Collapsed"
+        $u.ProgressPanel.Visibility = "Visible"
+        $u.Progress.IsIndeterminate = $true
+        $u.ProgressText.Text = "Starting update..."
+        $u.StatusTitle.Text = "Updating..."
+        $script:FL.OldVersion = $(if ($script:FL.LocalVersion -and $script:FL.LocalVersion.version) { [string]$script:FL.LocalVersion.version } else { "previous" })
+        & $script:FL.StartJob "update" 'Invoke-FLUpdate -Config (Get-FLConfig) -Report $Report' $null {
+            param($Result, $ErrorText)
+            $u = $script:FL.UI
+            $u.ProgressPanel.Visibility = "Collapsed"
+            if ($Result -and $Result.Applied) {
+                Write-FLLauncherLog "Update: $($Result.Message)"
+                # play.ps1 and this window were replaced: restart the launcher from disk.
+                $u.StatusTitle.Text = "Updated - restarting the launcher..."
+                $ps = Join-Path $env:SystemRoot "System32\WindowsPowerShell\v1.0\powershell.exe"
+                $relaunch = @("-NoProfile", "-ExecutionPolicy", "Bypass", "-WindowStyle", "Hidden", "-File", "`"$PlayScript`"", "-Window", "-Hidden",
+                              "-AfterUpdate", "`"$($script:FL.OldVersion)`"")
+                if ($script:FL.SelectedSave) { $relaunch += @("-Save", $script:FL.SelectedSave) }
+                if ($script:FL.Preview) { $relaunch += "-Preview" }
+                Start-Process -FilePath $ps -ArgumentList $relaunch -WorkingDirectory $Here -WindowStyle Hidden
+                $script:FL.ExitCode = 0
+                $script:FL.Window.Close()
+                return
+            }
+            $msg = if ($Result) { $Result.Message } elseif ($ErrorText) { $ErrorText } else { "Unknown error." }
+            Write-FLLauncherLog "Update not applied: $msg"
+            & $script:FL.SetBusy $false
+            & $script:FL.SetNotice "warn" "Update not installed" "$msg You can still play the installed version."
+            & $script:FL.CheckUpdates
+        }
+    }
+
+    $script:FL.ImportGameFile = {
+        param($Kind)
+        if ($script:FL.Preview) { return }
+        $dlg=New-Object Microsoft.Win32.OpenFileDialog
+        $dlg.Filter=if ($Kind -eq 'rom') { 'Decrypted 3DS ROM (*.3ds)|*.3ds' } else { 'Decrypted DLC (*.cia)|*.cia' }
+        if (-not $dlg.ShowDialog($script:FL.Window)) { return }
+        & $script:FL.SetBusy $true
+        & $script:FL.SetNotice 'info' 'Preparing game files...' 'Validating and copying your dump. This can take a moment.'
+        & $script:FL.StartJob 'game-file' 'param($Kind,$Path) Install-FLGameFile -Kind $Kind -Path $Path' @{ Kind=$Kind; Path=$dlg.FileName } {
+            param($result,$errorText)
+            & $script:FL.SetBusy $false
+            if ($errorText) { & $script:FL.SetNotice 'error' 'Game file not added' $errorText }
+            else { & $script:FL.SetNotice 'success' 'Game file ready' ([string]$result) }
+            & $script:FL.RefreshSetup
+            & $script:FL.LoadLogo
         }
     }
 
@@ -738,7 +1262,23 @@ function Show-FLLauncherWindow {
             return
         }
         $mods = @()
-        if ($Kind -ne "vanilla") { $mods = @($script:FL.Mods | Where-Object { $_.Present } | ForEach-Object { $_.Path }) }
+        if ($Kind -ne "vanilla") {
+            $stack = Test-FLModStack -ModInfo ([pscustomobject]@{ Mods = $script:FL.Mods })
+            if ($stack.Conflicts.Count -gt 0) {
+                $c = $stack.Conflicts[0]
+                $extra = if ($stack.Conflicts.Count -gt 1) { " (+$(($stack.Conflicts.Count - 1)) more)" } else { "" }
+                $labelA = if ($c.NameA -eq $c.NameB) { $c.FolderA } else { $c.NameA }
+                $labelB = if ($c.NameA -eq $c.NameB) { $c.FolderB } else { $c.NameB }
+                & $script:FL.SetNotice "error" "Mod conflict" "Mod conflict on resource $($c.Id): '$labelA' and '$labelB'$extra. Disable one of the mods (or use a merged stack), then Play again."
+                Write-FLLauncherLog "Launch blocked: conflict on resource $($c.Id) between $($c.FolderA) and $($c.FolderB)"
+                return
+            }
+            if ($stack.Missing.Count -gt 0) {
+                & $script:FL.SetNotice "error" "Some mods are missing" ("Missing: " + (@($stack.Missing | ForEach-Object { $_.Folder }) -join ", ") + ". Update the game, or disable the mod(s).")
+                return
+            }
+            $mods = @($stack.Enabled | Where-Object { -not $_.SourceOnly } | ForEach-Object { $_.Path })
+        }
         & $script:FL.SavePrefs
         $save = $script:FL.SelectedSave
         $what = $(switch ($Kind) { "mods" { "with $($mods.Count) mod(s)" } "vanilla" { "vanilla (no mods)" } default { "game settings" } })
@@ -785,47 +1325,6 @@ function Show-FLLauncherWindow {
     }
 
     # ---- update -------------------------------------------------------
-    $script:FL.RunUpdate = {
-        $u = $script:FL.UI
-        if ($script:FL.Status -and $script:FL.Status.State -eq "Offline") { & $script:FL.CheckUpdates; return }
-        if ((Get-FLRunningGames).Count -gt 0) {
-            & $script:FL.SetNotice "warn" "Close Fantasy Life first" "The game is still running from this install; close it, then update."
-            return
-        }
-        & $script:FL.SetBusy $true
-        $u.Notice.Visibility = "Collapsed"
-        $u.ProgressPanel.Visibility = "Visible"
-        $u.Progress.IsIndeterminate = $true
-        $u.ProgressText.Text = "Starting update..."
-        $u.StatusTitle.Text = "Updating..."
-        $script:FL.OldVersion = $(if ($script:FL.LocalVersion -and $script:FL.LocalVersion.version) { [string]$script:FL.LocalVersion.version } else { "previous" })
-        & $script:FL.StartJob "update" 'Invoke-FLUpdate -Config (Get-FLConfig) -Report $Report' $null {
-            param($Result, $ErrorText)
-            $u = $script:FL.UI
-            $u.ProgressPanel.Visibility = "Collapsed"
-            if ($Result -and $Result.Applied) {
-                Write-FLLauncherLog "Update: $($Result.Message)"
-                # play.ps1 and this window were replaced: restart the launcher from disk.
-                $u.StatusTitle.Text = "Updated - restarting the launcher..."
-                $ps = Join-Path $env:SystemRoot "System32\WindowsPowerShell\v1.0\powershell.exe"
-                $relaunch = @("-NoProfile", "-ExecutionPolicy", "Bypass", "-WindowStyle", "Hidden", "-File", "`"$PlayScript`"", "-Window", "-Hidden",
-                              "-AfterUpdate", "`"$($script:FL.OldVersion)`"")
-                if ($script:FL.SelectedSave) { $relaunch += @("-Save", $script:FL.SelectedSave) }
-                if ($script:FL.Preview) { $relaunch += "-Preview" }
-                Start-Process -FilePath $ps -ArgumentList $relaunch -WorkingDirectory $Here -WindowStyle Hidden
-                $script:FL.ExitCode = 0
-                $script:FL.Window.Close()
-                return
-            }
-            $msg = if ($Result) { $Result.Message } elseif ($ErrorText) { $ErrorText } else { "Unknown error." }
-            Write-FLLauncherLog "Update not applied: $msg"
-            & $script:FL.SetBusy $false
-            & $script:FL.SetNotice "warn" "Update not installed" "$msg You can still play the installed version."
-            & $script:FL.CheckUpdates
-        }
-    }
-
-    # ---- firewall -------------------------------------------------------
     $script:FL.CheckFirewall = {
         $u = $script:FL.UI
         if ($script:FL.NoFirewall) { $u.NetText.Text = "Network check off"; return }
@@ -868,6 +1367,34 @@ if ($ok) { Remove-Item -LiteralPath (Join-Path $Here "data\yw2-recomp\firewall-d
         }
     }
 
+    # ---- mod install (Add Mod button + drag-and-drop) ------------------------
+    $script:FL.InstallModZip = {
+        param([string]$ZipPath)
+        if (-not $ZipPath) { return }
+        if ([IO.Path]::GetExtension($ZipPath).ToLowerInvariant() -ne ".zip") {
+            & $script:FL.SetNotice "warn" "Not a .zip" "Drop or pick a .zip file (a built overlay package, or a source mod when the build tools are available)."
+            return
+        }
+        if ((Test-FLZipNeedsArchive $ZipPath) -and -not (Confirm-FLModExtraction)) { return }
+        & $script:FL.SetBusy $true
+        $u = $script:FL.UI
+        $u.Notice.Visibility = "Collapsed"
+        & $script:FL.SetNotice "info" "Installing mod..." ([IO.Path]::GetFileName($ZipPath))
+        & $script:FL.StartJob "install-mod" 'param([string]$ZipPath) Install-FLModZip -ZipPath $ZipPath' @{ ZipPath = $ZipPath } {
+            param($Result, $ErrorText)
+            & $script:FL.SetBusy $false
+            if ($Result -and $Result.Ok) {
+                Write-FLLauncherLog "Install: $($Result.Message)"
+                & $script:FL.ReloadMods
+                & $script:FL.SetNotice "success" "Mod installed" "$($Result.Message) It is enabled; press Play to use it."
+            } else {
+                $msg = if ($Result) { $Result.Message } elseif ($ErrorText) { $ErrorText } else { "Unknown error." }
+                Write-FLLauncherLog "Install failed: $msg"
+                & $script:FL.SetNotice "error" "Mod not installed" $msg
+            }
+        }
+    }
+
     # ---- events -------------------------------------------------------
     $ui.Header.Add_MouseLeftButtonDown({ try { $script:FL.Window.DragMove() } catch {} })
     $ui.CloseButton.Add_Click({ $script:FL.Window.Close() })
@@ -876,8 +1403,11 @@ if ($ok) { Remove-Item -LiteralPath (Join-Path $Here "data\yw2-recomp\firewall-d
     $ui.NoticeAction.Add_Click({ if ($script:FL.NoticeAction) { & $script:FL.NoticeAction } })
     $ui.PlayModsButton.Add_Click({ & $script:FL.Launch "mods" })
     $ui.PlayVanillaButton.Add_Click({ & $script:FL.Launch "vanilla" })
-    $ui.SettingsButton.Add_Click({ & $script:FL.Launch "settings" })
+    $ui.SettingsButton.Add_Click({ Show-FLInputSettings -Preview:$script:FL.Preview })
+    $ui.GameSettingsButton.Add_Click({ & $script:FL.Launch "settings" })
     $ui.UpdateButton.Add_Click({ & $script:FL.RunUpdate })
+    $ui.SelectRomButton.Add_Click({ & $script:FL.ImportGameFile 'rom' })
+    $ui.AddDlcButton.Add_Click({ & $script:FL.ImportGameFile 'dlc' })
     $ui.FirewallButton.Add_Click({ & $script:FL.SetupFirewall })
     $ui.LogButton.Add_Click({
         $log = Get-FLLogFile $script:FL.SelectedSave
@@ -886,6 +1416,33 @@ if ($ok) { Remove-Item -LiteralPath (Join-Path $Here "data\yw2-recomp\firewall-d
         else { & $script:FL.SetNotice "info" "No log yet" "Logs appear in $(Join-Path $Here 'logs') after the first start." }
     })
     $ui.FolderButton.Add_Click({ Start-Process explorer.exe -ArgumentList "`"$Here`"" })
+    $ui.ManageModsButton.Add_Click({ Show-FLModManager })
+    $ui.AddModButton.Add_Click({
+        $dlg = New-Object Microsoft.Win32.OpenFileDialog
+        $dlg.Title = "Add a mod (.zip)"
+        $dlg.Filter = "Mod archives (*.zip)|*.zip|All files (*.*)|*.*"
+        $dlg.Multiselect = $true
+        if ($dlg.ShowDialog()) {
+            foreach ($f in $dlg.FileNames) { & $script:FL.InstallModZip $f }
+        }
+    })
+    $window.AllowDrop = $true
+    $window.Add_DragOver({
+        param($s, $e)
+        if ($e.Data.GetDataPresent([Windows.DataFormats]::FileDrop)) { $e.Effects = [Windows.DragDropEffects]::Copy; $e.Handled = $true }
+        else { $e.Effects = [Windows.DragDropEffects]::None }
+    })
+    $window.Add_Drop({
+        param($s, $e)
+        if (-not $e.Data.GetDataPresent([Windows.DataFormats]::FileDrop)) { return }
+        $files = @($e.Data.GetData([Windows.DataFormats]::FileDrop))
+        $zips = @($files | Where-Object { [IO.Path]::GetExtension($_).ToLowerInvariant() -eq ".zip" })
+        if ($zips.Count -eq 0) {
+            & $script:FL.SetNotice "warn" "Not a .zip" "Drop a .zip file (a built overlay package, or a source mod when the build tools are available)."
+            return
+        }
+        foreach ($f in $zips) { & $script:FL.InstallModZip $f }
+    })
     $window.Add_KeyDown({ param($s, $e) if ($e.Key -eq "Escape") { $script:FL.Window.Close() } })
 
     # Poll background jobs, progress messages and the running game.
@@ -925,8 +1482,10 @@ if ($ok) { Remove-Item -LiteralPath (Join-Path $Here "data\yw2-recomp\firewall-d
     })
     $timer.Start()
 
-    # ---- start-up work ------------------------------------------------------
+    # Startup uses local metadata and background checks.
+    & $script:FL.RefreshSetup
     $demo = $script:FL.Demo
+    if ($Preview -and -not $demo) { $demo = "offline" }
     if ($demo) {
         # Developer previews of each state (used for screenshots; never in normal use).
         switch ($demo) {
@@ -934,6 +1493,18 @@ if ($ok) { Remove-Item -LiteralPath (Join-Path $Here "data\yw2-recomp\firewall-d
             "offline"   { & $script:FL.ApplyStatus ([pscustomobject]@{ State = "Offline"; Message = "Offline or update server unreachable." }) }
             "updating"  { & $script:FL.ApplyStatus ([pscustomobject]@{ State = "Available"; Message = "" }); $ui.Notice.Visibility = "Collapsed"; $ui.ProgressPanel.Visibility = "Visible"; $ui.Progress.Value = 42; $ui.ProgressText.Text = "Downloading 31.4 / 74.9 MB"; $ui.StatusTitle.Text = "Updating..."; $ui.UpdateButton.Visibility = "Collapsed" }
             "error"     { & $script:FL.ApplyStatus ([pscustomobject]@{ State = "UpToDate"; Message = "" }); & $script:FL.SetNotice "error" "Fantasy Life closed with an error (code 1)" "The last lines of play.log:" "fatal: example error line from the game log`nmods: example" "Open log" { } }
+            "mods-off"  {
+                & $script:FL.ApplyStatus ([pscustomobject]@{ State = "UpToDate"; Message = "" })
+                # Mute the first present mod in memory only (screenshot of the
+                # "with N of M mods" subtitle; never writes launcher.json).
+                $first = @($script:FL.Mods | Where-Object { $_.Present -and -not $_.SourceOnly }) | Select-Object -First 1
+                if ($first) {
+                    $first.Enabled = $false
+                    $script:FL.DisabledMods = @($script:FL.DisabledMods + @($first.Folder) | Select-Object -Unique)
+                    & $script:FL.RebuildChips
+                    & $script:FL.UpdatePlaySub
+                }
+            }
             default     { & $script:FL.ApplyStatus ([pscustomobject]@{ State = "UpToDate"; Message = "" }) }
         }
         $ui.NetDot.Fill = & $brush "#58A83A"; $ui.NetText.Text = "Multiplayer network ready"
@@ -954,6 +1525,11 @@ if ($ok) { Remove-Item -LiteralPath (Join-Path $Here "data\yw2-recomp\firewall-d
         }
     }
 
+    $script:FL.ManagerPreview = [bool]$PreviewModManager
+    if ($PreviewModManager) { $window.Add_ContentRendered({ Show-FLModManager }) }
+    if ($Preview -and $script:FL.Demo -eq 'input') {
+        $window.Add_ContentRendered({ [void](Show-FLInputSettings -Preview) })
+    }
     if ($Screenshot) {
         $shotTimer = New-Object Windows.Threading.DispatcherTimer
         $shotTimer.Interval = [TimeSpan]::FromMilliseconds(400)
@@ -964,10 +1540,13 @@ if ($ok) { Remove-Item -LiteralPath (Join-Path $Here "data\yw2-recomp\firewall-d
             if ((-not $script:FL.StatusDone -or $script:FL.Jobs.Count -gt 0) -and $waited -lt 20) { return }
             $script:FL.ShotTimer.Stop()
             try {
-                $root = $script:FL.Window.Content
+                $targetWindow = $script:FL.Window
+                if ($script:FL.ManagerPreview -and $script:FLM) { $targetWindow = $script:FLM.Window }
+                if ($script:FL.Preview -and $script:FL.Demo -eq 'input' -and $script:FLInput) { $targetWindow=$script:FLInput.Window }
+                $root = $targetWindow.Content
                 $root.UpdateLayout()
-                $w = [int][Math]::Ceiling($script:FL.Window.ActualWidth)
-                $h = [int][Math]::Ceiling($script:FL.Window.ActualHeight)
+                $w = [int][Math]::Ceiling($targetWindow.ActualWidth)
+                $h = [int][Math]::Ceiling($targetWindow.ActualHeight)
                 $rtb = New-Object Windows.Media.Imaging.RenderTargetBitmap ($w, $h, 96, 96, [Windows.Media.PixelFormats]::Pbgra32)
                 $rtb.Render($root)
                 $enc = New-Object Windows.Media.Imaging.PngBitmapEncoder
@@ -977,6 +1556,7 @@ if ($ok) { Remove-Item -LiteralPath (Join-Path $Here "data\yw2-recomp\firewall-d
             } catch {
                 Write-FLLauncherLog "Screenshot failed: $($_.Exception.Message)"
             }
+            if ($script:FLInput -and $script:FLInput.Window) { $script:FLInput.Window.Close() }
             $script:FL.Window.Close()
         })
         $window.Add_ContentRendered({ $script:FL.ShotTimer.Start() })

@@ -1,0 +1,258 @@
+{
+  "format": "fl-mod-source-v1",
+  "name": "Castele Quiet House",
+  "notes": "Shopping District door05 to spare map 154. A furnished Castele room cloned from Steele's House (map 159/bundle 125), with its baked furniture, paired collision and lighting companions; no donor NPCs, shop or event triggers. Attic exit-only placement container is remapped to the donor threshold. Ordinary appended route 218 uses door selector 5; no native route_select call. No minimap tiles, like the donor. See docs/testing/castele-house.md for unverified gameplay acceptance.",
+  "edits": [
+    {
+      "resources": [
+        5966,
+        5967,
+        5968,
+        5969,
+        5970,
+        5971,
+        5972,
+        5973
+      ],
+      "row": 154,
+      "copy_from": 159,
+      "expect": {
+        "map_label": "HouseMap_019",
+        "bundle_index": 120,
+        "script_row": 109
+      },
+      "set": {
+        "map_label": "HouseMap_019",
+        "bundle_index": 120,
+        "script_row": 109,
+        "u_40": 154
+      },
+      "localized": {
+        "name": [
+          "Casa tranquila",
+          "Maison paisible",
+          "Ruhiges Haus",
+          "Quiet House",
+          "Casa tranquila",
+          "Maison paisible",
+          "Casa tranquilla",
+          "Quiet House"
+        ]
+      }
+    },
+    {
+      "resource": 8716,
+      "row": 120,
+      "copy_from": 125,
+      "expect": {
+        "resources": [
+          9002,
+          8997,
+          8998,
+          9003,
+          9004,
+          8996,
+          4294967295,
+          9001,
+          9000,
+          8999
+        ]
+      },
+      "set": {
+        "resources": [
+          9002,
+          8997,
+          8998,
+          9003,
+          9004,
+          8996,
+          4294967295,
+          9001,
+          9000,
+          8999
+        ]
+      }
+    },
+    {
+      "resource": 5965,
+      "row": "append",
+      "copy_from": 5,
+      "set": {
+        "map_pair": [
+          0,
+          154
+        ],
+        "u_06": [
+          5,
+          255
+        ],
+        "label": "Castele Shopping District <-> Quiet House"
+      }
+    }
+  ],
+  "copies": [
+    {
+      "resource": 9002,
+      "base": 9047
+    },
+    {
+      "resource": 8997,
+      "base": 9042
+    },
+    {
+      "resource": 8998,
+      "base": 9043
+    },
+    {
+      "resource": 9003,
+      "base": 9048
+    },
+    {
+      "resource": 9004,
+      "base": 9049
+    },
+    {
+      "resource": 8996,
+      "base": 9041
+    },
+    {
+      "resource": 9001,
+      "base": 9046
+    },
+    {
+      "resource": 9000,
+      "base": 9045
+    },
+    {
+      "resource": 8999,
+      "base": 9044
+    }
+  ],
+  "placements": [
+    {
+      "resource": 22761,
+      "experimental_growth": true,
+      "edits": [
+        {
+          "row": "append",
+          "copy_from": 7,
+          "expect": {
+            "map_id": 0,
+            "type": 3,
+            "reference": 5,
+            "flags": 0
+          },
+          "set": {
+            "uid": 67112958,
+            "linked_uid": 4294967295,
+            "reference": 218,
+            "position": [
+              -0.297203,
+              1.51,
+              -13.038182
+            ],
+            "yaw": 2.2951086481385907
+          },
+          "warp": {
+            "arrival_position": [
+              -0.806493,
+              1.51,
+              -12.5876
+            ],
+            "arrival_yaw": 5.436701301728384,
+            "aux_position": [
+              -1.795114,
+              1.51,
+              -11.71294
+            ],
+            "aux_yaw": 2.2951086481385907
+          }
+        }
+      ]
+    },
+    {
+      "resource": 21323,
+      "base": 21399,
+      "experimental_growth": true,
+      "map_groups": [
+        {
+          "map_id": 154,
+          "groups": []
+        }
+      ],
+      "edits": [
+        {
+          "row": 0,
+          "expect": {
+            "map_id": 161,
+            "type": 3,
+            "reference": 19,
+            "flags": 0
+          },
+          "set": {
+            "map_id": 154,
+            "reference": 218,
+            "uid": 72159230,
+            "linked_uid": 4294967295,
+            "position": [
+              0.0,
+              0.05000000447034836,
+              5.199999809265137
+            ],
+            "extent": [
+              1.0499999523162842,
+              0.5,
+              1.0
+            ],
+            "yaw": 0.0
+          },
+          "warp": {
+            "arrival_position": [
+              0.0,
+              0.06393560767173767,
+              3.1999998092651367
+            ],
+            "arrival_yaw": 3.1415927410125732,
+            "aux_position": [
+              0.0,
+              0.05000000447034836,
+              4.199999809265137
+            ],
+            "aux_extent": [
+              1.5499999523162842,
+              1.0,
+              2.0
+            ],
+            "aux_yaw": 0.0,
+            "flags": 0
+          }
+        }
+      ]
+    },
+    {
+      "resource": 21324,
+      "experimental_growth": true,
+      "map_groups": [
+        {
+          "map_id": 154,
+          "groups": []
+        }
+      ]
+    }
+  ],
+  "transitions": [
+    {
+      "route": 218,
+      "endpoints": [
+        {
+          "resource": 22761,
+          "uid": 67112958
+        },
+        {
+          "resource": 21323,
+          "uid": 72159230
+        }
+      ]
+    }
+  ]
+}

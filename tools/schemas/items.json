@@ -1,0 +1,248 @@
+{
+  "name": "items",
+  "resource_ids": [
+    6792,
+    6793,
+    6794,
+    6795,
+    6796,
+    6797,
+    6798,
+    6799,
+    6800
+  ],
+  "row_size": 28,
+  "columns": [
+    {
+      "name": "name",
+      "type": "utf16",
+      "type_id": 10,
+      "offset": 0,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "Localised item name. Placeholder rows keep Japanese names even in Western slots."
+    },
+    {
+      "name": "sort_key",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 4,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "medium",
+      "note": "Orders items inside a category (weapons 0..4 = weapon kind; others ascend)."
+    },
+    {
+      "name": "variant",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 6,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "Meaning unresolved; preserve."
+    },
+    {
+      "name": "category",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 8,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "0 weapons 153, 1 armour 750, 2 tools 175, 3 furniture 399, 4 consumables 623, 5 materials 459, 6 key items 30, 7 bounties 146. Rows are grouped by category; code reads this byte at row+8."
+    },
+    {
+      "name": "item_type",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 9,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "medium",
+      "note": "Sub-kind (85 sword, 105 helmet, 111 shield, 92 pickaxe, 26 water, 118 generic)."
+    },
+    {
+      "name": "required_level",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 10,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "medium",
+      "note": "0 = none; 5..100 otherwise (Origin Island clothing uses 30-40)."
+    },
+    {
+      "name": "stack_limit",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 11,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "1 for gear/furniture, 99 for consumables/materials."
+    },
+    {
+      "name": "icon_index",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 12,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "Row in the icon table (ids 8686-8694, 4995 rows); code reads this halfword at row+12. Placeholder items use 1 (\"Dummy\")."
+    },
+    {
+      "name": "quality_flag",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 14,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "0 or 3."
+    },
+    {
+      "name": "equip_slot",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 15,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "medium",
+      "note": "Equipment slot / tool kind (16 shield, 17 helmet, 33 talisman, 41 pickaxe); 255 = n/a."
+    },
+    {
+      "name": "u_16",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 16,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "1095/1096 (922 key items, 1145-1151 bounties). Not a DLC flag."
+    },
+    {
+      "name": "related_index",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 18,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "65535 none; furniture object index; mirrors u_16 for tools/key items."
+    },
+    {
+      "name": "tier",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 20,
+      "count": 1,
+      "bits": 4,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "0..5, 5 on most placeholder/junk rows."
+    },
+    {
+      "name": "flag_20_4",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 20,
+      "count": 1,
+      "bits": 1,
+      "shift": 4,
+      "confidence": "uncertain",
+      "note": "1 on almost all real items."
+    },
+    {
+      "name": "sell_price",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 20,
+      "count": 1,
+      "bits": 27,
+      "shift": 5,
+      "confidence": "high",
+      "note": "Dosh, 27-bit packed. HP Potion 30, Healweed 5."
+    },
+    {
+      "name": "buy_price",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 24,
+      "count": 1,
+      "bits": 27,
+      "shift": 0,
+      "confidence": "high",
+      "note": "Dosh, 27-bit packed at byte 24 bit 0. HP Potion 60."
+    },
+    {
+      "name": "flag_24_27",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 24,
+      "count": 1,
+      "bits": 1,
+      "shift": 27,
+      "confidence": "uncertain",
+      "note": "Set on key items."
+    },
+    {
+      "name": "flag_24_28",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 24,
+      "count": 1,
+      "bits": 1,
+      "shift": 28,
+      "confidence": "uncertain",
+      "note": "1 on real items; 0 on placeholders and bounties."
+    },
+    {
+      "name": "flag_24_29",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 24,
+      "count": 1,
+      "bits": 1,
+      "shift": 29,
+      "confidence": "uncertain",
+      "note": "Observed 0 on part of equipment incl. Origin Island pieces."
+    },
+    {
+      "name": "flag_24_30",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 24,
+      "count": 1,
+      "bits": 1,
+      "shift": 30,
+      "confidence": "uncertain",
+      "note": "1 on real tradable items."
+    },
+    {
+      "name": "flag_24_31",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 24,
+      "count": 1,
+      "bits": 1,
+      "shift": 31,
+      "confidence": "uncertain",
+      "note": "1 on real tradable items."
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "name": "item_descriptions",
+  "resource_ids": [
+    6810,
+    6811,
+    6812,
+    6813,
+    6814,
+    6815,
+    6816,
+    6817,
+    6818
+  ],
+  "row_size": 4,
+  "columns": [
+    {
+      "name": "description",
+      "type": "utf16",
+      "type_id": 10,
+      "offset": 0,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "Same row order as items; \\n shown as control tokens."
+    }
+  ]
+}

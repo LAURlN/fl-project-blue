@@ -1,0 +1,61 @@
+{
+  "name": "furniture_stats",
+  "resource_ids": [
+    6747,
+    6748,
+    6749,
+    6750,
+    6751,
+    6752,
+    6753,
+    6754,
+    6755
+  ],
+  "row_size": 6,
+  "columns": [
+    {
+      "name": "u_00",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 0,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    },
+    {
+      "name": "u_02",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 2,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    },
+    {
+      "name": "u_03",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 3,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    },
+    {
+      "name": "u_04",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 4,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    }
+  ]
+}

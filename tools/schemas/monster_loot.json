@@ -1,0 +1,163 @@
+{
+  "name": "monster_loot",
+  "resource_ids": [
+    6930
+  ],
+  "row_size": 36,
+  "columns": [
+    {
+      "name": "level_key",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 0,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "medium",
+      "note": "Level/special-variant key; entries grouped by monster_id."
+    },
+    {
+      "name": "monster_id",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 2,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "Monster definition index; contiguous ascending blocks walked by 0x332904, which reads the monster ID of the row after each row. 0xffff = terminator row (fl_mod appends one to a changed table)."
+    },
+    {
+      "name": "drop_threshold_0",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 4,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "medium",
+      "note": "Byte probability/threshold; 77/255 is about 30%, exact roll comparison untraced."
+    },
+    {
+      "name": "drop_threshold_1",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 5,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "medium",
+      "note": ""
+    },
+    {
+      "name": "drop_threshold_2",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 6,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "medium",
+      "note": ""
+    },
+    {
+      "name": "drop_threshold_3",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 7,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "medium",
+      "note": ""
+    },
+    {
+      "name": "drop_threshold_4",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 8,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "medium",
+      "note": ""
+    },
+    {
+      "name": "bounty_threshold",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 9,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "Often 255 on bounty-carrying monsters."
+    },
+    {
+      "name": "drop_item_0",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 12,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "Item ID, 0xffffffff none."
+    },
+    {
+      "name": "drop_item_1",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 16,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "Item ID, 0xffffffff none."
+    },
+    {
+      "name": "drop_item_2",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 20,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "Item ID, 0xffffffff none."
+    },
+    {
+      "name": "drop_item_3",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 24,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "Item ID, 0xffffffff none."
+    },
+    {
+      "name": "drop_item_4",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 28,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "Item ID, 0xffffffff none."
+    },
+    {
+      "name": "bounty_item",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 32,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "medium",
+      "note": "Bounty item ID; category-local row in bounty_stats describes turn-in rewards."
+    }
+  ]
+}

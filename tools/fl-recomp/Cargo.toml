@@ -1,0 +1,13 @@
+[package]
+name = "fl-recomp"
+version = "0.1.0"
+edition = "2021"
+description = "Clean-room ARM11 (ARMv6K + Thumb-1 + VFPv2) AOT translator for Fantasy Life EU v00"
+license = "UNLICENSED"
+publish = false
+
+[[bin]]
+name = "fl-recomp"
+path = "src/main.rs"
+
+[dependencies]

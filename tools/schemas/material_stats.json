@@ -1,0 +1,50 @@
+{
+  "name": "material_stats",
+  "resource_ids": [
+    6765,
+    6766,
+    6767,
+    6768,
+    6769,
+    6770,
+    6771,
+    6772,
+    6773
+  ],
+  "row_size": 8,
+  "columns": [
+    {
+      "name": "u_00",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 0,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    },
+    {
+      "name": "u_04",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 4,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    },
+    {
+      "name": "u_06",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 6,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    }
+  ]
+}

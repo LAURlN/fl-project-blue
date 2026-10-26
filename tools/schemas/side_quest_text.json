@@ -1,0 +1,39 @@
+{
+  "name": "side_quest_text",
+  "resource_ids": [
+    32662,
+    32663,
+    32664,
+    32665,
+    32666,
+    32667,
+    32668,
+    32669,
+    32670
+  ],
+  "row_size": 8,
+  "columns": [
+    {
+      "name": "title",
+      "type": "utf16",
+      "type_id": 10,
+      "offset": 0,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": ""
+    },
+    {
+      "name": "request_text",
+      "type": "utf16",
+      "type_id": 10,
+      "offset": 4,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "Request dialogue summary."
+    }
+  ]
+}

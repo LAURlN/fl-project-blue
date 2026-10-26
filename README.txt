@@ -1,3 +1,11 @@
+﻿CURRENT WINDOWS LAUNCHER - with updater and modding workspace
+
+The launcher window checks for updates and offers an "Update now" button (update source:
+update-config.env). Input / Controls edits keyboard and controller bindings. The Mod Manager
+installs mods from ZIPs or GameBanana. Installation and normal launch run in user space; only the
+optional Firewall button asks for Windows permission. Python 3.10+ (user installation) is needed
+for the modding tools in tools/ (see MODDING.md).
+
 Fantasy Life PC - Standalone Dual-OS (Windows + Linux) Auto-Updating Build
 ==========================================================================
 
@@ -9,9 +17,22 @@ Fantasy Life PC - Standalone Dual-OS (Windows + Linux) Auto-Updating Build
     (a few seconds; offline never blocks playing). When a new build is out you see
     "Update available" and an "Update now" button with a progress bar. Update
     before playing together: multiplayer needs everyone on the same build.
-  - "Play" starts the game with all mods of this build (shown as chips).
+  - "Play" starts the game with the mods that are switched on (chips in the
+    Mods row; click a chip to toggle a mod off/on - your choice is remembered
+    in data\yw2-recomp\launcher.json and shown as "with N of M mods").
   - "Play vanilla" starts the original game data without any mods.
     Vanilla players can play together; vanilla and modded players cannot.
+  - Add a mod: click "Add Mod (.zip)" (or drop a .zip onto the window).
+    Accepted: a built overlay package (overlay.json + resources/*.lz; a single
+    top-level folder is fine), or a source mod (mod.json) when the build tools
+    are available on this PC - otherwise the source zip is refused with a
+    message instead of installing something broken. Unsafe zips (path
+    traversal, .exe/.bat/.ps1/...) are rejected. User-installed mods can be
+    removed again with right-click -> Uninstall; mods that ship with the
+    build can only be toggled off, not uninstalled.
+  - If two switched-on mods replace the same resource, the launcher warns
+    ("Mod conflict on resource X: 'Mod A' and 'Mod B'") and blocks Play
+    until you disable one of them; the game would otherwise crash at startup.
   - Pick the save profile (Free Life / Story). The window remembers your choice.
   - Footer: Game settings (controls, resolution, online relay = the Clockwork
     launcher), Firewall (one admin prompt), Log, install folder.
@@ -192,12 +213,17 @@ example:
   sudo ufw allow 47830/udp
 (only needed on the player who hosts a relay).
 
-7. MODS
--------
-Mods are added through the launcher's Mod Manager (ZIP or GameBanana). Never upload source dumps or extracted
-game resources.
+7. MODDING
+----------
+The modding tools, format docs and native plugin headers are included in this package.
+Start with MODDING.md, then docs/modding-guide.md. Python 3.10+ is needed for the tools.
+Never upload source dumps or extracted game resources (extracted/ stays on your PC).
 Stable Windows play.ps1 reads version.json's mods array (old packages fall back
 to installed overlay folders); an empty array disables all packaged mods.
+Per-mod toggles, ZIP installs and the save profile live in
+data\yw2-recomp\launcher.json (disabled_mods / user_mods / save) and survive
+updates; the ZIP updater still mirrors data\yw2-recomp\mods, so re-add
+user-installed overlay ZIPs after a ZIP update (git updates keep them).
 For maintainers: -RebuildMods reads the source repo's mods/enabled.json in order,
 builds each source with fl_mod.py and checks the entire stack before continuing.
 The ordinary publish command mirrors every built overlay from FantasyLife-Windows
@@ -206,3 +232,35 @@ overlays, and records the exact set in version.json. From FantasyLife-USB, run:
   powershell -ExecutionPolicy Bypass -File .\publish-update.ps1 -Push
 Do not add -FromTest unless you intend to publish exactly the overlays listed by
 the test install's test-version.json; that mode replaces the package's mod set.
+
+MOD MANAGER, GAMEBANANA & MODPACKS
+  On the Mods card choose "Manage / GameBanana". Installed Mods & Modpacks
+  lets you enable mods, change load order with the arrows, open folders and
+  uninstall user-installed mods. Core mods can be disabled.
+  Browse GameBanana: enter a search (blank lists all), optionally filter the
+  category on the current page, then Search / Refresh. Use Prev / Next for
+  more results. Install fetches the download list; choose a file and select
+  Install selected file. Only HTTPS downloads and ZIP packages are supported.
+  Reinstall / Update replaces previous user installs after the new ZIP succeeds.
+  Fantasy Life game ID defaults to 22668; override FL_GAMEBANANA_GAME_ID in
+  your environment or update-config.env.
+
+  Add Mod / Modpack (.zip) accepts overlays, script.lua / scripts/*.lua,
+  plugin.dll / plugins/*.dll, combinations, and multi-folder modpacks.
+  Source projects (mod.json) are kept for building; they are not runtime mods.
+  ZIPs can have a wrapping folder. Packs use modpack.json:
+    {"format":"fl-modpack-v1","name":"My pack","mods":["first","second"]}
+  Without a manifest, sibling mod folders are installed alphabetically.
+  Existing folders receive a suffix; imports never overwrite local files.
+  Order/enabled state is recorded in data/yw2-recomp/mods-state.json;
+  launcher.json keeps disabled mods and user-install provenance.
+  Export Enabled as Modpack (.zip) bundles enabled folders in load order
+  with the manifest, ready to share or upload to GameBanana.
+  Merge Sources requires Python, a build-stack-capable fl_mod.py, extracted
+  fl_eu/archive and at least two enabled source projects. The merged overlay
+  replaces the enabled source data. Sources remain installed but disabled.
+  PowerShell helper: Export-FLModpackZip -OutputPath <new.zip> [-MergeSources].
+
+  Offline screenshots (never start the game):
+    powershell -ExecutionPolicy Bypass -File play.ps1 -Preview -Screenshot main.png
+    powershell -ExecutionPolicy Bypass -File play.ps1 -PreviewModManager -Screenshot manager.png

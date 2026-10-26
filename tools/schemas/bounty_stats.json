@@ -1,0 +1,281 @@
+{
+  "name": "bounty_stats",
+  "resource_ids": [
+    6783,
+    6784,
+    6785,
+    6786,
+    6787,
+    6788,
+    6789,
+    6790,
+    6791
+  ],
+  "row_size": 28,
+  "columns": [
+    {
+      "name": "bits_0_0",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 0,
+      "count": 1,
+      "bits": 1,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    },
+    {
+      "name": "bits_0_1",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 0,
+      "count": 1,
+      "bits": 1,
+      "shift": 1,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    },
+    {
+      "name": "bits_0_2",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 0,
+      "count": 1,
+      "bits": 1,
+      "shift": 2,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    },
+    {
+      "name": "bits_0_3",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 0,
+      "count": 1,
+      "bits": 1,
+      "shift": 3,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    },
+    {
+      "name": "bits_0_4",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 0,
+      "count": 1,
+      "bits": 1,
+      "shift": 4,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    },
+    {
+      "name": "bits_0_5",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 0,
+      "count": 1,
+      "bits": 1,
+      "shift": 5,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    },
+    {
+      "name": "bits_0_6",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 0,
+      "count": 1,
+      "bits": 1,
+      "shift": 6,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    },
+    {
+      "name": "bits_0_7",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 0,
+      "count": 1,
+      "bits": 1,
+      "shift": 7,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    },
+    {
+      "name": "bits_0_8",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 0,
+      "count": 1,
+      "bits": 1,
+      "shift": 8,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    },
+    {
+      "name": "bits_0_9",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 0,
+      "count": 1,
+      "bits": 1,
+      "shift": 9,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    },
+    {
+      "name": "bits_0_10",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 0,
+      "count": 1,
+      "bits": 1,
+      "shift": 10,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    },
+    {
+      "name": "bits_0_11",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 0,
+      "count": 1,
+      "bits": 1,
+      "shift": 11,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    },
+    {
+      "name": "bits_0_12",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 0,
+      "count": 1,
+      "bits": 1,
+      "shift": 12,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    },
+    {
+      "name": "bits_0_13",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 0,
+      "count": 1,
+      "bits": 1,
+      "shift": 13,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    },
+    {
+      "name": "bits_0_14",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 0,
+      "count": 1,
+      "bits": 1,
+      "shift": 14,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    },
+    {
+      "name": "bits_0_15",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 0,
+      "count": 1,
+      "bits": 1,
+      "shift": 15,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    },
+    {
+      "name": "bits_0_16",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 0,
+      "count": 1,
+      "bits": 1,
+      "shift": 16,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    },
+    {
+      "name": "bits_0_17",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 0,
+      "count": 1,
+      "bits": 1,
+      "shift": 17,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    },
+    {
+      "name": "bits_0_18",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 0,
+      "count": 1,
+      "bits": 1,
+      "shift": 18,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    },
+    {
+      "name": "bits_0_19",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 0,
+      "count": 1,
+      "bits": 1,
+      "shift": 19,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    },
+    {
+      "name": "bits_0_20",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 0,
+      "count": 1,
+      "bits": 1,
+      "shift": 20,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    },
+    {
+      "name": "drop_rates",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 4,
+      "count": 3,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "Percent chance of each drop slot; the three values sum to 100."
+    },
+    {
+      "name": "drop_items",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 12,
+      "count": 3,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "Item IDs dropped by this bounty target; 0xffffffff = none. Rows parallel the bounty block of items."
+    },
+    {
+      "name": "u_18",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 24,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "Unnamed."
+    }
+  ]
+}

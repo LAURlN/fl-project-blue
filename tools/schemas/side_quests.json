@@ -1,0 +1,218 @@
+{
+  "name": "side_quests",
+  "resource_ids": [
+    8715
+  ],
+  "row_size": 52,
+  "columns": [
+    {
+      "name": "dialogue_base_resource",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 0,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "JP dialogue base = 29062 + 9*row; the per-language slot adds 0..8."
+    },
+    {
+      "name": "chapter_group",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 4,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "medium",
+      "note": "0..3 (3 = post-game / Ancient content)."
+    },
+    {
+      "name": "client_npc",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 6,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "NPC index; same for all quests of one client."
+    },
+    {
+      "name": "start_map",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 8,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "Index into the map table (5966-5973)."
+    },
+    {
+      "name": "end_map",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 10,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": ""
+    },
+    {
+      "name": "requested_item",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 12,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "Item ID, 0xffffffff none."
+    },
+    {
+      "name": "alternate_requested_item",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 16,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "medium",
+      "note": "Alternative acceptable item."
+    },
+    {
+      "name": "requested_quality",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 20,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "255 any, 1 good quality..."
+    },
+    {
+      "name": "requested_monster",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 22,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "Set instead of requested_item on slaying quests."
+    },
+    {
+      "name": "requested_quantity",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 24,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": ""
+    },
+    {
+      "name": "reward_item",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 28,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "Item ID, 0xffffffff none."
+    },
+    {
+      "name": "reward_quantity",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 32,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": ""
+    },
+    {
+      "name": "reward_dosh",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 36,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "0xffffffff none."
+    },
+    {
+      "name": "reward_points",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 40,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "10..1520, grows with quest level (stars/bliss?)."
+    },
+    {
+      "name": "u_2a",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 42,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "Always 0."
+    },
+    {
+      "name": "prerequisite_quest",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 44,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "Row index of the quest that must be done first, 65535 none."
+    },
+    {
+      "name": "required_story_flag",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 46,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "Event flag (5417); 1931/1932 = chapter 8 completion labels."
+    },
+    {
+      "name": "minimum_level",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 48,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "medium",
+      "note": ""
+    },
+    {
+      "name": "u_31",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 49,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "100/50/30/10/0."
+    }
+  ]
+}

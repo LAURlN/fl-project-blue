@@ -1,0 +1,72 @@
+{
+  "name": "life_challenges",
+  "resource_ids": [
+    5810,
+    5820,
+    5821,
+    5822,
+    5823,
+    5824,
+    5825,
+    5826,
+    5827
+  ],
+  "row_size": 24,
+  "columns": [
+    {
+      "name": "title",
+      "type": "utf16",
+      "type_id": 10,
+      "offset": 0,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": ""
+    },
+    {
+      "name": "objective_type",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 4,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "medium",
+      "note": "0 none, 7 craft item, 9 catch/bring item, 10 craft N of a group..."
+    },
+    {
+      "name": "objective_parameters",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 6,
+      "count": 8,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "medium",
+      "note": "Type-dependent (item index or group id, count); 65535 unused."
+    },
+    {
+      "name": "life_id",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 22,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "medium",
+      "note": "Life namespace 0..20 incl. cut Lives (1 Treasure Hunter, 20 Farmer)."
+    },
+    {
+      "name": "rank",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 23,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "medium",
+      "note": "255 none."
+    }
+  ]
+}

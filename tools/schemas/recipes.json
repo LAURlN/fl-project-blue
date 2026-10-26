@@ -1,0 +1,277 @@
+{
+  "name": "recipes",
+  "resource_ids": [
+    8388,
+    8389,
+    8390,
+    8391,
+    8392
+  ],
+  "row_size": 68,
+  "columns": [
+    {
+      "name": "recipe_key",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 0,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "Not unique (blacksmith filler rows repeat 33000); do not use as a primary key."
+    },
+    {
+      "name": "difficulty",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 2,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "medium",
+      "note": "Crafting difficulty; grows with the rank/ingredient tier."
+    },
+    {
+      "name": "u_04",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 4,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "7/10/15/20."
+    },
+    {
+      "name": "u_06",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 6,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": ""
+    },
+    {
+      "name": "u_08",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 8,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": ""
+    },
+    {
+      "name": "u_0a",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 10,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": ""
+    },
+    {
+      "name": "u_0c",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 12,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": ""
+    },
+    {
+      "name": "experience",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 14,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "medium",
+      "note": "Life experience for crafting."
+    },
+    {
+      "name": "work_parameters",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 16,
+      "count": 2,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "Two equal halfwords (minigame length?)."
+    },
+    {
+      "name": "u_14",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 20,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": ""
+    },
+    {
+      "name": "rank_requirement",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 21,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "medium",
+      "note": "Rank of the Life needed; 16 = no rank (default/filler rows), 15 = special."
+    },
+    {
+      "name": "output_quantity",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 22,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "medium",
+      "note": "1 in every row."
+    },
+    {
+      "name": "quality_mode",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 23,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "medium",
+      "note": "1 = row yields four quality tiers."
+    },
+    {
+      "name": "allow_extra_material",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 24,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "medium",
+      "note": ""
+    },
+    {
+      "name": "ingredient_quantities",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 25,
+      "count": 3,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "Parallel to ingredients."
+    },
+    {
+      "name": "output_items",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 28,
+      "count": 4,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "Item IDs per quality tier (normal, good, great, perfect); 65535 = unused."
+    },
+    {
+      "name": "seasoning_items",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 36,
+      "count": 4,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "medium",
+      "note": "Cooking only: salt, ginger, butter, pepper... 65535 elsewhere."
+    },
+    {
+      "name": "ingredients",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 44,
+      "count": 3,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "Up to three item IDs; 65535 = unused."
+    },
+    {
+      "name": "u_32",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 50,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "169 default; otherwise 10-149 grouped by output kind."
+    },
+    {
+      "name": "category_tags",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 52,
+      "count": 4,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "Up to four tags (0 swords, 2/5 shields, 5 armour, 6/9 tools, 3/4/11 clothes); NOT Life IDs."
+    },
+    {
+      "name": "workbench",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 60,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "medium",
+      "note": "Workbench / station variant (differs per recipe table)."
+    },
+    {
+      "name": "category_icon_index",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 62,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "Icon-table row 4593-4612 = crafting category icon (\"Synthetic alchemy medicine\"...)."
+    },
+    {
+      "name": "unlock_rank",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 64,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "medium",
+      "note": "Life rank at which the recipe is learned (1..10, 16 none)."
+    },
+    {
+      "name": "required_flag",
+      "type": "u16",
+      "type_id": 2,
+      "offset": 66,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "Event flag (table 5417) that gates the recipe; 1963 = Origin Island expansion owned."
+    }
+  ]
+}

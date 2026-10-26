@@ -1,0 +1,8 @@
+{
+  "format": "fl-mod-source-v1",
+  "name": "Free Life",
+  "notes": "Experimental EU v00 new-game Story Mode / Free Life choice. New saves only; see docs/story-skip.md and docs/testing/story-skip.md. Version 2 also completes the Origin Island story when the game itself reports the DLC as owned (entitlement flag 1963 is only read). No DLC entitlement, ECFlag, table 5780 row or Bliss bonus purchase is granted.",
+  "story_skip": {
+    "version": 4
+  }
+}

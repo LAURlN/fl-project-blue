@@ -1,0 +1,310 @@
+{
+  "format": "fl-mod-source-v1",
+  "name": "Wooden Sword",
+  "notes": "Item 77 is the unused weapon placeholder ID_Item_weapon_dummy000020, built from the Squire's Sword (item 0) row data. Custom look: icon row 1879 (an unreferenced item-family icon of a cut dagger, '# Crystal knife', texture 16487; the three following cut-dagger icons 16488-16490 get the same art in case a dye offset is added) gets the painted icon art/icon.png; weapon appearance 1580 (unused DLC dummy one-handed sword 10, model 4122 + texture 4123) gets the new mesh art/sword_mesh.json on the Squire's Sword skeleton (3804) and the painted texture art/sword_texture.png in the Squire's Sword texture container (3805). Sold in Castele's weapon and armour shop (8405); crafted at the Carpenter bench from 2 Oak Logs (carpentry row 228 was an unused Barrel filler row). See docs/modding-guide.md.",
+  "edits": [
+    {
+      "resources": [
+        6702,
+        6703,
+        6704,
+        6705,
+        6706,
+        6707,
+        6708,
+        6709,
+        6710
+      ],
+      "row": 77,
+      "copy_from": 0,
+      "expect": {
+        "symbolic_id": "ID_Item_weapon_dummy000020"
+      },
+      "set": {
+        "symbolic_id": "ID_Item_mod_wooden_sword"
+      }
+    },
+    {
+      "resources": [
+        6792,
+        6793,
+        6794,
+        6795,
+        6796,
+        6797,
+        6798,
+        6799,
+        6800
+      ],
+      "row": 77,
+      "copy_from": 0,
+      "expect": {
+        "category": 0,
+        "item_type": 118,
+        "icon_index": 1
+      },
+      "set": {
+        "buy_price": 150,
+        "sell_price": 10,
+        "icon_index": 1879
+      },
+      "localized": {
+        "name": [
+          "木の剣",
+          "Espada de madera",
+          "Épée en bois",
+          "Holzschwert",
+          "Wooden Sword",
+          "Espada de madera",
+          "Épée en bois",
+          "Spada di legno",
+          "Wooden Sword"
+        ]
+      }
+    },
+    {
+      "resources": [
+        6801,
+        6802,
+        6803,
+        6804,
+        6805,
+        6806,
+        6807,
+        6808,
+        6809
+      ],
+      "row": 77,
+      "copy_from": 0,
+      "expect": {
+        "source_3": "----"
+      },
+      "set": {
+        "source_1": "クルブルク 武器と防具の店",
+        "source_2": "大工のレシピ",
+        "source_3": "----",
+        "source_4": "----"
+      }
+    },
+    {
+      "resources": [
+        6810,
+        6811,
+        6812,
+        6813,
+        6814,
+        6815,
+        6816,
+        6817,
+        6818
+      ],
+      "row": 77,
+      "copy_from": 0,
+      "expect": {},
+      "localized": {
+        "description": [
+          [
+            "樫の木から削り出した素朴な剣。",
+            {
+              "control": "ffff"
+            },
+            {
+              "control": "f0ffffff04000000"
+            },
+            "軽くて安いが、とげには注意。"
+          ],
+          [
+            "Una sencilla espada tallada en roble.",
+            {
+              "control": "ffff"
+            },
+            {
+              "control": "f0ffffff04000000"
+            },
+            "Ligera, barata y casi sin astillas."
+          ],
+          [
+            "Une simple épée taillée dans du chêne.",
+            {
+              "control": "ffff"
+            },
+            {
+              "control": "f0ffffff04000000"
+            },
+            "Légère, bon marché et presque sans échardes."
+          ],
+          [
+            "Ein schlichtes Schwert aus Eichenholz.",
+            {
+              "control": "ffff"
+            },
+            {
+              "control": "f0ffffff04000000"
+            },
+            "Leicht, günstig und fast splitterfrei."
+          ],
+          [
+            "A plain sword whittled from oak.",
+            {
+              "control": "f0ffffff04000000"
+            },
+            "Light, cheap and almost splinter-free."
+          ],
+          [
+            "Una sencilla espada tallada en roble.",
+            {
+              "control": "ffff"
+            },
+            {
+              "control": "f0ffffff04000000"
+            },
+            "Ligera, barata y casi sin astillas."
+          ],
+          [
+            "Une simple épée taillée dans du chêne.",
+            {
+              "control": "ffff"
+            },
+            {
+              "control": "f0ffffff04000000"
+            },
+            "Légère, bon marché et presque sans échardes."
+          ],
+          [
+            "Una semplice spada intagliata nel rovere.",
+            {
+              "control": "ffff"
+            },
+            {
+              "control": "f0ffffff04000000"
+            },
+            "Leggera, economica e quasi senza schegge."
+          ],
+          [
+            "A plain sword whittled from oak.",
+            {
+              "control": "f0ffffff04000000"
+            },
+            "Light, cheap and almost splinter-free."
+          ]
+        ]
+      }
+    },
+    {
+      "resources": [
+        6720,
+        6721,
+        6722,
+        6723,
+        6724,
+        6725,
+        6726,
+        6727,
+        6728
+      ],
+      "row": 77,
+      "copy_from": 0,
+      "expect": {
+        "attack": 0,
+        "u_0a": 65535
+      },
+      "set": {
+        "attack": 4,
+        "u_0a": 1580
+      }
+    },
+    {
+      "resources": [
+        8686,
+        8687,
+        8688,
+        8689,
+        8690,
+        8691,
+        8692,
+        8693,
+        8694
+      ],
+      "row": 1879,
+      "expect": {
+        "icon_id": 16487
+      }
+    },
+    {
+      "resource": 8714,
+      "row": 1580,
+      "expect": {
+        "c01": "配信用ダミー・片手剣　１０"
+      }
+    },
+    {
+      "resource": 8405,
+      "row": "append",
+      "copy_from": 3,
+      "set": {
+        "stock_tier": 1,
+        "item_id": 77
+      }
+    },
+    {
+      "resource": 8390,
+      "row": 228,
+      "copy_from": 14,
+      "expect": {
+        "recipe_key": 41770,
+        "rank_requirement": 16,
+        "unlock_rank": 16
+      },
+      "set": {
+        "recipe_key": 20990,
+        "ingredients": [
+          2127,
+          65535,
+          65535
+        ],
+        "ingredient_quantities": [
+          2,
+          0,
+          0
+        ],
+        "output_items": [
+          77,
+          65535,
+          65535,
+          65535
+        ],
+        "category_tags": [
+          0,
+          11,
+          65535,
+          65535
+        ]
+      }
+    }
+  ],
+  "textures": [
+    {
+      "resources": [
+        16487,
+        16488,
+        16489,
+        16490
+      ],
+      "png": "art/icon.png"
+    },
+    {
+      "resource": 4123,
+      "base": 3805,
+      "png": "art/sword_texture.png",
+      "format": "etc1",
+      "mips": 1
+    }
+  ],
+  "models": [
+    {
+      "resource": 4122,
+      "base": 3804,
+      "mesh": "art/sword_mesh.json"
+    }
+  ]
+}

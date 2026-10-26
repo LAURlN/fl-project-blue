@@ -19,18 +19,13 @@ param(
     [switch]$LibraryOnly,
     # Developer: open the window but never start the game; optionally save a PNG of it.
     [switch]$Preview,
+    [switch]$PreviewModManager,
     [string]$Screenshot = ""
 )
 
-# Fantasy Life PC launcher.
-#
-#   play.bat / desktop shortcut     -> launcher window (update, play with mods, play vanilla)
-#   play.ps1 -Direct [flags]        -> play right away without the window (old behaviour,
-#                                      including the update check unless -NoUpdate)
-#   play.ps1 -Vanilla | -Launcher | -NoLaunch | -SetupFirewall  -> direct mode as well
-#
-# The update logic never touches game/, saves/, logs/, settings.ini or console_id,
-# never runs git clean, and never blocks the launch when offline.
+# Fantasy Life PC launcher: local setup, controls, mods and user-space launching.
+# No automatic update checks or elevation. Firewall setup is an explicit UI action.
+# -NoUpdate remains accepted for compatibility with existing shortcuts.
 
 $ErrorActionPreference = "Stop"
 $Here = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -92,6 +87,46 @@ function Read-FLJson {
     try { return (Get-Content -LiteralPath $Path -Raw | ConvertFrom-Json) } catch { return $null }
 }
 
+# Launcher preferences (data\yw2-recomp\launcher.json): the selected save profile,
+# mods the player toggled off (disabled_mods), and folders installed from ZIPs
+# (user_mods). Read-merge-write always, so the window, install/uninstall helpers
+# and background jobs never clobber keys the other side owns.
+function Read-FLPrefs {
+    param([string]$Path = (Join-Path $Here "data\yw2-recomp\launcher.json"))
+    $obj = Read-FLJson $Path
+    $save = "freelife"
+    $disabled = @()
+    $user = @()
+    if ($obj) {
+        if ($obj.PSObject.Properties.Name -contains "save" -and $obj.save) { $save = [string]$obj.save }
+        if ($obj.PSObject.Properties.Name -contains "disabled_mods" -and $obj.disabled_mods) {
+            $disabled = @($obj.disabled_mods | Where-Object { $_ -is [string] } | ForEach-Object { [string]$_ })
+        }
+        if ($obj.PSObject.Properties.Name -contains "user_mods" -and $obj.user_mods) {
+            $user = @($obj.user_mods | Where-Object { $_ -is [string] } | ForEach-Object { [string]$_ })
+        }
+    }
+    return [pscustomobject]@{ save = $save; disabled_mods = $disabled; user_mods = $user }
+}
+
+function Write-FLPrefs {
+    param([string]$Path, $Prefs)
+    $obj = [ordered]@{
+        save          = [string]$Prefs.save
+        disabled_mods = @($Prefs.disabled_mods)
+        user_mods     = @($Prefs.user_mods)
+    }
+    New-Item -ItemType Directory -Path (Split-Path -Parent $Path) -Force | Out-Null
+    [IO.File]::WriteAllText($Path, ($obj | ConvertTo-Json), (New-Object Text.UTF8Encoding($false)))
+    $statePath = Join-Path $Here "data\yw2-recomp\mods-state.json"
+    $state = Read-FLJson $statePath
+    if ($state -and $state.order) { Set-FLModOrder @($state.order) }
+}
+
+function Get-FLPrefsPath {
+    return (Join-Path $Here "data\yw2-recomp\launcher.json")
+}
+
 # What is installed: stable version.json or test-version.json.
 function Get-FLLocalVersion {
     param($Config)
@@ -99,19 +134,27 @@ function Get-FLLocalVersion {
     return Read-FLJson (Join-Path $Here "version.json")
 }
 
-# The mod overlays this build plays with. Each entry has Folder, Name (from
-# overlay.json), Path and Present. Per-mod picking can later filter this list.
+# What is installed: stable version.json or test-version.json, unioned with
+# every overlay folder actually on disk (so user-installed mods always show up
+# in the Mod Manager). Each entry has Folder, Name (from overlay.json or
+# mod.json), Path, Present (a built overlay.json exists), SourceOnly (only an
+# unbuilt mod.json), Listed (in the manifest's mods array), Author, Version,
+# Enabled (not in launcher.json's disabled_mods) and Shipped (part of the
+# build's manifest, i.e. core).
 function Get-FLMods {
     param($Config, $LocalVersion)
     $modRoot = Join-Path $Here "data\yw2-recomp\mods\fantasylife"
     $names = @()
     $note = ""
+    $haveList = $false
     if ($Config.IsTest) {
-        if ($LocalVersion -and $LocalVersion.mods) { $names = @($LocalVersion.mods) }
+        if ($LocalVersion -and ($LocalVersion.PSObject.Properties.Name -contains "mods") -and $LocalVersion.mods) {
+            $names = @($LocalVersion.mods)
+            $haveList = $true
+        }
     } else {
         # An explicit empty list means vanilla. Missing/old manifests fall back
         # to installed overlays; never infer fixed names from a build date.
-        $haveList = $false
         $manifest = Read-FLJson (Join-Path $Here "version.json")
         if ($manifest -and ($manifest.PSObject.Properties.Name -contains "mods")) {
             try {
@@ -129,23 +172,508 @@ function Get-FLMods {
         }
         if (-not $haveList) {
             $names = @(Get-ChildItem -LiteralPath $modRoot -Directory -ErrorAction SilentlyContinue |
-                Where-Object { Test-Path -LiteralPath (Join-Path $_.FullName "overlay.json") } |
+                Where-Object { Test-FLModFolder $_.FullName } |
                 Sort-Object Name | ForEach-Object { $_.Name })
         }
     }
+    $prefs = Read-FLPrefs
+    $manifestSet = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
+    foreach ($n in $names) { [void]$manifestSet.Add([string]$n) }
+    $userSet = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
+    foreach ($u in @($prefs.user_mods)) { [void]$userSet.Add([string]$u) }
+    $disabledSet = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
+    foreach ($d in @($prefs.disabled_mods)) { [void]$disabledSet.Add([string]$d) }
+    # Union manifest order first, then any extra installed folder (sorted) so
+    # user-installed mods are always visible and toggleable.
+    $extra = @(Get-ChildItem -LiteralPath $modRoot -Directory -ErrorAction SilentlyContinue |
+        Where-Object { -not $manifestSet.Contains($_.Name) } | Sort-Object Name | ForEach-Object { $_.Name })
+    $all = @($names) + @($extra)
+    $state = Read-FLJson (Join-Path $Here "data\yw2-recomp\mods-state.json")
+    if ($state -and $state.order) {
+        $all = @(@($state.order | Where-Object { $all -contains $_ }) + @($all | Where-Object { $state.order -notcontains $_ }) | Select-Object -Unique)
+    }
     $mods = @()
-    foreach ($folder in $names) {
+    foreach ($folder in $all) {
         $path = Join-Path $modRoot $folder
+        if ($folder -notmatch '^[a-zA-Z0-9][a-zA-Z0-9._-]*$') { continue }
+        if (-not (Test-FLModFolder $path) -and -not $manifestSet.Contains([string]$folder)) { continue }
         $overlay = Read-FLJson (Join-Path $path "overlay.json")
-        $display = if ($overlay -and $overlay.name) { [string]$overlay.name } else { [string]$folder }
+        $gb = Read-FLJson (Join-Path $path "gamebanana.json")
+        $lua = (Test-Path -LiteralPath (Join-Path $path "script.lua")) -or @(Get-ChildItem -Path (Join-Path $path "scripts\*.lua") -File -ErrorAction SilentlyContinue).Count -gt 0
+        $plugin = (Test-Path -LiteralPath (Join-Path $path "plugin.dll")) -or @(Get-ChildItem -Path (Join-Path $path "plugins\*.dll") -File -ErrorAction SilentlyContinue).Count -gt 0
+        $kinds = @()
+        if ($overlay) { if (@($overlay.sources).Count -gt 1) { $kinds += "Merged Stack" } else { $kinds += "Overlay" } }
+        if ($lua) { $kinds += "Lua Script" }
+        if ($plugin) { $kinds += "Plugin" }
+        if (-not $kinds.Count) { $kinds += "Source" }
+        $source = $null
+        if (-not $overlay) { $source = Read-FLJson (Join-Path $path "mod.json") }
+        $display = if ($overlay -and $overlay.name) { [string]$overlay.name }
+                   elseif ($source -and $source.name) { [string]$source.name }
+                   elseif ($gb -and $gb.mod_name) { [string]$gb.mod_name }
+                   else { [string]$folder }
+        $author = ""
+        if ($overlay -and ($overlay.PSObject.Properties.Name -contains "author") -and $overlay.author) { $author = [string]$overlay.author }
+        elseif ($source -and ($source.PSObject.Properties.Name -contains "author") -and $source.author) { $author = [string]$source.author }
+        $version = ""
+        if ($overlay -and ($overlay.PSObject.Properties.Name -contains "version") -and $overlay.version) { $version = [string]$overlay.version }
+        elseif ($source -and ($source.PSObject.Properties.Name -contains "version") -and $source.version) { $version = [string]$source.version }
+        $shipped = $manifestSet.Contains([string]$folder)
+        # Core protection: manifest mods stay until the manifest drops them;
+        # without a manifest only ZIP-installed folders (user_mods) are removable.
+        $removable = if ($haveList) { (-not $shipped) -or $userSet.Contains([string]$folder) } else { $userSet.Contains([string]$folder) }
+        # Default enabled: manifest mods always; with a manifest, extra folders
+        # only when the player installed them (user_mods) or already enabled
+        # them; without a manifest every installed overlay is the mod list.
+        $defaultOn = if ($haveList) { $shipped -or $userSet.Contains([string]$folder) } else { $true }
         $mods += [pscustomobject]@{
-            Folder  = [string]$folder
-            Name    = $display
-            Path    = $path
-            Present = [bool]$overlay
+            Kind       = $kinds -join " + "
+            Submitter  = $(if ($gb) { [string]$gb.submitter } elseif ($overlay) { [string]$overlay.submitter })
+            GameBananaId = $(if ($gb) { $gb.mod_id } elseif ($overlay) { $overlay.GameBananaId })
+            FileId     = $(if ($gb) { $gb.file_id } elseif ($overlay) { $overlay.FileId })
+            Description = $(if ($gb -and $gb.description) { [string]$gb.description } elseif ($overlay) { [string]$overlay.description })
+            Folder     = [string]$folder
+            Name       = $display
+            Path       = $path
+            Present    = ([bool]$overlay -or $lua -or $plugin)
+            SourceOnly = (-not $overlay -and -not $lua -and -not $plugin) -and [bool]$source
+            Listed     = $shipped
+            Author     = $author
+            Version    = $version
+            Enabled    = $defaultOn -and (-not $disabledSet.Contains([string]$folder))
+            Shipped    = $shipped
+            Removable  = [bool]$removable
         }
     }
-    return [pscustomobject]@{ Mods = $mods; Note = $note }
+    return [pscustomobject]@{ Mods = $mods; Note = $note; Prefs = $prefs }
+}
+
+# Enabled overlay stack check, matching fl_mod.py check-stack and the runtime
+# (port/runtime/src/games/fantasylife/mods.cpp): any resource id (resources[].id
+# or a virtual_sizes key) claimed by two enabled folders is fatal. A single
+# pre-merged overlay folder trivially has no pairwise conflicts. Returns an
+# array of collisions: Id, Kind ("resource"|"virtual"), FolderA/NameA (first
+# claim, load order), FolderB/NameB.
+function Get-FLModConflicts {
+    param([object[]]$Mods)
+    $claim = @{}
+    $conflicts = @()
+    foreach ($mod in @($Mods)) {
+        if (-not $mod -or -not $mod.Present) { continue }
+        $overlay = Read-FLJson (Join-Path $mod.Path "overlay.json")
+        if (-not $overlay) { continue }
+        $ids = New-Object System.Collections.Generic.List[object]
+        if ($overlay.PSObject.Properties.Name -contains "resources" -and $overlay.resources) {
+            foreach ($r in @($overlay.resources)) {
+                if ($null -ne $r -and ($r.PSObject.Properties.Name -contains "id") -and $null -ne $r.id) {
+                    $ids.Add(@{ Id = [int]$r.id; Kind = "resource" })
+                }
+            }
+        }
+        if ($overlay.PSObject.Properties.Name -contains "virtual_sizes" -and $overlay.virtual_sizes) {
+            foreach ($p in $overlay.virtual_sizes.PSObject.Properties) {
+                $vid = 0
+                if ([int]::TryParse([string]$p.Name, [ref]$vid)) { $ids.Add(@{ Id = $vid; Kind = "virtual" }) }
+            }
+        }
+        foreach ($entry in $ids) {
+            $key = [string]$entry.Id
+            if ($claim.ContainsKey($key)) {
+                $prev = $claim[$key]
+                $conflicts += [pscustomobject]@{
+                    Id = $entry.Id; Kind = $entry.Kind
+                    FolderA = $prev.Folder; NameA = $prev.Name
+                    FolderB = [string]$mod.Folder; NameB = [string]$mod.Name
+                }
+            } else {
+                $claim[$key] = @{ Folder = [string]$mod.Folder; Name = [string]$mod.Name }
+            }
+        }
+    }
+    return $conflicts
+}
+
+# One call for launch decisions: enabled+present mods, pairwise conflicts, and
+# listed+enabled mods whose overlay is missing (source-only mods never block).
+function Test-FLModStack {
+    param($ModInfo)
+    $mods = @($ModInfo.Mods)
+    $enabled = @($mods | Where-Object { $_.Enabled -and $_.Present })
+    $conflicts = @(Get-FLModConflicts -Mods $enabled)
+    $missing = @($mods | Where-Object { $_.Listed -and $_.Enabled -and -not $_.Present -and -not $_.SourceOnly })
+    return [pscustomobject]@{
+        Enabled   = $enabled
+        Conflicts = $conflicts
+        Missing   = $missing
+        Blocked   = ($conflicts.Count -gt 0 -or $missing.Count -gt 0)
+    }
+}
+
+# Sibling-discovery for the source-mod build toolchain (same pattern as
+# Get-FLRomPath / Get-FLExePath). $null when python, fl_mod.py or the
+# extracted archive is unavailable (standalone end-user package).
+function Get-FLModToolchain {
+    $python = $null
+    foreach ($cmd in @("python", "py", "python3")) {
+        $c = Get-Command $cmd -ErrorAction SilentlyContinue
+        if ($c -and $c.Source -and $c.Source -notmatch "WindowsApps") { $python = $c.Source; break }
+    }
+    if (-not $python) { return $null }
+    $flMod = $null
+    foreach ($candidate in @(
+        (Join-Path $Here "tools\fl_mod.py"),
+        (Join-Path $Here "..\..\fl-wt\mod-stack\tools\fl_mod.py"),
+        (Join-Path $Here "..\fl-project-blue\tools\fl_mod.py"),
+        (Join-Path $Here "..\..\fl-project-blue\tools\fl_mod.py")
+    )) {
+        if (Test-Path -LiteralPath $candidate -PathType Leaf) { $flMod = (Resolve-Path -LiteralPath $candidate).Path; break }
+    }
+    if (-not $flMod) { return $null }
+    $archive = $null
+    foreach ($candidate in @(
+        (Join-Path $Here "extracted\fl_eu\archive"),
+        (Join-Path $Here "..\fl-project-blue\extracted\fl_eu\archive"),
+        (Join-Path $Here "..\..\fl-project-blue\extracted\fl_eu\archive")
+    )) {
+        if (Test-Path -LiteralPath $candidate -PathType Container) { $archive = (Resolve-Path -LiteralPath $candidate).Path; break }
+    }
+    if (-not $archive) { $archive = Join-Path $Here "extracted\fl_eu\archive" }
+    return [pscustomobject]@{ Python = $python; FlMod = $flMod; Archive = $archive }
+}
+
+function ConvertTo-FLModSlug {
+    param([string]$Name)
+    $slug = ([string]$Name).Trim() -replace '[^a-zA-Z0-9._-]', '-'
+    $slug = $slug -replace '-{2,}', '-'
+    $slug = $slug.Trim('.', '-', '_')
+    if (-not $slug -or $slug -notmatch '^[a-zA-Z0-9]') { $slug = "mod" }
+    if ($slug.Length -gt 64) { $slug = $slug.Substring(0, 64) }
+    if ($slug -notmatch '^[a-zA-Z0-9][a-zA-Z0-9._-]*$') { $slug = "mod-" + [Guid]::NewGuid().ToString("N").Substring(0, 8) }
+    return $slug
+}
+
+function Test-FLModFolder {
+    param([string]$Path)
+    foreach ($leaf in @("overlay.json", "script.lua", "plugin.dll", "mod.json")) {
+        if (Test-Path -LiteralPath (Join-Path $Path $leaf) -PathType Leaf) { return $true }
+    }
+    return (@(Get-ChildItem -Path (Join-Path $Path "scripts\*.lua"), (Join-Path $Path "plugins\*.dll") -File -ErrorAction SilentlyContinue).Count -gt 0)
+}
+
+function Set-FLModOrder {
+    param([string[]]$Folders)
+    $path = Join-Path $Here "data\yw2-recomp\mods-state.json"
+    $state = Read-FLJson $path
+    if (-not $state) { $state = [pscustomobject]@{} }
+    $state | Add-Member NoteProperty order @($Folders | Select-Object -Unique) -Force
+    New-Item -ItemType Directory -Path (Split-Path $path) -Force | Out-Null
+    $disabled = @((Read-FLPrefs).disabled_mods)
+    $state | Add-Member NoteProperty enabled @($Folders | Where-Object { $disabled -notcontains $_ }) -Force
+    $state | ConvertTo-Json -Depth 20 | Set-Content -LiteralPath $path -Encoding UTF8
+}
+
+# Validate and stage every constituent before publishing. Never overwrite installs.
+function Install-FLModZip {
+    param([Parameter(Mandatory = $true)][string]$ZipPath, [string]$DefaultName = "")
+    $stage = Join-Path ([IO.Path]::GetTempPath()) ("fl-mod-" + [guid]::NewGuid().ToString("N"))
+    $root = Join-Path $Here "data\yw2-recomp\mods\fantasylife"
+    $published = @(); $zip = $null
+    $prefsPath = Get-FLPrefsPath
+    $prefsBefore = $null
+    $statePath = Join-Path $Here "data\yw2-recomp\mods-state.json"
+    $stateBefore = $null
+    try {
+        if (-not (Test-Path -LiteralPath $ZipPath -PathType Leaf)) { throw "ZIP not found." }
+        Add-Type -AssemblyName System.IO.Compression.FileSystem
+        $zip = [IO.Compression.ZipFile]::OpenRead($ZipPath)
+        New-Item -ItemType Directory -Path $stage -Force | Out-Null
+        $stageFull = [IO.Path]::GetFullPath($stage).TrimEnd('\') + '\'
+        $total = [long]0
+        foreach ($entry in $zip.Entries) {
+            $rel = $entry.FullName.Replace('\','/')
+            if ($rel -match '(^/|:|(^|/)\.\.?(/|$)|[<>|?*])' -or $rel -match '(^|/)(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(\.|/|$)' -or $rel -match '[. ](/|$)') { throw "Unsafe ZIP path: $rel" }
+            if (($entry.ExternalAttributes -band 0xA0000000) -eq 0xA0000000) { throw "Links are not supported in mod archives." }
+            $total += $entry.Length
+            if ($total -gt 2GB -or $zip.Entries.Count -gt 20000) { throw "Archive exceeds the 2 GB / 20,000 file limit." }
+            if ($rel.EndsWith('/')) { continue }
+            $ext = [IO.Path]::GetExtension($rel).ToLowerInvariant()
+            if ($ext -in @('.exe','.bat','.cmd','.ps1','.psm1','.psd1','.vbs','.vbe','.js','.jse','.wsf','.wsh','.msi','.msp','.scr','.com','.pif','.reg','.lnk','.hta','.cpl','.jar')) { throw "Unsupported executable file: $rel" }
+            if ($ext -eq '.dll' -and $rel -notmatch '(^|/)(plugin\.dll|plugins/[^/]+\.dll)$') { throw "DLLs must be plugin.dll or plugins/*.dll." }
+            $target = [IO.Path]::GetFullPath((Join-Path $stage $rel))
+            if (-not $target.StartsWith($stageFull, [StringComparison]::OrdinalIgnoreCase)) { throw "Unsafe ZIP path." }
+            if (Test-Path -LiteralPath $target) { throw "Duplicate ZIP entry: $rel" }
+            New-Item -ItemType Directory -Path (Split-Path $target) -Force | Out-Null
+            [IO.Compression.ZipFileExtensions]::ExtractToFile($entry, $target)
+        }
+        $zip.Dispose(); $zip = $null
+        $base = $stage
+        while (-not (Test-FLModFolder $base) -and -not (Test-Path -LiteralPath (Join-Path $base 'modpack.json'))) {
+            $dirs = @(Get-ChildItem -LiteralPath $base -Directory)
+            if ($dirs.Count -ne 1) { break }
+            $base = $dirs[0].FullName
+        }
+        $manifestPath = Join-Path $base 'modpack.json'
+        $sources = @()
+        $isPack = Test-Path -LiteralPath $manifestPath
+        if ($isPack) {
+            $pack = Read-FLJson $manifestPath
+            if (-not $pack -or $pack.format -ne 'fl-modpack-v1' -or $pack.mods -isnot [array] -or -not $pack.mods.Count) { throw "Invalid fl-modpack-v1 manifest." }
+            if (@($pack.mods | Select-Object -Unique).Count -ne $pack.mods.Count) { throw "Duplicate folder in modpack." }
+            foreach ($folder in $pack.mods) {
+                if ($folder -isnot [string] -or $folder -notmatch '^[a-zA-Z0-9][a-zA-Z0-9._-]*$') { throw "Invalid modpack folder." }
+                $sources += Get-Item -LiteralPath (Join-Path $base $folder)
+            }
+        } elseif (Test-FLModFolder $base) { $sources = @(Get-Item -LiteralPath $base) }
+        else { $sources = @(Get-ChildItem -LiteralPath $base -Directory | Where-Object { Test-FLModFolder $_.FullName } | Sort-Object Name) }
+        if (-not $sources.Count) { throw "No overlay, Lua script, plugin or source mod found in this ZIP." }
+        $plan = @()
+        New-Item -ItemType Directory -Path $root -Force | Out-Null
+        foreach ($source in $sources) {
+            if (-not (Test-FLModFolder $source.FullName)) { throw "Invalid mod folder: $($source.Name)" }
+            foreach ($metaFile in @('overlay.json','mod.json')) {
+                $mp = Join-Path $source.FullName $metaFile
+                if ((Test-Path -LiteralPath $mp) -and -not (Read-FLJson $mp)) { throw "Unreadable $metaFile in $($source.Name)." }
+            }
+            $meta = Read-FLJson (Join-Path $source.FullName 'overlay.json')
+            if (-not $meta) { $meta = Read-FLJson (Join-Path $source.FullName 'mod.json') }
+            $name = if ($meta -and $meta.name) { [string]$meta.name } elseif ($DefaultName -and $sources.Count -eq 1) { $DefaultName } elseif ($source.FullName -eq $stage) { [IO.Path]::GetFileNameWithoutExtension($ZipPath) } else { $source.Name }
+            $slug = if ($isPack -or $sources.Count -gt 1) { ConvertTo-FLModSlug $source.Name } else { ConvertTo-FLModSlug $name }
+            $folder = $slug; $n = 2
+            while ((Test-Path -LiteralPath (Join-Path $root $folder)) -or @($plan | Where-Object { $_.Folder -eq $folder }).Count) { $folder = "$slug-$n"; $n++ }
+            $plan += [pscustomobject]@{ Source = $source.FullName; Folder = $folder; Name = $name }
+        }
+        if (Test-Path -LiteralPath $prefsPath) { $prefsBefore = [IO.File]::ReadAllText($prefsPath) }
+        if (Test-Path -LiteralPath $statePath) { $stateBefore = [IO.File]::ReadAllText($statePath) }
+        $info = Get-FLMods -Config (Get-FLConfig) -LocalVersion (Get-FLLocalVersion -Config (Get-FLConfig))
+        foreach ($item in $plan) {
+            $dest = [IO.Path]::GetFullPath((Join-Path $root $item.Folder))
+            if (-not $dest.StartsWith([IO.Path]::GetFullPath($root).TrimEnd('\') + '\', [StringComparison]::OrdinalIgnoreCase)) { throw "Unsafe destination." }
+            $published += $item.Folder
+            Copy-Item -LiteralPath $item.Source -Destination $dest -Recurse
+            if ((Test-Path -LiteralPath (Join-Path $dest 'mod.json')) -and -not (Test-Path -LiteralPath (Join-Path $dest 'overlay.json'))) {
+                $tool=Get-FLModToolchain
+                if ($tool) {
+                Initialize-FLModArchive -Toolchain $tool
+                $built=Join-Path $stage ('built-'+$item.Folder)
+                [void](Invoke-FLPythonTool $tool.Python @('-I',$tool.FlMod,'build',$tool.Archive,$dest,$built))
+                Copy-Item -Path (Join-Path $built '*') -Destination $dest -Recurse -Force
+                }
+            }
+        }
+        $prefs = Read-FLPrefs
+        $prefs.user_mods = @(@($prefs.user_mods) + $published | Select-Object -Unique)
+        $prefs.disabled_mods = @($prefs.disabled_mods | Where-Object { $published -notcontains $_ })
+        Write-FLPrefs -Path $prefsPath -Prefs $prefs
+        Set-FLModOrder (@($info.Mods | ForEach-Object { $_.Folder }) + $published)
+        return [pscustomobject]@{ Ok = $true; Message = "Installed $($published.Count) mod(s): $($published -join ', ')."; Folders = $published; Folder = $published[0]; Name = $plan[0].Name }
+    } catch {
+        foreach ($folder in $published) {
+            $dest = [IO.Path]::GetFullPath((Join-Path $root $folder))
+            if ($dest.StartsWith([IO.Path]::GetFullPath($root).TrimEnd('\') + '\', [StringComparison]::OrdinalIgnoreCase)) { Remove-Item -LiteralPath $dest -Recurse -Force }
+        }
+        if ($published.Count) {
+            if ($null -ne $prefsBefore) { [IO.File]::WriteAllText($prefsPath, $prefsBefore) } else { Remove-Item -LiteralPath $prefsPath -Force -ErrorAction SilentlyContinue }
+            if ($null -ne $stateBefore) { [IO.File]::WriteAllText($statePath, $stateBefore) } else { Remove-Item -LiteralPath $statePath -Force -ErrorAction SilentlyContinue }
+        }
+        return [pscustomobject]@{ Ok = $false; Message = "Install failed: $($_.Exception.Message)"; Folders = @(); Folder = ""; Name = "" }
+    } finally {
+        if ($zip) { $zip.Dispose() }
+        if (Test-Path -LiteralPath $stage) { Remove-Item -LiteralPath $stage -Recurse -Force }
+    }
+}
+function Build-FLMergedStack {
+    param([string]$OutputDirectory = "", [object[]]$Mods)
+    $tool = Get-FLModToolchain
+    if (-not $tool) { throw "Install Python 3.10 or newer to build source mods." }
+    Initialize-FLModArchive -Toolchain $tool
+    if (-not $Mods) { $Mods = @((Get-FLMods -Config (Get-FLConfig) -LocalVersion (Get-FLLocalVersion -Config (Get-FLConfig))).Mods | Where-Object Enabled) }
+    $sources = @($Mods | Where-Object { Test-Path -LiteralPath (Join-Path $_.Path 'mod.json') })
+    if ($sources.Count -lt 2) { throw "Enable at least two source mods containing mod.json." }
+    if (-not $OutputDirectory) { $OutputDirectory = Join-Path $Here ("data\yw2-recomp\mods\fantasylife\merged-" + [guid]::NewGuid().ToString('N').Substring(0,8)) }
+    if (Test-Path -LiteralPath $OutputDirectory) { throw "Merge output must be a new folder." }
+    $argsList = @('-I', $tool.FlMod, 'build-stack', $tool.Archive, $OutputDirectory) + @($sources | ForEach-Object { $_.Path })
+    $psi = New-Object Diagnostics.ProcessStartInfo
+    $psi.FileName = $tool.Python
+    $psi.Arguments = ($argsList | ForEach-Object { '"' + $_.Replace('"','\"') + '"' }) -join ' '
+    $psi.UseShellExecute = $false; $psi.CreateNoWindow = $true
+    $psi.RedirectStandardOutput = $true; $psi.RedirectStandardError = $true
+    $proc = [Diagnostics.Process]::Start($psi)
+    $stdoutTask = $proc.StandardOutput.ReadToEndAsync()
+    $stderrTask = $proc.StandardError.ReadToEndAsync()
+    $proc.WaitForExit()
+    $stdout = $stdoutTask.Result; $stderr = $stderrTask.Result
+    $exitCode = $proc.ExitCode; $proc.Dispose()
+    if ($exitCode -ne 0 -or -not (Test-Path -LiteralPath (Join-Path $OutputDirectory 'overlay.json'))) { throw "Merge failed: $stderr $stdout" }
+    return $OutputDirectory
+}
+
+function Export-FLModpackZip {
+    param([Parameter(Mandatory = $true)][string]$OutputPath, [switch]$MergeSources)
+    $mods = @((Get-FLMods -Config (Get-FLConfig) -LocalVersion (Get-FLLocalVersion -Config (Get-FLConfig))).Mods | Where-Object { $_.Enabled -and (Test-FLModFolder $_.Path) })
+    if (-not $mods.Count) { throw "Enable at least one installed mod to export." }
+    if (Test-Path -LiteralPath $OutputPath) { throw "Choose a new ZIP filename; the existing file was preserved." }
+    $tmp = Join-Path ([IO.Path]::GetTempPath()) ("fl-pack-" + [guid]::NewGuid().ToString('N'))
+    try {
+        New-Item -ItemType Directory -Path $tmp | Out-Null
+        $folders = @()
+        if ($MergeSources) {
+            $mergedFolder = "merged-stack"
+            while (@($mods | Where-Object { $_.Folder -eq $mergedFolder }).Count) { $mergedFolder += "-merged" }
+            $merged = Join-Path $tmp $mergedFolder
+            [void](Build-FLMergedStack -OutputDirectory $merged -Mods $mods)
+            $folders += $mergedFolder
+        }
+        foreach ($mod in $mods) {
+            if (($mod.Path | Get-Item -Force).Attributes -band [IO.FileAttributes]::ReparsePoint) { throw "Cannot export filesystem links." }
+            if (@(Get-ChildItem -LiteralPath $mod.Path -Recurse -Force | Where-Object { $_.Attributes -band [IO.FileAttributes]::ReparsePoint }).Count) { throw "Cannot export a mod containing filesystem links." }
+            if ($MergeSources -and (Test-Path -LiteralPath (Join-Path $mod.Path 'mod.json'))) {
+                # Preserve script/plugin assets, but do not load their old data overlays.
+                if ($mod.Kind -match 'Lua|Plugin') {
+                    $dest = Join-Path $tmp $mod.Folder
+                    Copy-Item -LiteralPath $mod.Path -Destination $dest -Recurse
+                    $oldOverlay = Join-Path $dest 'overlay.json'
+                    if (Test-Path -LiteralPath $oldOverlay) { Remove-Item -LiteralPath $oldOverlay }
+                    $folders += $mod.Folder
+                }
+                continue
+            }
+            Copy-Item -LiteralPath $mod.Path -Destination (Join-Path $tmp $mod.Folder) -Recurse
+            $folders += $mod.Folder
+        }
+        [ordered]@{ format = 'fl-modpack-v1'; name = [IO.Path]::GetFileNameWithoutExtension($OutputPath); created_at = [DateTime]::UtcNow.ToString('o'); mods = @($folders) } | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $tmp 'modpack.json') -Encoding UTF8
+        Add-Type -AssemblyName System.IO.Compression.FileSystem
+        $zip = [IO.Compression.ZipFile]::Open([IO.Path]::GetFullPath($OutputPath), 'Create')
+        try {
+            foreach ($file in Get-ChildItem -LiteralPath $tmp -Recurse -File -Force) {
+                $entryName = $file.FullName.Substring($tmp.TrimEnd('\').Length + 1).Replace('\','/')
+                [void][IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, $file.FullName, $entryName)
+            }
+        } finally { $zip.Dispose() }
+        return [pscustomobject]@{ Ok = $true; Message = "Exported $($folders.Count) mods to $OutputPath"; Path = $OutputPath }
+    } finally {
+        if (Test-Path -LiteralPath $tmp) { Remove-Item -LiteralPath $tmp -Recurse -Force }
+    }
+}
+
+function Get-FLGameBananaGameId {
+    $value = $env:FL_GAMEBANANA_GAME_ID
+    if (-not $value) { $value = (Read-FLKeyValueFile (Join-Path $Here 'update-config.env'))['FL_GAMEBANANA_GAME_ID'] }
+    if (-not $value) { return 22668 }
+    $id = 0
+    if (-not [int]::TryParse($value, [ref]$id) -or $id -le 0) { throw "FL_GAMEBANANA_GAME_ID must be a positive number." }
+    return $id
+}
+
+function Assert-FLHttpsUrl {
+    param([string]$Url)
+    $uri = $null
+    if (-not [uri]::TryCreate($Url, [UriKind]::Absolute, [ref]$uri) -or $uri.Scheme -ne 'https' -or $uri.UserInfo) { throw "Only HTTPS URLs are supported." }
+}
+
+# Follow redirects explicitly so a redirect cannot downgrade to HTTP.
+function Invoke-FLGameBananaRequest {
+    param([string]$Url, [string]$OutFile = "")
+    Enable-FLTls12
+    try {
+        for ($redirect = 0; $redirect -lt 6; $redirect++) {
+            Assert-FLHttpsUrl $Url
+            $response = $null
+            try {
+                $response = Invoke-WebRequest -Uri $Url -UseBasicParsing -TimeoutSec 15 -MaximumRedirection 0 -ErrorAction Stop
+            } catch {
+                if ($_.Exception.Response -and [int]$_.Exception.Response.StatusCode -in @(301,302,303,307,308)) {
+                    $Url = ([uri]::new([uri]$Url, [string]$_.Exception.Response.Headers['Location'])).AbsoluteUri
+                    continue
+                }
+                throw
+            }
+            if ([int]$response.StatusCode -in @(301,302,303,307,308)) {
+                $Url = ([uri]::new([uri]$Url, [string]$response.Headers['Location'])).AbsoluteUri
+                continue
+            }
+            if ($OutFile) {
+                $stream = [IO.File]::Create($OutFile)
+                try { $response.RawContentStream.Position = 0; $response.RawContentStream.CopyTo($stream) } finally { $stream.Dispose() }
+                return
+            }
+            return ($response.Content | ConvertFrom-Json)
+        }
+        throw "Too many redirects."
+    } catch { throw "GameBanana is unavailable (offline, timeout, or invalid response). $($_.Exception.Message)" }
+}
+
+function Search-FLGameBananaMods {
+    param([int]$GameId = (Get-FLGameBananaGameId), [ValidateRange(1,100000)][int]$Page = 1, [string]$Search = "", [string]$Category = "")
+    if ($GameId -le 0) { throw "Invalid GameBanana game ID." }
+    $url = "https://gamebanana.com/apiv11/Mod/Index?_aFilters%5BGeneric_Game%5D=$GameId&_nPerpage=20&_nPage=$Page"
+    if ($Search) { $url += '&_aFilters%5B_sName%5D=' + [uri]::EscapeDataString($Search) }
+    $data = Invoke-FLGameBananaRequest $url
+    $installed = @((Get-FLMods -Config (Get-FLConfig) -LocalVersion (Get-FLLocalVersion -Config (Get-FLConfig))).Mods)
+    foreach ($r in @($data._aRecords)) {
+        if (-not $r) { continue }
+        if ($Category -and $r._aRootCategory._sName -notlike "*$Category*") { continue }
+        $match = @($installed | Where-Object { $_.GameBananaId -eq $r._idRow }) | Select-Object -First 1
+        [pscustomobject]@{ Id = $r._idRow; Name = $r._sName; Category = $r._aRootCategory._sName; Submitter = $r._aSubmitter._sName; Likes = $r._nLikeCount; Views = $r._nViewCount; ProfileUrl = $r._sProfileUrl; DateUpdated = $r._tsDateUpdated; InstalledFolder = $(if ($match) { $match.Folder } else { "" }) }
+    }
+}
+
+function Get-FLGameBananaModFiles {
+    param([Parameter(Mandatory = $true)][ValidateRange(1,2147483647)][int]$ModId)
+    $data = Invoke-FLGameBananaRequest "https://gamebanana.com/apiv11/Mod/$ModId/ProfilePage"
+    foreach ($f in @($data._aFiles)) {
+        try { Assert-FLHttpsUrl $f._sDownloadUrl } catch { continue }
+        [pscustomobject]@{ Id = $f._idRow; Name = $f._sFile; Description = $f._sDescription; DownloadUrl = $f._sDownloadUrl; Size = $f._nFilesize; DateAdded = $f._tsDateAdded }
+    }
+}
+
+function Install-FLGameBananaMod {
+    param([Parameter(Mandatory = $true)]$Mod, [Parameter(Mandatory = $true)]$File)
+    $tmp = Join-Path ([IO.Path]::GetTempPath()) ("fl-gb-" + [guid]::NewGuid().ToString('N') + '.zip')
+    try {
+        Assert-FLHttpsUrl $File.DownloadUrl
+        Invoke-FLGameBananaRequest -Url $File.DownloadUrl -OutFile $tmp
+        $result = Install-FLModZip -ZipPath $tmp -DefaultName $Mod.Name
+        if (-not $result.Ok) { return $result }
+        foreach ($folder in $result.Folders) {
+            [ordered]@{ mod_id = $Mod.Id; mod_name = $Mod.Name; submitter = $Mod.Submitter; file_id = $File.Id; file_name = $File.Name; description = $File.Description; installed_at = [DateTime]::UtcNow.ToString('o') } | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $Here "data\yw2-recomp\mods\fantasylife\$folder\gamebanana.json") -Encoding UTF8
+        }
+        # Retire previous user installs only after the replacement succeeds.
+        $previous = @((Get-FLMods -Config (Get-FLConfig) -LocalVersion (Get-FLLocalVersion -Config (Get-FLConfig))).Mods | Where-Object { $_.GameBananaId -eq $Mod.Id -and $_.Removable -and $result.Folders -notcontains $_.Folder })
+        foreach ($old in $previous) { [void](Remove-FLMod -Folder $old.Folder) }
+        return $result
+    } catch { return [pscustomobject]@{ Ok = $false; Message = $_.Exception.Message; Folders = @() } }
+    finally { if (Test-Path -LiteralPath $tmp) { Remove-Item -LiteralPath $tmp -Force } }
+}
+# Uninstall a mod folder (user-installed or, with -Force, any non-running one).
+# Core/shipped mods are refused unless -Force; the folder must live under
+# data\yw2-recomp\mods\fantasylife. Prefs (disabled_mods/user_mods) are cleaned.
+function Remove-FLMod {
+    param(
+        [Parameter(Mandatory = $true)][string]$Folder,
+        [switch]$Force
+    )
+    if ($Folder -notmatch '^[a-zA-Z0-9][a-zA-Z0-9._-]*$') { throw "Invalid mod folder name: $Folder" }
+    $prefsPath = Get-FLPrefsPath
+    $prefs = Read-FLPrefs -Path $prefsPath
+    $modRoot = Join-Path $Here "data\yw2-recomp\mods\fantasylife"
+    $path = Join-Path $modRoot $Folder
+    if (-not (Test-Path -LiteralPath $path -PathType Container)) { throw "Mod folder not found: $Folder" }
+    $full = [IO.Path]::GetFullPath($path)
+    $rootFull = [IO.Path]::GetFullPath($modRoot).TrimEnd('\') + '\'
+    if (-not $full.StartsWith($rootFull, [StringComparison]::OrdinalIgnoreCase)) { throw "Refusing to delete outside the mods folder." }
+    $isUser = @($prefs.user_mods) -contains $Folder
+    if (-not $isUser -and -not $Force) {
+        $info = Get-FLMods -Config (Get-FLConfig) -LocalVersion (Get-FLLocalVersion -Config (Get-FLConfig)) -LocalVersion (Get-FLLocalVersion -Config (Get-FLConfig))
+        $mod = @($info.Mods | Where-Object { $_.Folder -eq $Folder }) | Select-Object -First 1
+        if ($mod -and -not $mod.Removable) { throw "'$Folder' ships with this build and cannot be uninstalled. Toggle it off instead." }
+    }
+    Remove-Item -LiteralPath $full -Recurse -Force
+    $prefs.user_mods = @($prefs.user_mods | Where-Object { $_ -ne $Folder })
+    $prefs.disabled_mods = @($prefs.disabled_mods | Where-Object { $_ -ne $Folder })
+    $state = Read-FLJson (Join-Path $Here "data\yw2-recomp\mods-state.json")
+    if ($state -and $state.order) { Set-FLModOrder @($state.order | Where-Object { $_ -ne $Folder }) }
+    Write-FLPrefs -Path $prefsPath -Prefs $prefs
+    return [pscustomobject]@{ Ok = $true; Message = "Uninstalled '$Folder'."; Folder = $Folder }
 }
 
 function Get-FLRomPath {
@@ -296,7 +824,6 @@ function Get-FLUpdateStatus {
     return [pscustomobject]$status
 }
 
-# Download with progress reports (Report: scriptblock text, percent [-1 = unknown]).
 function Invoke-FLDownload {
     param([string]$Url, [string]$OutFile, [scriptblock]$Report)
     Enable-FLTls12
@@ -430,7 +957,7 @@ function Invoke-FLUpdate {
 
         & $Report "Installing the new build..." -1
         # Runtime/data first (bin\ includes the launcher window and icon tools).
-        foreach ($sub in @("bin", "lib", "data\yw2-recomp\shader-cache-v3", "contrib")) {
+        foreach ($sub in @("bin", "lib", "data\yw2-recomp\shader-cache-v3", "contrib", "tools")) {
             $src = Join-Path $packageRoot $sub
             $dst = Join-Path $Here $sub
             if (Test-Path -LiteralPath $src -PathType Container) {
@@ -549,6 +1076,11 @@ function Start-FLGame {
     $vars["APPDATA"] = Join-Path $Here "data"
     $vars["XDG_DATA_HOME"] = Join-Path $Here "data"
     $vars["YW2_STATE_DIR"] = $saveDir
+    $vars["FL_STATE_DIR"] = $saveDir
+    $vars["FL_DATA_DIR"] = Join-Path $Here "data\yw2-recomp"
+    $vars["FL_WIDESCREEN"] = "0"
+    $vars["FL_INTERP"] = "0"
+    $vars["FL_SCALE"] = "1"
     $vars["YW2_WIDESCREEN"] = "0"
     $vars["YW2_INTERP"] = "0"
     $vars["YW2_SCALE"] = "1"
@@ -606,6 +1138,9 @@ function Write-FLLauncherLog {
     } catch {}
 }
 
+. (Join-Path $Here 'bin\launcher\setup.ps1')
+. (Join-Path $Here 'bin\launcher\controls.ps1')
+
 if ($LibraryOnly) { return }
 
 # ---------------------------------------------------------------------------
@@ -614,7 +1149,7 @@ if ($LibraryOnly) { return }
 
 $Config = Get-FLConfig
 $ActionFlags = $Direct -or $Vanilla -or $Launcher -or $NoLaunch -or $SetupFirewall
-$WindowMode = $Window -or $Preview -or $Screenshot -or (-not $ActionFlags -and $env:FL_DIRECT -ne "1" -and [Environment]::UserInteractive)
+$WindowMode = $Window -or $Preview -or $PreviewModManager -or $Screenshot -or (-not $ActionFlags -and $env:FL_DIRECT -ne "1" -and [Environment]::UserInteractive)
 
 if ($WindowMode) {
     $WindowScript = Join-Path $Here "bin\launcher\window.ps1"
@@ -623,7 +1158,7 @@ if ($WindowMode) {
         try {
             . $WindowScript
             $code = Show-FLLauncherWindow -Config $Config -InitialSave $Save -NoUpdateCheck:$NoUpdate -NoDlc:$NoDlc `
-                -NoFirewall:$NoFirewall -AfterUpdate $AfterUpdate -Preview:$Preview -Screenshot $Screenshot
+                -NoFirewall:$NoFirewall -AfterUpdate $AfterUpdate -Preview:($Preview -or $PreviewModManager) -PreviewModManager:$PreviewModManager -Screenshot $Screenshot
             exit $code
         } catch {
             $windowError = $_
@@ -716,56 +1251,11 @@ if (-not $ExePath) {
 $Integration = Update-FLDesktopIntegration -Config $Config -RomPath $RomPath
 Write-Host "[Desktop] $Integration" -ForegroundColor DarkGray
 
-# 5. Windows Firewall for multiplayer. Reading rules works without admin, so the
-#    check is cheap and silent when everything is already in place. Only a "yes"
-#    starts setup-firewall.ps1 through one UAC prompt.
-$FirewallScript   = Join-Path $Here "setup-firewall.ps1"
-$FirewallDeclined = Join-Path $RecompDataDir "firewall-declined"
-if ($NoFirewall -or $env:FL_NO_FIREWALL -eq "1") {
-    Write-Host "[Firewall] Skipped (-NoFirewall/FL_NO_FIREWALL=1)." -ForegroundColor DarkGray
-} elseif (-not (Test-Path -LiteralPath $FirewallScript -PathType Leaf)) {
-    Write-Host "[Firewall] setup-firewall.ps1 not found; skipping network access check." -ForegroundColor DarkGray
-} else {
-    try {
-        . $FirewallScript
-        if ($SetupFirewall) {
-            if (-not (Test-FantasyLifeInteractiveConsole)) {
-                Write-Host "[Firewall] Non-interactive session; skipping network access setup." -ForegroundColor DarkGray
-            } else {
-                Write-Host "[Firewall] Setting up multiplayer network access (one UAC prompt)..." -ForegroundColor Cyan
-                if (Invoke-FantasyLifeFirewallSetupElevated -InstallDir $Here) {
-                    Remove-Item -LiteralPath $FirewallDeclined -Force -ErrorAction SilentlyContinue
-                    Write-Host "[Firewall] Network access is ready." -ForegroundColor Green
-                }
-            }
-        } elseif (Test-Path -LiteralPath $FirewallDeclined) {
-            Write-Host "[Firewall] Network access setup was declined earlier; retry with play.bat -SetupFirewall." -ForegroundColor DarkGray
-        } elseif (-not (Test-FantasyLifeInteractiveConsole)) {
-            Write-Host "[Firewall] Non-interactive session; skipping network access setup." -ForegroundColor DarkGray
-        } else {
-            $FirewallStatus = Get-FantasyLifeFirewallStatus -InstallDir $Here
-            if ($FirewallStatus.Ready) {
-                Remove-Item -LiteralPath $FirewallDeclined -Force -ErrorAction SilentlyContinue
-            } else {
-                $FirewallAnswer = Read-Host "Set up network access for multiplayer now? [Y/n]"
-                if ($FirewallAnswer -match "^(?i)\s*n") {
-                    Set-Content -LiteralPath $FirewallDeclined -Encoding ASCII -Value ("Declined " + (Get-Date).ToString("s") + " for " + $Here)
-                    Write-Host "[Firewall] OK - skipping. Hamachi/LAN multiplayer may be blocked. Retry with play.bat -SetupFirewall." -ForegroundColor Yellow
-                } else {
-                    Write-Host "[Firewall] Setting up multiplayer network access (one UAC prompt)..." -ForegroundColor Cyan
-                    if (Invoke-FantasyLifeFirewallSetupElevated -InstallDir $Here) {
-                        Remove-Item -LiteralPath $FirewallDeclined -Force -ErrorAction SilentlyContinue
-                        Write-Host "[Firewall] Network access is ready." -ForegroundColor Green
-                    }
-                }
-            }
-        }
-    } catch {
-        Write-Host "[Firewall] Check skipped ($($_.Exception.Message))." -ForegroundColor Yellow
-    }
-}
+# Firewall setup is available only through the optional launcher button.
+
 # 6. Mods: -Vanilla = none; an FL_MOD_DIRS set in the calling environment wins;
-#    otherwise the build's mod list (version.json / test-version.json).
+#    otherwise the enabled subset of the build's mod list (version.json /
+#    test-version.json), honouring disabled_mods from launcher.json.
 $ModDirs = @()
 if ($Vanilla) {
     $ModDirs = @()
@@ -776,12 +1266,22 @@ if ($Vanilla) {
 } else {
     $ModInfo = Get-FLMods -Config $Config -LocalVersion $LocalVersion
     if ($ModInfo.Note) { Write-Host "[Mods] $($ModInfo.Note)" -ForegroundColor Yellow }
-    foreach ($mod in $ModInfo.Mods) {
-        if (-not $mod.Present) { throw "Installed mod '$($mod.Folder)' is missing. Update the normal game before playing." }
+    $stack = Test-FLModStack -ModInfo $ModInfo
+    foreach ($mod in $stack.Missing) {
+        throw "Enabled mod '$($mod.Folder)' is missing. Update the normal game before playing, or disable the mod."
     }
-    $ModDirs = @($ModInfo.Mods | ForEach-Object { $_.Path })
-    if ($ModInfo.Mods.Count -gt 0) {
-        Write-Host ("[Mods] {0}" -f (@($ModInfo.Mods | ForEach-Object { $_.Name }) -join ", ")) -ForegroundColor Cyan
+    if ($stack.Conflicts.Count -gt 0) {
+        $c = $stack.Conflicts[0]
+        $extra = if ($stack.Conflicts.Count -gt 1) { " (+$(($stack.Conflicts.Count - 1)) more)" } else { "" }
+        $labelA = if ($c.NameA -eq $c.NameB) { $c.FolderA } else { $c.NameA }
+        $labelB = if ($c.NameA -eq $c.NameB) { $c.FolderB } else { $c.NameB }
+        throw "Mod conflict on resource $($c.Id): '$labelA' and '$labelB'$extra. Disable one or use a merged stack."
+    }
+    $off = @($ModInfo.Mods | Where-Object { -not $_.Enabled } | ForEach-Object { $_.Folder })
+    if ($off.Count -gt 0) { Write-Host "[Mods] Disabled: $($off -join ', ')" -ForegroundColor DarkGray }
+    $ModDirs = @($stack.Enabled | Where-Object { -not $_.SourceOnly } | ForEach-Object { $_.Path })
+    if ($ModDirs.Count -gt 0) {
+        Write-Host ("[Mods] {0}" -f (@($stack.Enabled | Where-Object { -not $_.SourceOnly } | ForEach-Object { $_.Name }) -join ", ")) -ForegroundColor Cyan
     }
 }
 

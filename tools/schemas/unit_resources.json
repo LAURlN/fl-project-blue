@@ -1,0 +1,72 @@
+{
+  "name": "unit_resources",
+  "resource_ids": [
+    8706,
+    8707,
+    8708,
+    8709,
+    8710,
+    8711,
+    8712,
+    8713,
+    8719
+  ],
+  "row_size": 76,
+  "columns": [
+    {
+      "name": "resources",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 0,
+      "count": 17,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "17 resource IDs; slot meanings documented in phase2-maps-enemies.md."
+    },
+    {
+      "name": "name",
+      "type": "utf16",
+      "type_id": 6,
+      "offset": 68,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "Display name; includes monsters, NPCs, props and other units. This is the name players see for a monster (8706 es-419, 8707 fr-CA, 8708 de, 8709 en, 8710 es, 8711 fr, 8712 it, 8713 en-GB, 8719 ja)."
+    },
+    {
+      "name": "unit_kind",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 72,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "medium",
+      "note": "Observed 2 on mon, 4 on bnp, and other values for NPC/objects."
+    },
+    {
+      "name": "u_49",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 73,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": ""
+    },
+    {
+      "name": "u_4a",
+      "type": "u8",
+      "type_id": 1,
+      "offset": 74,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": ""
+    }
+  ]
+}

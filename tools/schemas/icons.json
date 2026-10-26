@@ -1,0 +1,39 @@
+{
+  "name": "icons",
+  "resource_ids": [
+    8686,
+    8687,
+    8688,
+    8689,
+    8690,
+    8691,
+    8692,
+    8693,
+    8694
+  ],
+  "row_size": 8,
+  "columns": [
+    {
+      "name": "icon_id",
+      "type": "u32",
+      "type_id": 3,
+      "offset": 0,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "uncertain",
+      "note": "Opaque id (13856...); equal across slots."
+    },
+    {
+      "name": "name",
+      "type": "utf16",
+      "type_id": 6,
+      "offset": 4,
+      "count": 1,
+      "bits": 0,
+      "shift": 0,
+      "confidence": "high",
+      "note": "Icon name; indexed by items.icon_index and recipes.category_icon_index."
+    }
+  ]
+}
