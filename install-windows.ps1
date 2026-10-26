@@ -1,4 +1,4 @@
-param(
+﻿param(
     [string]$TargetDir = (Join-Path $env:LOCALAPPDATA "FantasyLife-PC"),
     [switch]$NoFirewall
 )
@@ -14,11 +14,6 @@ Write-Host " Fantasy Life PC - Windows Installer" -ForegroundColor Cyan
 Write-Host " Source:      $SourceDir" -ForegroundColor Gray
 Write-Host " Destination: $TargetDir" -ForegroundColor Gray
 Write-Host "==============================================================" -ForegroundColor Cyan
-
-if (-not (Test-Path (Join-Path $SourceDir "game\FantasyLife_EU.3ds"))) {
-    Write-Error "Game dump (game\FantasyLife_EU.3ds) not found in $SourceDir!"
-    exit 1
-}
 
 New-Item -ItemType Directory -Path $TargetDir -Force | Out-Null
 
@@ -98,35 +93,5 @@ Write-Host "  Desktop Shortcut: $DesktopDir\Fantasy Life.lnk" -ForegroundColor C
 Write-Host "  Updates:          The launcher window shows when an update is ready (one click)" -ForegroundColor Cyan
 Write-Host ""
 
-# Allow LAN/Hamachi/Radmin/ZeroTier multiplayer through Windows Firewall. This
-# is idempotent and keeps any rules the user created by hand.
-if ($NoFirewall -or $env:FL_NO_FIREWALL -eq "1") {
-    Write-Host "[Firewall] Skipped (-NoFirewall/FL_NO_FIREWALL=1)." -ForegroundColor DarkGray
-} else {
-    $FirewallSetup = Join-Path $TargetDir "setup-firewall.ps1"
-    if (-not (Test-Path -LiteralPath $FirewallSetup -PathType Leaf)) {
-        $FirewallSetup = Join-Path $SourceDir "setup-firewall.ps1"
-    }
-    if (-not (Test-Path -LiteralPath $FirewallSetup -PathType Leaf)) {
-        Write-Host "[Firewall] setup-firewall.ps1 not found; skipping network access setup." -ForegroundColor Yellow
-    } else {
-        Write-Host "[Firewall] Allowing LAN/Hamachi/Radmin/ZeroTier multiplayer through Windows Firewall (one UAC prompt)..." -ForegroundColor Yellow
-        try {
-            . $FirewallSetup
-            if (-not (Test-FantasyLifeInteractiveConsole)) {
-                Write-Host "[Firewall] Non-interactive session; skipped. Run play.bat -SetupFirewall in $TargetDir if multiplayer is blocked." -ForegroundColor Yellow
-            } else {
-                $FirewallStatus = Get-FantasyLifeFirewallStatus -InstallDir $TargetDir
-                if ($FirewallStatus.Ready) {
-                    Write-Host "[Firewall] Multiplayer rules are already present." -ForegroundColor DarkGray
-                } elseif (Invoke-FantasyLifeFirewallSetupElevated -InstallDir $TargetDir) {
-                    Remove-Item -LiteralPath (Join-Path $TargetDir "data\yw2-recomp\firewall-declined") -Force -ErrorAction SilentlyContinue
-                    Write-Host "[Firewall] Multiplayer rules are ready." -ForegroundColor Green
-                }
-            }
-        } catch {
-            Write-Host "[Firewall] Skipped ($($_.Exception.Message)). Run play.bat -SetupFirewall to retry." -ForegroundColor Yellow
-        }
-    }
-}
-Write-Host ""
+# Optional Firewall button in the launcher is the only elevation entry point.
+

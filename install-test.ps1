@@ -1,4 +1,4 @@
-[CmdletBinding(PositionalBinding = $false)]
+﻿[CmdletBinding(PositionalBinding = $false)]
 param(
     [string]$TargetDir = (Join-Path $env:LOCALAPPDATA "FantasyLife-PC-Test"),
     [string]$StableDir = (Join-Path $env:LOCALAPPDATA "FantasyLife-PC"),
@@ -327,37 +327,7 @@ if (-not $NoShortcuts) {
     }
 }
 
-# 9. Windows Firewall for multiplayer, only when rules are missing.
-if ($NoFirewall -or $env:FL_NO_FIREWALL -eq "1") {
-    Write-Host "[Firewall] Skipped (-NoFirewall/FL_NO_FIREWALL=1)." -ForegroundColor DarkGray
-} else {
-    $FirewallSetup = Join-Path $TargetFull "setup-firewall.ps1"
-    if (-not (Test-Path -LiteralPath $FirewallSetup -PathType Leaf)) {
-        $FirewallSetup = Join-Path $SourceFull "setup-firewall.ps1"
-    }
-    if (-not (Test-Path -LiteralPath $FirewallSetup -PathType Leaf)) {
-        Write-Host "[Firewall] setup-firewall.ps1 not found; skipping network access setup." -ForegroundColor Yellow
-    } else {
-        try {
-            . $FirewallSetup
-            $FirewallStatus = Get-FantasyLifeFirewallStatus -InstallDir $TargetFull
-            if ($FirewallStatus.Ready) {
-                Write-Host "[Firewall] Multiplayer rules are already present." -ForegroundColor DarkGray
-            } elseif (-not (Test-FantasyLifeInteractiveConsole)) {
-                Write-Host "[Firewall] Non-interactive session; skipped. Run play.bat -SetupFirewall in $TargetFull if multiplayer is blocked." -ForegroundColor Yellow
-            } else {
-                Write-Host "[Firewall] Allowing LAN/Hamachi/Radmin/ZeroTier multiplayer through Windows Firewall (one UAC prompt)..." -ForegroundColor Yellow
-                if (Invoke-FantasyLifeFirewallSetupElevated -InstallDir $TargetFull) {
-                    Remove-Item -LiteralPath (Join-Path $TargetFull "data\yw2-recomp\firewall-declined") -Force -ErrorAction SilentlyContinue
-                    Write-Host "[Firewall] Multiplayer rules are ready." -ForegroundColor Green
-                }
-            }
-        } catch {
-            Write-Host "[Firewall] Skipped ($($_.Exception.Message)). Run play.bat -SetupFirewall to retry." -ForegroundColor Yellow
-        }
-    }
-}
-
+# Optional Firewall button in the launcher is the only elevation entry point.
 Write-Host ""
 Write-Host "Test install ready: $TargetFull" -ForegroundColor Green
 Write-Host "  Shortcut:    Fantasy Life (Test)" -ForegroundColor Green
