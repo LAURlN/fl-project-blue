@@ -335,18 +335,30 @@ if ($FromTest) {
             throw "Built mod source is empty: $sourceModRoot. Refusing to publish a package with its previous mods silently removed."
         }
         $ModNames = @()
+        $modsFull = [IO.Path]::GetFullPath($ModsDir).TrimEnd('\')
         foreach ($sourceMod in $sourceMods) {
             if ($sourceMod.Name -notmatch '^[a-zA-Z0-9][a-zA-Z0-9._-]*$') { throw "Invalid built mod folder name: $($sourceMod.Name)" }
             if (-not (Test-Path -LiteralPath (Join-Path $sourceMod.FullName "overlay.json") -PathType Leaf)) {
                 throw "Built mod '$($sourceMod.Name)' has no overlay.json: $($sourceMod.FullName)"
             }
-            Copy-Item -LiteralPath $sourceMod.FullName -Destination (Join-Path $ModsDir $sourceMod.Name) -Recurse -Force
+            $destMod = Join-Path $ModsDir $sourceMod.Name
+            if (Test-Path -LiteralPath $destMod) {
+                if ([IO.Path]::GetFullPath((Split-Path -Parent $destMod)).TrimEnd('\') -ne $modsFull) {
+                    throw "Unsafe destination mod path: $destMod"
+                }
+                # Copy the source directory into its parent. Removing the old
+                # destination first avoids Copy-Item nesting ModName\ModName.
+                Remove-Item -LiteralPath $destMod -Recurse -Force
+            }
+            Copy-Item -LiteralPath $sourceMod.FullName -Destination $ModsDir -Recurse -Force
+            if (-not (Test-Path -LiteralPath (Join-Path $destMod "overlay.json") -PathType Leaf)) {
+                throw "Copied mod '$($sourceMod.Name)' has no overlay.json at its package root."
+            }
             $ModNames += $sourceMod.Name
         }
 
         # Mirror the selected build's overlay set. Prune only stale direct
         # children of this package's known mods directory, after all copies pass.
-        $modsFull = [IO.Path]::GetFullPath($ModsDir).TrimEnd('\')
         foreach ($old in @(Get-ChildItem -LiteralPath $ModsDir -Directory)) {
             if ($ModNames -notcontains $old.Name) {
                 if ((Split-Path -Parent $old.FullName) -ne $modsFull) { throw "Unsafe stale mod path: $($old.FullName)" }
